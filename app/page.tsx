@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
+import SocialIcons from '../components/SocialIcons';
 
 export default function Home() {
   const [visible, setVisible] = useState(false);
@@ -9,13 +10,17 @@ export default function Home() {
     <div className='flex flex-col items-center py-8'>
       <h1 className='text-4xl font-bold mb-2'>👋🏼 This is Farabi</h1>
 
-      <h2 className='text-2xl mb-6'>Muslim & Dreamer😴💭</h2>
+      <h2 className='text-2xl mb-6'>Muslim & Dreamer 😴💭</h2>
 
       <h3 className='text-2xl mb-6'>
-        Writes code & loves everything about CLIs, Linux, and automation!
+        Writes code & loves everything about Linux and automation!
       </h3>
 
       <p className='text-lg max-w-2xl text-center mb-6'></p>
+
+      <div className='mb-6'>
+        <SocialIcons />
+      </div>
 
       <button
         onClick={() => setVisible(!visible)}

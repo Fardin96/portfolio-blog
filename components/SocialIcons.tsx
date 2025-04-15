@@ -16,11 +16,12 @@ export default function SocialIcons() {
           ></path>
         </svg>
       </a>
+
       <a
         href='https://www.linkedin.com/in/farabi-fardin-khan-18b57a158/'
         target='_blank'
         rel='noopener noreferrer'
-        className='text-blue-600 hover:text-blue-800'
+        className='text-grey-600 hover:text-blue-800'
         aria-label='LinkedIn'
       >
         <svg className='w-8 h-8' fill='currentColor' viewBox='0 0 24 24'>

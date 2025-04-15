@@ -36,6 +36,7 @@ export default function Projects() {
           >
             <h2 className='text-xl font-semibold mb-2'>{project.title}</h2>
             <p className='text-gray-600 mb-4'>{project.description}</p>
+
             <Link
               href={`/projects/${project.id}`}
               className='text-blue-500 hover:text-blue-700'

@@ -13,10 +13,8 @@ export default function Home() {
       <h2 className='text-2xl mb-6'>Muslim & Dreamer 😴💭</h2>
 
       <h3 className='text-2xl mb-6'>
-        Writes code & loves everything about Linux and automation!
+        Writes code & loves everything about Linux and automation.
       </h3>
-
-      <p className='text-lg max-w-2xl text-center mb-6'></p>
 
       <div className='mb-6'>
         <SocialIcons />

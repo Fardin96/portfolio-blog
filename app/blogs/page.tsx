@@ -36,6 +36,7 @@ export default function Blogs() {
             <h2 className='text-2xl font-semibold mb-2'>{blog.title}</h2>
             <p className='text-gray-500 text-sm mb-2'>{blog.date}</p>
             <p className='text-gray-600 mb-4'>{blog.excerpt}</p>
+
             <Link
               href={`/blogs/${blog.id}`}
               className='text-blue-500 hover:text-blue-700'

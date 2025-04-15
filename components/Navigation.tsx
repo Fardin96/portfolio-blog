@@ -62,7 +62,9 @@ export default function Navigation() {
               >
                 Projects
               </Link>
+
               <div className='border-r border-gray-600 h-6 self-center'></div>
+
               <Link
                 href='/blogs'
                 className='text-white hover:text-gray-300 px-3 py-2'
@@ -85,6 +87,7 @@ export default function Navigation() {
             >
               Projects
             </Link>
+
             <Link
               href='/blogs'
               className='text-white block px-3 py-2 rounded-md text-base font-medium'

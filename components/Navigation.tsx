@@ -4,10 +4,13 @@ import { useState } from 'react';
 import { FiSun } from 'react-icons/fi';
 import { FaRegMoon } from 'react-icons/fa';
 import '../app/globals.css';
+import { useTheme } from 'next-themes';
+import ToggleTheme from './ToggleTheme';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [theme, setTheme] = useState(false);
+  // const [theme, setTheme] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   return (
     <nav className='bg-gray-800 w-full'>
@@ -21,12 +24,7 @@ export default function Navigation() {
 
           {/* Mobile menu button */}
           <div className='md:hidden'>
-            <button
-              onClick={() => setTheme((prev) => !prev)}
-              className='text-gray-300 hover:text-white p-2'
-            >
-              {theme ? <FiSun size={25} /> : <FaRegMoon size={25} />}
-            </button>
+            <ToggleTheme />
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -85,12 +83,7 @@ export default function Navigation() {
             </div>
 
             <div className='flex space-x-1'>
-              <button
-                onClick={() => setTheme((prev) => !prev)}
-                className='text-gray-300 hover:text-white p-2'
-              >
-                {theme ? <FiSun size={25} /> : <FaRegMoon size={25} />}
-              </button>
+              <ToggleTheme />
             </div>
           </div>
         </div>

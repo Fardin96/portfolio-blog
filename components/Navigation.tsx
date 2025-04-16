@@ -1,9 +1,13 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
+import { FiSun } from 'react-icons/fi';
+import { FaRegMoon } from 'react-icons/fa';
+import '../app/globals.css';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [theme, setTheme] = useState(false);
 
   return (
     <nav className='bg-gray-800 w-full'>
@@ -17,6 +21,13 @@ export default function Navigation() {
 
           {/* Mobile menu button */}
           <div className='md:hidden'>
+            <button
+              onClick={() => setTheme((prev) => !prev)}
+              className='text-gray-300 hover:text-white p-2'
+            >
+              {theme ? <FiSun size={25} /> : <FaRegMoon size={25} />}
+            </button>
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className='text-gray-300 hover:text-white p-2'
@@ -71,6 +82,15 @@ export default function Navigation() {
               >
                 Blogs
               </Link>
+            </div>
+
+            <div className='flex space-x-1'>
+              <button
+                onClick={() => setTheme((prev) => !prev)}
+                className='text-gray-300 hover:text-white p-2'
+              >
+                {theme ? <FiSun size={25} /> : <FaRegMoon size={25} />}
+              </button>
             </div>
           </div>
         </div>

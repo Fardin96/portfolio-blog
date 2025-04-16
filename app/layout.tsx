@@ -1,4 +1,5 @@
 import Navigation from '../components/Navigation';
+import { ThemeProvider } from '../components/theme-provider';
 import './globals.css';
 
 export default function RootLayout({
@@ -9,9 +10,16 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <Navigation />
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navigation />
 
-        <main className='container mx-auto p-4'>{children}</main>
+          <main className='container mx-auto p-4'>{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   );

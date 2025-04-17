@@ -16,7 +16,7 @@ export default function ToggleTheme() {
   return (
     <button
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      className='text-gray-300 hover:text-white p-2 hover:cursor-pointer'
+      className='text-gray-300 hover:text-white p-2 transition:all duration-200 hover:cursor-pointer hover:scale-120'
     >
       {theme === 'light' ? <FiSun size={25} /> : <FaRegMoon size={25} />}
     </button>

@@ -8,8 +8,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en' suppressHydrationWarning>
-      <body>
+    <html
+      lang='en'
+      className='h-full'
+      suppressHydrationWarning
+      data-theme='dark'
+    >
+      <body className='h-full'>
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
@@ -18,7 +23,7 @@ export default function RootLayout({
         >
           <Navigation />
 
-          <main className='container mx-auto p-4'>{children}</main>
+          <main className='h-full container mx-auto p-4'>{children}</main>
         </ThemeProvider>
       </body>
     </html>

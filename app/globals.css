@@ -9,12 +9,17 @@
   --text-color: #333;
   --background-color: #fff;
   --link-color: #007bff;
+  --navbar-bg: #374151; /* navbar light mode */
+  --ic-git-hover: black;
+  --shadow-dark: rgba(0, 0, 0, 0.6);
 }
 
 html.dark {
   --text-color: #f0f0f0;
-  --background-color: #121212;
+  --background-color: #1e293b;
   --link-color: #66b2ff;
+  --navbar-bg: #0f172a; /* navbar dark mode */
+  --ic-git-hover: white
 }
 
 body {
@@ -22,7 +27,7 @@ body {
   line-height: 1.6;
   color: var(--text-color);
   background-color: var(--background-color);
-  transition: color 0.3s ease, background-color 0.3s ease;
+  /* transition: color 0.3s ease, background-color 0.3s ease; */
 }
 
 a {
@@ -36,9 +41,10 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-color);
 }
 
-
-/* .ic-theme{
-  height: 50px;
-  width: 50px;
-  border: 1px solid blue;
-} */
+.custom-dark-shadow {
+  box-shadow: 0 5px 10px -3px var(--shadow-dark), 0 4px 6px -4px var(--shadow-dark);
+}
+.custom-dark-shadow:hover {
+  box-shadow: 0 10px 15px -3px var(--shadow-dark), 0 4px 6px -4px var(--shadow-dark);
+  transform: scale(1.02); /* include scale here since you're removing hover:scale-105 from JSX */
+}

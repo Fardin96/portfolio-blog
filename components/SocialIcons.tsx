@@ -1,3 +1,5 @@
+import '../app/globals.css';
+
 export default function SocialIcons() {
   return (
     <div className='flex space-x-4'>
@@ -5,7 +7,7 @@ export default function SocialIcons() {
         href='https://github.com/Fardin96'
         target='_blank'
         rel='noopener noreferrer'
-        className='text-gray-700 hover:text-gray-900'
+        className='text-gray-700 hover:text-[var(--ic-git-hover)] hover:scale-150'
         aria-label='GitHub'
       >
         <svg className='w-8 h-8' fill='currentColor' viewBox='0 0 24 24'>
@@ -21,7 +23,7 @@ export default function SocialIcons() {
         href='https://www.linkedin.com/in/farabi-fardin-khan-18b57a158/'
         target='_blank'
         rel='noopener noreferrer'
-        className='text-grey-600 hover:text-blue-800'
+        className='text-gray-700 hover:text-blue-700 hover:scale-150'
         aria-label='LinkedIn'
       >
         <svg className='w-8 h-8' fill='currentColor' viewBox='0 0 24 24'>

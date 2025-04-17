@@ -32,7 +32,7 @@ export default function Projects() {
         {projects.map((project) => (
           <div
             key={project.id}
-            className='border rounded-lg p-4 shadow hover:shadow-md'
+            className='border rounded-lg p-4 shadow transition-all duration-200 custom-dark-shadow hover:scale-105'
           >
             <h2 className='text-xl font-semibold mb-2'>{project.title}</h2>
             <p className='text-gray-600 mb-4'>{project.description}</p>

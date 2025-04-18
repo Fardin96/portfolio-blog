@@ -1,29 +1,8 @@
 'use client';
 import Link from 'next/link';
+import { projects } from '../../public/static';
 
-export default function Projects() {
-  // Example projects data
-  const projects = [
-    {
-      id: 1,
-      title: 'Portfolio Website',
-      description:
-        'A Next.js based portfolio website showcasing my skills and projects.',
-    },
-    {
-      id: 2,
-      title: 'Task Management App',
-      description:
-        'A React-based application for managing daily tasks and to-dos.',
-    },
-    {
-      id: 3,
-      title: 'E-commerce Platform',
-      description:
-        'A full-stack e-commerce solution with user authentication and product management.',
-    },
-  ];
-
+export default function Projects(): React.ReactElement {
   return (
     <div>
       <h1 className='text-3xl font-bold mb-6'>My Projects</h1>

@@ -1,9 +1,10 @@
 'use client';
+import React from 'react';
 // import Image from 'next/image';
 // import { useState } from 'react';
 import SocialIcons from '../components/SocialIcons';
 
-export default function Home() {
+export default function Home(): React.ReactElement {
   // const [visible, setVisible] = useState(false);
 
   return (

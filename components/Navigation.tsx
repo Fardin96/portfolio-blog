@@ -1,14 +1,11 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
-import { FiSun } from 'react-icons/fi';
-import { FaRegMoon } from 'react-icons/fa';
+import React, { useState } from 'react';
 import '../app/globals.css';
-import { useTheme } from 'next-themes';
 import ToggleTheme from './ToggleTheme';
 
-export default function Navigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+export default function Navigation(): React.ReactElement {
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
     <nav className='bg-[var(--navbar-bg)] w-full'>

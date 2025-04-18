@@ -1,20 +1,13 @@
 'use client';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import React from 'react';
+import { RouteParams } from '../../../public/types';
+import { projectDetails } from '../../../public/static';
 
-export default function ProjectDetail() {
-  const params = useParams();
+export default function ProjectDetail(): React.ReactElement {
+  const params = useParams<RouteParams>();
   const id = params.id;
-
-  // In a real app, you would fetch this data from an API or database
-  const projectDetails = {
-    title: `Project ${id}`,
-    description:
-      'This is a detailed description of the project. In a real application, this would be fetched based on the project ID.',
-    technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS'],
-    github: 'https://github.com/yourusername/project',
-    liveDemo: 'https://project-demo.example.com',
-  };
 
   return (
     <div>
@@ -34,6 +27,7 @@ export default function ProjectDetail() {
 
       <div className='mb-6'>
         <h2 className='text-xl font-semibold mb-2'>Technologies Used</h2>
+
         <div className='flex flex-wrap gap-2'>
           {projectDetails.technologies.map((tech, index) => (
             <span
@@ -53,6 +47,7 @@ export default function ProjectDetail() {
         >
           GitHub Repository
         </a>
+
         <a
           href={projectDetails.liveDemo}
           className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'

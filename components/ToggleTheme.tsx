@@ -1,11 +1,19 @@
 import { FiSun } from 'react-icons/fi';
 import { FaRegMoon } from 'react-icons/fa';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+// import { ThemeType } from '../public/types';
 
-export default function ToggleTheme() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+type UseThemeReturnType = {
+  theme: string | undefined;
+  setTheme: (theme: string) => void;
+  themes: string[];
+  systemTheme?: string;
+};
+
+export default function ToggleTheme(): React.ReactElement | null {
+  const { theme, setTheme } = useTheme() as UseThemeReturnType;
+  const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);

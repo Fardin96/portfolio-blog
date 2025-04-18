@@ -1,6 +1,7 @@
+import React from 'react';
 import '../app/globals.css';
 
-export default function SocialIcons() {
+export default function SocialIcons(): React.ReactElement {
   return (
     <div className='flex space-x-4'>
       <a

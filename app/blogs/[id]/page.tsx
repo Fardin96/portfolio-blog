@@ -1,40 +1,12 @@
 'use client';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { RouteParams } from '../../../public/types';
+import { blogPost } from '../../../public/static';
 
-export default function BlogDetail() {
-  const params = useParams();
+export default function BlogDetail(): React.ReactElement {
+  const params = useParams<RouteParams>();
   const id = params.id;
-
-  // In a real app, you would fetch this data from an API or database
-  const blogPost = {
-    title: `Blog Post ${id}`,
-    date: 'April 15, 2025',
-    author: 'Farabi',
-    content: `
-      This is the full content of the blog post. In a real application, this would be 
-      fetched based on the blog post ID. You could use Markdown or a rich text editor 
-      to create and store your blog content.
-      
-      ## Heading
-      
-      This is a paragraph with some **bold text** and *italic text*.
-      
-      - List item 1
-      - List item 2
-      - List item 3
-      
-      ### Code Example
-      
-      \`\`\`javascript
-      function greeting() {
-        console.log("Hello, world!");
-      }
-      \`\`\`
-      
-      You can expand this with more content as needed.
-    `,
-  };
 
   return (
     <div>

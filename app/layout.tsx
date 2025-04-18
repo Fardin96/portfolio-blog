@@ -1,18 +1,20 @@
+import { Metadata } from 'next';
 import Navigation from '../components/Navigation';
 import { ThemeProvider } from '../components/theme-provider';
-import './globals.css';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "😴💭 Farabi's Portfolio-Blog",
   description:
     "Farabi's personal portfolio and blog — chill, code, and creativity.",
 };
 
+type RootLayoutProps = {
+  children: React.ReactNode;
+};
+
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: RootLayoutProps): React.ReactElement {
   return (
     <html
       lang='en'

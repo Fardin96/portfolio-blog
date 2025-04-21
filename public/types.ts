@@ -30,4 +30,11 @@ export type BlogPost = {
   content: string;
 };
 
-export type ThemeType = 'light' | 'dark' | 'system';
+type ThemeValue = 'light' | 'dark' | 'system';
+
+export type UseThemeReturnType = {
+  theme: string | undefined;
+  setTheme: (theme: ThemeValue) => void;
+  themes: string[];
+  systemTheme?: string;
+};

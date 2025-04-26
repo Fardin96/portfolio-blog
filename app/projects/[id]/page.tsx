@@ -1,9 +1,9 @@
 'use client';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AllPosts, Post, RouteParams } from '../../../public/types';
-import { projectDetails as data } from '../../../public/static';
+import { projectDetails } from '../../../public/static';
 import { getSinglePost } from '../../../functions/sanityFetch';
 
 export default function ProjectDetail(): React.ReactElement {
@@ -30,6 +30,10 @@ export default function ProjectDetail(): React.ReactElement {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div>
       <Link
@@ -46,20 +50,22 @@ export default function ProjectDetail(): React.ReactElement {
         <p>{data?.description}</p>
       </div>
 
-      <div className='mb-6'>
-        <h2 className='text-xl font-semibold mb-2'>Technologies Used</h2>
+      {data?.tags && data?.tags?.length > 0 && (
+        <div className='mb-6'>
+          <h2 className='text-xl font-semibold mb-2'>Technologies Used</h2>
 
-        <div className='flex flex-wrap gap-2'>
-          {data?.tags.map((tech, index) => (
-            <span
-              key={index}
-              className='bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm'
-            >
-              {tech}
-            </span>
-          ))}
+          <div className='flex flex-wrap gap-2'>
+            {data?.tags?.map((tech, index) => (
+              <span
+                key={index}
+                className='bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm'
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className='flex gap-4'>
         <a

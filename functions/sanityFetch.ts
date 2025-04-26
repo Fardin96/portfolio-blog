@@ -58,6 +58,10 @@ export async function getSinglePost(
       throw new Error(`Post with ID "${postId}" not found`);
     }
 
+    console.log('+------------------------SINGLE-POST----------------------+');
+    console.log(JSON.stringify(post, null, 2));
+    console.log(post?.tags === null);
+
     return post;
   } catch (error) {
     console.error('Error fetching single post:', error);

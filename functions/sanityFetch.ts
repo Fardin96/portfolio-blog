@@ -1,5 +1,5 @@
 import { createClient } from '@sanity/client';
-import { AllBlogPosts } from '../public/types';
+import { AllPosts } from '../public/types';
 
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
@@ -9,14 +9,15 @@ export const client = createClient({
   // token: process.env.SANITY_SECRET_TOKEN // Needed for certain operations like updating content, accessing drafts or using draft perspectives
 });
 
-export async function getAllProjects(): Promise<AllBlogPosts[]> {
+export async function getAllPosts(docName: string): Promise<AllPosts[]> {
   try {
-    const query = `*[_type == "Project"]{
+    const query = `*[_type == "${docName}"]{
       title,
-      "description": description[0].children[0].text
+      "description": description[0].children[0].text,
+      "date": publishedAt
     }`;
 
-    const posts = await client.fetch<AllBlogPosts[]>(query);
+    const posts = await client.fetch<AllPosts[]>(query);
     // console.log('+-------------------getpost-----------------+');
     // console.log(posts);
 

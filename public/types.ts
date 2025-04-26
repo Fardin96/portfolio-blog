@@ -23,9 +23,10 @@ export type Blog = {
   date: string;
 };
 
-export type AllBlogPosts = {
+export type AllPosts = {
   title: string;
   description: string;
+  date: string | null;
 };
 
 export type BlogPost = {

@@ -1,12 +1,12 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getAllProjects } from '../../functions/sanityFetch';
-import { AllBlogPosts } from '../../public/types';
+import { getAllPosts } from '../../functions/sanityFetch';
+import { AllPosts } from '../../public/types';
 import { projects } from '../../public/static';
 
 export default function Projects(): React.ReactElement {
-  const [data, setData] = useState<AllBlogPosts[]>([]);
+  const [data, setData] = useState<AllPosts[]>([]);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -14,7 +14,7 @@ export default function Projects(): React.ReactElement {
     setError('');
 
     try {
-      const result = await getAllProjects();
+      const result = await getAllPosts('Project');
       setData(result);
     } catch (err) {
       console.error('Failed to fetch posts:', err);

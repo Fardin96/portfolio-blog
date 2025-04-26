@@ -1,5 +1,5 @@
 import { createClient } from '@sanity/client';
-import { AllPosts, AllPostsType } from '../public/types';
+import { AllPosts, AllPostsType, Post } from '../public/types';
 
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
@@ -11,6 +11,7 @@ export const client = createClient({
 export async function getAllPosts(docName: AllPostsType): Promise<AllPosts[]> {
   try {
     const query = `*[_type == $docName]{
+      "id": _id,
       title,
       "description": description[0].children[0].text,
       "date": publishedAt
@@ -32,12 +33,37 @@ export async function getAllPosts(docName: AllPostsType): Promise<AllPosts[]> {
   }
 }
 
-// export async function createPost(post: Post) {
-//   const result = client.create(post)
-//   return result
-// }
+export async function getSinglePost(
+  docName: AllPostsType,
+  postId: string
+): Promise<Post> {
+  try {
+    const query = `*[_type == $docName && _id == $postId][0]{
+      "id": _id,
+      title,
+      "description": description[0].children[0].text,
+      "date": publishedAt,
+      tags,
+      author->{name, "image": image.asset->url},
+      "mainImage": mainImage.asset->url,
+      body
+    }`;
 
-// export async function updateDocumentTitle(_id, title) {
-//   const result = client.patch(_id).set({title})
-//   return result
-// }
+    const post = await client.fetch<Post>(query, {
+      docName,
+      postId,
+    });
+
+    if (!post) {
+      throw new Error(`Post with ID "${postId}" not found`);
+    }
+
+    return post;
+  } catch (error) {
+    console.error('Error fetching single post:', error);
+
+    throw error instanceof Error
+      ? error
+      : new Error('Unknown error occurred while fetching the post!');
+  }
+}

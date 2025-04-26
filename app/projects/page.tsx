@@ -71,14 +71,14 @@ export default function Projects(): React.ReactElement {
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
         {data.map((project, idx) => (
           <div
-            key={idx}
+            key={project.id}
             className='border rounded-lg p-4 shadow transition-all duration-200 custom-dark-shadow hover:scale-102'
           >
             <h2 className='text-xl font-semibold mb-2'>{project.title}</h2>
             <p className='text-gray-600 mb-4'>{project.description}</p>
 
             <Link
-              href={`/projects/${idx}`}
+              href={`/projects/${project.id}`}
               className='text-blue-500 hover:text-blue-700'
             >
               View Project →

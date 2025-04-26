@@ -24,9 +24,26 @@ export type Blog = {
 };
 
 export type AllPosts = {
+  id: string;
   title: string;
   description: string;
   date: string | null;
+};
+
+export type Post = {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  tags: string[];
+  author: {
+    name: string;
+    image: string;
+  };
+  mainImage: string;
+  body: string;
+  gitHubUrl: string;
+  demoUrl: string;
 };
 
 export type AllPostsType = 'Project' | 'blog';

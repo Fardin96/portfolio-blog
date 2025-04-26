@@ -10,7 +10,7 @@ export default function Projects(): React.ReactElement {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchData = async () => {
+  const fetchData = async (): Promise<void> => {
     setError('');
 
     try {
@@ -18,8 +18,8 @@ export default function Projects(): React.ReactElement {
       setData(result);
     } catch (err) {
       console.error('Failed to fetch posts:', err);
-      const errMsg = err instanceof Error ? err.message : 'Unknown Error';
 
+      const errMsg = err instanceof Error ? err.message : 'Unknown Error';
       setError(`Failed to fetch data: ${errMsg}`);
     } finally {
       setLoading(false);

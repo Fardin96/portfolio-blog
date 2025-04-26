@@ -19,16 +19,16 @@ export default function Blogs(): React.ReactElement {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchData = async () => {
+  const fetchData = async (): Promise<void> => {
     setError('');
 
     try {
-      const result = await getAllPosts('Project');
+      const result = await getAllPosts('blog');
       setData(result);
     } catch (err) {
       console.error('Failed to fetch posts:', err);
-      const errMsg = err instanceof Error ? err.message : 'Unknown Error';
 
+      const errMsg = err instanceof Error ? err.message : 'Unknown Error';
       setError(`Failed to fetch data: ${errMsg}`);
     } finally {
       setLoading(false);

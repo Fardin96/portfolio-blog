@@ -29,6 +29,8 @@ export type AllPosts = {
   date: string | null;
 };
 
+export type AllPostsType = 'Project' | 'blog';
+
 export type BlogPost = {
   title: string;
   date: string;

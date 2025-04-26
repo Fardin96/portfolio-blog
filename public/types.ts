@@ -23,6 +23,11 @@ export type Blog = {
   date: string;
 };
 
+export type AllBlogPosts = {
+  title: string;
+  description: string;
+};
+
 export type BlogPost = {
   title: string;
   date: string;

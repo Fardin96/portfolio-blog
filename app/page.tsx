@@ -1,7 +1,5 @@
 'use client';
-import React from 'react';
-// import Image from 'next/image';
-// import { useState } from 'react';
+import React, { useState } from 'react';
 import SocialIcons from '../components/SocialIcons';
 
 export default function Home(): React.ReactElement {
@@ -21,13 +19,19 @@ export default function Home(): React.ReactElement {
         <SocialIcons />
       </div>
 
-      {/* <button
+      {/* 
+      <button
         onClick={() => setVisible(!visible)}
         className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4'
       >
         {visible ? 'Hide image ❌' : 'Show image ✅'}
       </button>
 
+      <div>
+        <p>{data}</p>
+      </div> */}
+
+      {/* 
       <div className='flex flex-col items-center justify-center'>
         {visible && (
           <Image

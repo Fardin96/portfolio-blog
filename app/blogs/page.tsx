@@ -4,15 +4,7 @@ import { blogs } from '../../public/static';
 import { useEffect, useState } from 'react';
 import { AllPosts } from '../../public/types';
 import { getAllPosts } from '../../functions/sanityFetch';
-
-const formatDate = (date: string): string => {
-  return new Date(date).toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
-};
+import { formatDate } from '../../functions/utils';
 
 export default function Blogs(): React.ReactElement {
   const [data, setData] = useState<AllPosts[]>([]);
@@ -79,7 +71,7 @@ export default function Blogs(): React.ReactElement {
       <div className='space-y-6'>
         {data.map((blog, idx) => (
           <div
-            key={idx}
+            key={blog.id}
             className='border rounded-lg p-4 shadow transition-all duration-200 custom-dark-shadow'
           >
             <h2 className='text-2xl font-semibold mb-2'>{blog.title}</h2>
@@ -89,7 +81,7 @@ export default function Blogs(): React.ReactElement {
             <p className='text-gray-600 mb-4'>{blog.description}</p>
 
             <Link
-              href={`/blogs/${idx}`}
+              href={`/blogs/${blog.id}`}
               className='text-blue-500 hover:text-blue-700'
             >
               Read more →

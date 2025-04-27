@@ -61,7 +61,6 @@ export async function getSinglePost(
 
     // console.log('+------------------------SINGLE-POST----------------------+');
     // console.log(JSON.stringify(post, null, 2));
-    // console.log(post?.tags === null);
 
     return post;
   } catch (error) {

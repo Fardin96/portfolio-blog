@@ -1,12 +1,39 @@
 'use client';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { RouteParams } from '../../../public/types';
+import { Post, RouteParams } from '../../../public/types';
 import { blogPost } from '../../../public/static';
+import { useEffect, useState } from 'react';
+import { getSinglePost } from '../../../functions/sanityFetch';
+import { formatDate } from '../../../functions/utils';
 
 export default function BlogDetail(): React.ReactElement {
+  const [data, setData] = useState<Post | null>(null);
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+
   const params = useParams<RouteParams>();
-  const id = params.id;
+  const blogId = params.id;
+
+  const fetchData = async (): Promise<void> => {
+    setError('');
+
+    try {
+      const result = await getSinglePost('blog', blogId);
+      setData(result);
+    } catch (err) {
+      console.error('Failed to fetch posts:', err);
+
+      const errMsg = err instanceof Error ? err.message : 'Unknown Error';
+      setError(`Failed to fetch data: ${errMsg}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -17,16 +44,16 @@ export default function BlogDetail(): React.ReactElement {
         ← Back to blogs
       </Link>
 
-      <h1 className='text-3xl font-bold mb-2'>{blogPost.title}</h1>
+      <h1 className='text-3xl font-bold mb-2'>{data?.title}</h1>
 
       <div className='flex items-center text-gray-500 mb-6'>
-        <span>By {blogPost.author}</span>
+        <span>By {data?.author?.name}</span>
         <span className='mx-2'>•</span>
-        <span>{blogPost.date}</span>
+        <span>{formatDate(data?.date)}</span>
       </div>
 
       <div className='prose max-w-none'>
-        <pre style={{ whiteSpace: 'pre-wrap' }}>{blogPost.content}</pre>
+        <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.description}</pre>
       </div>
     </div>
   );

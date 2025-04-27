@@ -25,7 +25,7 @@ export default function SocialIcons(): React.ReactElement {
         onClick={() => handleClick()}
         target='_blank'
         rel='noopener noreferrer'
-        className='text-gray-700 hover:text-[var(--ic-mail-hover)] transition-all duration-200 hover:scale-150'
+        className='text-gray-700 hover:text-[var(--ic-mail-hover)] transition-all duration-200 hover:scale-120'
         aria-label='GitHub'
       >
         <IoMdMail size={35} />
@@ -35,7 +35,7 @@ export default function SocialIcons(): React.ReactElement {
         href='https://github.com/Fardin96'
         target='_blank'
         rel='noopener noreferrer'
-        className='text-gray-700 hover:text-[var(--ic-git-hover)] transition-all duration-200 hover:scale-150'
+        className='text-gray-700 hover:text-[var(--ic-git-hover)] transition-all duration-200 hover:scale-120'
         aria-label='GitHub'
       >
         <svg className='w-8 h-8' fill='currentColor' viewBox='0 0 24 24'>
@@ -51,7 +51,7 @@ export default function SocialIcons(): React.ReactElement {
         href='https://www.linkedin.com/in/farabi-fardin-khan-18b57a158/'
         target='_blank'
         rel='noopener noreferrer'
-        className='text-gray-700 hover:text-blue-700 transition-all duration-200 hover:scale-150'
+        className='text-gray-700 hover:text-blue-700 transition-all duration-200 hover:scale-120'
         aria-label='LinkedIn'
       >
         <svg className='w-8 h-8' fill='currentColor' viewBox='0 0 24 24'>

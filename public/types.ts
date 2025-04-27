@@ -30,12 +30,17 @@ export type AllPosts = {
   date: string | null;
 };
 
+export type Tag = {
+  title: string;
+  value: string;
+};
+
 export type Post = {
   id: string;
   title: string;
   description: string;
   date: string;
-  tags: string[];
+  tags: Tag[];
   author: {
     name: string;
     image: string;

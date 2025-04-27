@@ -38,12 +38,13 @@ export async function getSinglePost(
   postId: string
 ): Promise<Post> {
   try {
+    // "tags": tags[]->{ title, value },
     const query = `*[_type == $docName && _id == $postId][0]{
       "id": _id,
       title,
+      "tags": tags[]->{ title, value },
       "description": description[0].children[0].text,
       "date": publishedAt,
-      tags,
       author->{name, "image": image.asset->url},
       "mainImage": mainImage.asset->url,
       body
@@ -58,9 +59,9 @@ export async function getSinglePost(
       throw new Error(`Post with ID "${postId}" not found`);
     }
 
-    console.log('+------------------------SINGLE-POST----------------------+');
-    console.log(JSON.stringify(post, null, 2));
-    console.log(post?.tags === null);
+    // console.log('+------------------------SINGLE-POST----------------------+');
+    // console.log(JSON.stringify(post, null, 2));
+    // console.log(post?.tags === null);
 
     return post;
   } catch (error) {

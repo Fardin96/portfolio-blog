@@ -55,14 +55,16 @@ export default function ProjectDetail(): React.ReactElement {
           <h2 className='text-xl font-semibold mb-2'>Technologies Used</h2>
 
           <div className='flex flex-wrap gap-2'>
-            {data?.tags?.map((tech, index) => (
-              <span
-                key={index}
-                className='bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm'
-              >
-                {tech}
-              </span>
-            ))}
+            {data?.tags?.map((tech, index) => {
+              return (
+                <span
+                  key={index}
+                  className='bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm'
+                >
+                  {tech.title}
+                </span>
+              );
+            })}
           </div>
         </div>
       )}

@@ -11,6 +11,7 @@
   --link-color: #007bff;
   --navbar-bg: #374151; /* navbar light mode */
   --ic-git-hover: black;
+  --ic-mail-hover: red;
   --drop-shadow: rgba(0, 0, 0, 0.6);
 }
 
@@ -20,6 +21,7 @@ html.dark {
   --link-color: #66b2ff;
   --navbar-bg: #0f172a; /* navbar dark mode */
   --ic-git-hover: white;
+  --ic-mail-hover: red;
   --drop-shadow: rgba(255, 255, 255, 0.1);
 }
 

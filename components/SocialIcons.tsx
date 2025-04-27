@@ -1,9 +1,36 @@
 import React from 'react';
 import '../app/globals.css';
+import { IoMdMail } from 'react-icons/io';
 
 export default function SocialIcons(): React.ReactElement {
+  const email = 'fardinshuvro96@gmail.com';
+
+  const handleClick = () => {
+    // Copy email to clipboard
+    navigator.clipboard
+      .writeText(email)
+      .then(() => {
+        console.log('Email copied to clipboard');
+      })
+      .catch((err) => {
+        console.error('Failed to copy email: ', err);
+      });
+    // No need to prevent default — let mail app open normally
+  };
+
   return (
     <div className='flex space-x-4'>
+      <a
+        href={`mailto:${email}`}
+        onClick={() => handleClick()}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='text-gray-700 hover:text-[var(--ic-mail-hover)] transition-all duration-200 hover:scale-150'
+        aria-label='GitHub'
+      >
+        <IoMdMail size={35} />
+      </a>
+
       <a
         href='https://github.com/Fardin96'
         target='_blank'

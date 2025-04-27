@@ -1,7 +1,6 @@
 import { Blog, BlogPost, Project, ProjectDetails } from './types';
 
 export const projectDetails: ProjectDetails = {
-  // title: `Project ${id}`,
   title: `Project`,
   description:
     'This is a detailed description of the project. In a real application, this would be fetched based on the project ID.',
@@ -55,7 +54,6 @@ export const blogs: Blog[] = [
 ];
 
 export const blogPost: BlogPost = {
-  // title: `Blog Post ${id}`,
   title: `Blog Post`,
   date: 'April 15, 2025',
   author: 'Farabi',

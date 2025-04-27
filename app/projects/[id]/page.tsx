@@ -2,8 +2,7 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { AllPosts, Post, RouteParams } from '../../../public/types';
-import { projectDetails } from '../../../public/static';
+import { Post, RouteParams } from '../../../public/types';
 import { getSinglePost } from '../../../functions/sanityFetch';
 
 export default function ProjectDetail(): React.ReactElement {
@@ -12,18 +11,19 @@ export default function ProjectDetail(): React.ReactElement {
   const [loading, setLoading] = useState<boolean>(true);
 
   const params = useParams<RouteParams>();
-  const projectId = params.id;
+  const projectId: string = params.id;
 
   const fetchData = async (): Promise<void> => {
     setError('');
 
     try {
-      const result = await getSinglePost('Project', projectId);
+      const result: Post = await getSinglePost('Project', projectId);
       setData(result);
     } catch (err) {
       console.error('Failed to fetch posts:', err);
 
-      const errMsg = err instanceof Error ? err.message : 'Unknown Error';
+      const errMsg: string =
+        err instanceof Error ? err.message : 'Unknown Error';
       setError(`Failed to fetch data: ${errMsg}`);
     } finally {
       setLoading(false);

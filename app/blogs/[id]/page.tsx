@@ -2,7 +2,6 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Post, RouteParams } from '../../../public/types';
-import { blogPost } from '../../../public/static';
 import { useEffect, useState } from 'react';
 import { getSinglePost } from '../../../functions/sanityFetch';
 import { formatDate } from '../../../functions/utils';
@@ -12,19 +11,20 @@ export default function BlogDetail(): React.ReactElement {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
 
-  const params = useParams<RouteParams>();
-  const blogId = params.id;
+  const params: RouteParams = useParams<RouteParams>();
+  const blogId: string = params.id;
 
   const fetchData = async (): Promise<void> => {
     setError('');
 
     try {
-      const result = await getSinglePost('blog', blogId);
+      const result: Post = await getSinglePost('blog', blogId);
       setData(result);
     } catch (err) {
       console.error('Failed to fetch posts:', err);
 
-      const errMsg = err instanceof Error ? err.message : 'Unknown Error';
+      const errMsg: string =
+        err instanceof Error ? err.message : 'Unknown Error';
       setError(`Failed to fetch data: ${errMsg}`);
     } finally {
       setLoading(false);

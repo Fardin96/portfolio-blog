@@ -14,12 +14,13 @@ export default function Projects(): React.ReactElement {
     setError('');
 
     try {
-      const result = await getAllPosts('Project');
+      const result: AllPosts[] = await getAllPosts('Project');
       setData(result);
     } catch (err) {
       console.error('Failed to fetch posts:', err);
 
-      const errMsg = err instanceof Error ? err.message : 'Unknown Error';
+      const errMsg: string =
+        err instanceof Error ? err.message : 'Unknown Error';
       setError(`Failed to fetch data: ${errMsg}`);
     } finally {
       setLoading(false);

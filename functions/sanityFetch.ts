@@ -38,7 +38,6 @@ export async function getSinglePost(
   postId: string
 ): Promise<Post> {
   try {
-    // "tags": tags[]->{ title, value },
     const query = `*[_type == $docName && _id == $postId][0]{
       "id": _id,
       title,

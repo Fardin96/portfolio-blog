@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Navigation from '../components/Navigation';
 import { ThemeProvider } from '../components/theme-provider';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   title: "😴💭 Farabi's Portfolio-Blog",
@@ -23,6 +24,7 @@ export default function RootLayout({
       data-theme='dark'
     >
       <body className='h-full'>
+        <SpeedInsights />
         <ThemeProvider
           attribute='class'
           defaultTheme='system'

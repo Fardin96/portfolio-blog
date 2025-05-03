@@ -24,6 +24,7 @@ export default function RootLayout({
       data-theme='dark'
     >
       <body className='h-full'>
+        <SpeedInsights />
         <ThemeProvider
           attribute='class'
           defaultTheme='system'

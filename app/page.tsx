@@ -1,9 +1,46 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SocialIcons from '../components/SocialIcons';
+import { WebhookData } from '../public/types/webhookTypes';
 
 export default function Home(): React.ReactElement {
   // const [visible, setVisible] = useState(false);
+  const [webhookData, setWebhookData] = useState<WebhookData[]>([]);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [error, setError] = useState<string | null>(null);
+  // const [refreshKey, setRefreshKey] = useState<number>(0);
+
+  useEffect(() => {
+    async function fetchWebhookData() {
+      try {
+        // setLoading(true);
+        const response = await fetch('/api/webhook/data');
+        if (!response.ok) {
+          throw new Error('Failed to fetch webhook data');
+        }
+
+        const data = await response.json();
+
+        setWebhookData(data.webhooks || []);
+        // setError(null);
+      } catch (err) {
+        console.error('Error fetching webhook data:', err);
+        // setError('Failed to load webhook data. Please try again later.');
+      } finally {
+        // setLoading(false);
+      }
+    }
+
+    fetchWebhookData();
+
+    // Set up polling to refresh the data every 5 seconds
+    const intervalId = setInterval(() => {
+      fetchWebhookData();
+    }, 5000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div className='flex flex-col items-center justify-center py-8'>
@@ -18,6 +55,8 @@ export default function Home(): React.ReactElement {
       <div className='mt-16 mb-6'>
         <SocialIcons />
       </div>
+
+      <p>{webhookData.toString()}</p>
 
       {/* 
       <button

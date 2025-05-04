@@ -1,7 +1,7 @@
 'use client';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Post, RouteParams } from '../../../public/types';
+import { Post, RouteParams } from '../../../public/types/types';
 import { useEffect, useState } from 'react';
 import { getSinglePost } from '../../../functions/sanityFetch';
 import { formatDate } from '../../../functions/utils';

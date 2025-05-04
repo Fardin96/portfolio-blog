@@ -1,4 +1,4 @@
-import { Blog, BlogPost, Project, ProjectDetails } from './types';
+import { Blog, BlogPost, Project, ProjectDetails } from './types/types';
 
 export const projectDetails: ProjectDetails = {
   title: `Project`,

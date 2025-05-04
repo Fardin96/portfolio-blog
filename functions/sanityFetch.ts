@@ -1,5 +1,5 @@
 import { createClient } from '@sanity/client';
-import { AllPosts, AllPostsType, Post } from '../public/types';
+import { AllPosts, AllPostsType, Post } from '../public/types/types';
 
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,

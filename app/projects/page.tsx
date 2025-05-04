@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getAllPosts } from '../../functions/sanityFetch';
-import { AllPosts } from '../../public/types';
+import { AllPosts } from '../../public/types/types';
 import { projects } from '../../public/static';
 
 export default function Projects(): React.ReactElement {

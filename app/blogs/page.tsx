@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { blogs } from '../../public/static';
 import { useEffect, useState } from 'react';
-import { AllPosts } from '../../public/types';
+import { AllPosts } from '../../public/types/types';
 import { getAllPosts } from '../../functions/sanityFetch';
 import { formatDate } from '../../functions/utils';
 

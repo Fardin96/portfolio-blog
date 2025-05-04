@@ -38,7 +38,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ success: true, message: 'Webhook received!' });
   } catch (error) {
-    console.error('Error @ webhookroute.ts: ', error);
-    return NextResponse.json({ error: 'Webhook error!' }, { status: 400 });
+    console.error('Error @ webhook-POST: ', error);
+    return NextResponse.json({ error: 'Webhook POST error!' }, { status: 400 });
   }
 }

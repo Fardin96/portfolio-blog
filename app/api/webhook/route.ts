@@ -10,9 +10,7 @@ declare global {
   var webhookData: WebhookData[];
 }
 
-export default async function POST(
-  request: NextRequest
-): Promise<NextResponse> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = request.json() as WebhookPayload;
 

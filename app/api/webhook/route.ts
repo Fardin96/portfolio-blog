@@ -12,7 +12,7 @@ declare global {
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const body = request.json() as WebhookPayload;
+    const body = (await request.json()) as WebhookPayload;
 
     // const signature = request.headers.get('x-hub-signature-256');
     const eventType = request.headers.get('x-github-event') || 'unknown';

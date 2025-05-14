@@ -20,8 +20,10 @@ export default function Home(): React.ReactElement {
         }
 
         const data = await response.json();
+        console.log('+--------------------main-page------------------+');
+        console.log('data: ', data);
 
-        setWebhookData(data.webhooks || []);
+        setWebhookData(data || []);
         // setError(null);
       } catch (err) {
         console.error('Error fetching webhook data:', err);
@@ -34,12 +36,12 @@ export default function Home(): React.ReactElement {
     fetchWebhookData();
 
     // Set up polling to refresh the data every 5 seconds
-    const intervalId = setInterval(() => {
-      fetchWebhookData();
-    }, 5000);
+    // const intervalId = setInterval(() => {
+    //   fetchWebhookData();
+    // }, 5000);
 
     // Clean up the interval when the component unmounts
-    return () => clearInterval(intervalId);
+    // return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -56,7 +58,7 @@ export default function Home(): React.ReactElement {
         <SocialIcons />
       </div>
 
-      <p>{webhookData.toString()}</p>
+      <p>{JSON.stringify(webhookData, null, 2)}</p>
 
       {/* 
       <button

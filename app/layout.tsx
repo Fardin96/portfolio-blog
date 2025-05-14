@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 type RootLayoutProps = {
-  children: React.ReactNode;
+  children: React.ReactElement;
 };
 
 export default function RootLayout({

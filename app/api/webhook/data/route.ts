@@ -22,11 +22,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     let webhooks = [];
     if (webhookData) {
-      webhooks = await JSON.parse(webhookData as string);
+      // webhooks = await JSON.parse({webhookData as string});
 
       // convert to array if not already
       if (!Array.isArray(webhooks)) {
-        webhooks = [webhooks];
+        webhooks = [webhookData];
       }
     }
 

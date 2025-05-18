@@ -15,7 +15,8 @@ async function fetchWebhookData(
       throw new Error('Failed to fetch webhook data');
     }
 
-    const data = (await response.json()) as WebhookData[];
+    // const data = (await response.json()) as WebhookData[];
+    const data = await response.json();
     console.log('+--------------------main-page------------------+');
     console.log('data: ', data);
 

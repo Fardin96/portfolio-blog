@@ -11,8 +11,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     if (!redisClient) {
       return NextResponse.json(
         {
-          error: 'Redis client not found!',
           webhooks: [],
+          error: 'Redis client not found!',
         } as WebhookDataResponse,
         { status: 400 }
       );
@@ -25,10 +25,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       // webhooks = await JSON.parse({webhookData as string});
 
       // convert to array if not already
-      if (!Array.isArray(webhooks)) {
-        webhooks = [webhookData];
-      }
+      // if (!Array.isArray(webhooks)) {
+      webhooks = [webhookData];
+      // }
     }
+
+    console.log('webhookdata: ', webhookData);
+    console.log('webhooks: ', webhooks);
 
     return NextResponse.json({
       webhooks: webhooks,

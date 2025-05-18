@@ -23,6 +23,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     let webhooks = [];
     if (webhookData) {
       // ? why is this not working?
+      // ?idk
       // webhooks = await JSON.parse({ webhookData } as string);
 
       // convert to array if not already

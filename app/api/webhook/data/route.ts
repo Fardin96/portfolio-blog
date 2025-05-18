@@ -18,11 +18,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const webhookData = await redisClient.get('test-key');
+    const webhookData = await redisClient.get('webhookData');
 
     let webhooks = [];
     if (webhookData) {
-      // webhooks = await JSON.parse({webhookData as string});
+      // ? why is this not working?
+      // webhooks = await JSON.parse({ webhookData } as string);
 
       // convert to array if not already
       // if (!Array.isArray(webhooks)) {
@@ -30,6 +31,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       // }
     }
 
+    console.log('+---------------------GET-DATA------------------+');
     console.log('webhookdata: ', webhookData);
     console.log('webhooks: ', webhooks);
 

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from 'redis';
 import {
   WebhookData,
-  WebhookPayload,
+  GitHookPayload,
 } from '../../../public/types/webhookTypes';
 import { getRedisClient } from '../../utils/redisClient';
 
@@ -16,7 +16,7 @@ import { getRedisClient } from '../../utils/redisClient';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const body = (await request.json()) as WebhookPayload; //? doesn't have github data?
+    const body = (await request.json()) as GitHookPayload; //? doesn't have github data?
 
     // const signature = request.headers.get('x-hub-signature-256');
     const eventType = request.headers.get('x-github-event') || 'unknown';

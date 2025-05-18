@@ -24,7 +24,7 @@ export interface Sender {
   [key: string]: any;
 }
 
-export interface WebhookPayload {
+export interface GitHookPayload {
   commits?: Commit[];
   repository?: Repository;
   sender?: Sender;
@@ -45,7 +45,7 @@ export interface WebhookPayload {
 export interface WebhookData {
   timestamp: string;
   eventType: string;
-  payload: WebhookPayload;
+  payload: GitHookPayload;
   //   repository: string; sender: string;
 }
 

@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { WebhookDataResponse } from '../../../../public/types/webhookTypes';
 import { createClient } from 'redis';
-import redisClient from '../../../utils/redisClient';
+import { getRedisClient } from '../../../utils/redisClient';
 
 // const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
+    const redisClient = await getRedisClient();
+    if (!redisClient) {
+      return NextResponse.json(
+        {
+          error: 'Redis client not found!',
+          webhooks: [],
+        } as WebhookDataResponse,
+        { status: 400 }
+      );
+    }
+
     const webhookData = await redisClient.get('test-key');
 
     let webhooks = [];

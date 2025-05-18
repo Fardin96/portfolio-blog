@@ -4,6 +4,7 @@ import {
   WebhookData,
   WebhookPayload,
 } from '../../../public/types/webhookTypes';
+import redisClient from '../../utils/redisClient';
 
 // const GITHUB_HOOK_SECRET: string = process.env.GITHUB_HOOK_SECRET;
 
@@ -11,7 +12,7 @@ import {
 //   var webhookData: WebhookData[];
 // }
 
-const redis = await createClient().connect();
+// const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     };
 
     // ? how to store this data in vercel kv?
-    await redis.set('webhookData', JSON.stringify(webhookData));
+    await redisClient.set('webhookData', JSON.stringify(webhookData));
 
     // if (!global.webhookData) {
     //   global.webhookData = [];

@@ -3,6 +3,32 @@ import React, { useEffect, useState } from 'react';
 import SocialIcons from '../components/SocialIcons';
 import { WebhookData } from '../public/types/webhookTypes';
 
+type SetWebhookDataType = (data: WebhookData[]) => void;
+
+async function fetchWebhookData(
+  setWebhookData: SetWebhookDataType
+): Promise<void> {
+  try {
+    // setLoading(true);
+    const response = await fetch('/api/webhook/data');
+    if (!response.ok) {
+      throw new Error('Failed to fetch webhook data');
+    }
+
+    const data = await response.json();
+    console.log('+--------------------main-page------------------+');
+    console.log('data: ', data);
+
+    setWebhookData(data || []);
+    // setError(null);
+  } catch (err) {
+    console.error('Error fetching webhook data:', err);
+    // setError('Failed to load webhook data. Please try again later.');
+  } finally {
+    // setLoading(false);
+  }
+}
+
 export default function Home(): React.ReactElement {
   // const [visible, setVisible] = useState(false);
   const [webhookData, setWebhookData] = useState<WebhookData[]>([]);
@@ -11,29 +37,7 @@ export default function Home(): React.ReactElement {
   // const [refreshKey, setRefreshKey] = useState<number>(0);
 
   useEffect(() => {
-    async function fetchWebhookData() {
-      try {
-        // setLoading(true);
-        const response = await fetch('/api/webhook/data');
-        if (!response.ok) {
-          throw new Error('Failed to fetch webhook data');
-        }
-
-        const data = await response.json();
-        console.log('+--------------------main-page------------------+');
-        console.log('data: ', data);
-
-        setWebhookData(data || []);
-        // setError(null);
-      } catch (err) {
-        console.error('Error fetching webhook data:', err);
-        // setError('Failed to load webhook data. Please try again later.');
-      } finally {
-        // setLoading(false);
-      }
-    }
-
-    fetchWebhookData();
+    fetchWebhookData(setWebhookData);
 
     // Set up polling to refresh the data every 5 seconds
     // const intervalId = setInterval(() => {

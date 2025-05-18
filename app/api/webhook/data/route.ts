@@ -7,7 +7,7 @@ import redisClient from '../../../utils/redisClient';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    const webhookData = await redisClient.get('webhookData');
+    const webhookData = await redisClient.get('test-key');
 
     let webhooks = [];
     if (webhookData) {

@@ -3,50 +3,32 @@ import React, { useEffect, useState } from 'react';
 import SocialIcons from '../components/SocialIcons';
 import { WebhookData } from '../public/types/webhookTypes';
 
-type SetWebhookDataType = (data: WebhookData) => void;
+type SetWebhookDataType = (data: WebhookData | null) => void;
 
 async function fetchWebhookData(
   setWebhookData: SetWebhookDataType
 ): Promise<void> {
   try {
-    // setLoading(true);
     const response = await fetch('/api/webhook/data');
     if (!response.ok) {
       throw new Error('Failed to fetch webhook data');
     }
 
-    // const data = (await response.json()) as WebhookData[];
     const data = await response.json();
     console.log('+--------------------main-page------------------+');
     console.log('response.json(): ', data);
 
     setWebhookData(data.webhookData || null);
-    // setError(null);
   } catch (err) {
     console.error('Error fetching webhook data:', err);
-    // setError('Failed to load webhook data. Please try again later.');
-  } finally {
-    // setLoading(false);
   }
 }
 
 export default function Home(): React.ReactElement {
-  // const [visible, setVisible] = useState(false);
   const [webhookData, setWebhookData] = useState<WebhookData | null>(null);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [error, setError] = useState<string | null>(null);
-  // const [refreshKey, setRefreshKey] = useState<number>(0);
 
   useEffect(() => {
     fetchWebhookData(setWebhookData);
-
-    // Set up polling to refresh the data every 5 seconds
-    // const intervalId = setInterval(() => {
-    //   fetchWebhookData();
-    // }, 5000);
-
-    // Clean up the interval when the component unmounts
-    // return () => clearInterval(intervalId);
   }, []);
 
   return (

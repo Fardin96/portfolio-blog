@@ -3,7 +3,7 @@ import {
   WebhookData,
   GitHookPayload,
 } from '../../../public/types/webhookTypes';
-import { getRedisClient } from '../../utils/redisClient';
+import { setRedisData } from '../../utils/redisServices';
 
 /**
  ** GITHUB WEBHOOK ENDPOINT
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // const signature = request.headers.get('x-hub-signature-256');
     const eventType = request.headers.get('x-github-event') || 'unknown';
 
-    // handle events
+    // events validation
     if (eventType === 'ping') {
       return NextResponse.json({ message: 'Pong!' });
     } else if (eventType === 'unknown') {
@@ -26,6 +26,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const body = (await request.json()) as GitHookPayload;
+    // console.log('+---------------------POST-DATA------------------+');
+    // console.log('received this payload: ', body);
 
     // payload
     const timestamp = new Date().toISOString();
@@ -41,15 +43,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       payload,
     };
 
-    console.log('+---------------------POST-DATA------------------+');
-    // console.log('received this payload: ', body);
-    console.log('sending this payload: ', webhookData);
-
     // store data in redis DB
-    const redisClient = await getRedisClient();
-    if (redisClient) {
-      await redisClient.set('webhookData', JSON.stringify(webhookData));
-    }
+    await setRedisData('webhookData', JSON.stringify(webhookData));
 
     // return success response
     return NextResponse.json({

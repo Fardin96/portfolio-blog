@@ -65,6 +65,6 @@ export interface WebhookResponse {
 }
 
 export interface WebhookDataResponse {
-  webhookData: WebhookData[];
+  webhookData: WebhookData | null;
   error?: string;
 }

@@ -7,6 +7,7 @@ export interface Commit {
     name: string;
     email: string;
   };
+  [key: string]: any;
 }
 
 export interface Repository {
@@ -24,29 +25,36 @@ export interface Sender {
   [key: string]: any;
 }
 
+/*
+ * github webhook payload format
+ */
+// export interface GitHookPayload {
+//   commits?: Commit[];
+//   repository?: Repository;
+//   sender?: Sender;
+//   ref?: string;
+//   before?: string;
+//   after?: string;
+//   created?: boolean;
+//   deleted?: boolean;
+//   forced?: boolean;
+//   compare?: string;
+//   pusher?: {
+//     name: string;
+//     email: string;
+//   };
+//   [key: string]: any; // Allow other properties
+// }
 export interface GitHookPayload {
   commits?: Commit[];
-  repository?: Repository;
-  sender?: Sender;
-  ref?: string;
-  before?: string;
-  after?: string;
-  created?: boolean;
-  deleted?: boolean;
-  forced?: boolean;
-  compare?: string;
-  pusher?: {
-    name: string;
-    email: string;
-  };
-  [key: string]: any; // Allow other properties
+  head_commit?: Commit;
+  [key: string]: any;
 }
 
 export interface WebhookData {
   timestamp: string;
   eventType: string;
   payload: GitHookPayload;
-  //   repository: string; sender: string;
 }
 
 // For API responses

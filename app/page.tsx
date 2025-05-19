@@ -63,7 +63,7 @@ export default function Home(): React.ReactElement {
         <SocialIcons />
       </div>
 
-      <p>repository data: {JSON.stringify(webhookData[0].payload, null, 2)}</p>
+      <p>repository data: {JSON.stringify(webhookData, null, 2)}</p>
 
       {/* 
       <button

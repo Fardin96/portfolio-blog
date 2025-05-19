@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getAllPosts } from '../../functions/sanityFetch';
+import { getAllPosts } from '../../utils/sanityServices';
 import { AllPosts } from '../../public/types/types';
 import { projects } from '../../public/static';
 

@@ -3,7 +3,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { Post, RouteParams } from '../../../public/types/types';
-import { getSinglePost } from '../../../functions/sanityFetch';
+import { getSinglePost } from '../../../utils/sanityServices';
 
 export default function ProjectDetail(): React.ReactElement {
   const [data, setData] = useState<Post | null>(null);

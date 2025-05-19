@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { blogs } from '../../public/static';
 import { useEffect, useState } from 'react';
 import { AllPosts } from '../../public/types/types';
-import { getAllPosts } from '../../functions/sanityFetch';
-import { formatDate } from '../../functions/utils';
+import { getAllPosts } from '../../utils/sanityServices';
+import { formatDate } from '../../utils/utils';
 
 export default function Blogs(): React.ReactElement {
   const [data, setData] = useState<AllPosts[]>([]);

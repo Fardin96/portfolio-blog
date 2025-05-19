@@ -3,8 +3,8 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Post, RouteParams } from '../../../public/types/types';
 import { useEffect, useState } from 'react';
-import { getSinglePost } from '../../../functions/sanityFetch';
-import { formatDate } from '../../../functions/utils';
+import { getSinglePost } from '../../../utils/sanityServices';
+import { formatDate } from '../../../utils/utils';
 
 export default function BlogDetail(): React.ReactElement {
   const [data, setData] = useState<Post | null>(null);

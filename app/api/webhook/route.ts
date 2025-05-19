@@ -3,7 +3,8 @@ import {
   WebhookData,
   GitHookPayload,
 } from '../../../public/types/webhookTypes';
-import { setRedisData } from '../../utils/redisServices';
+import { setRedisData } from '../../../utils/redisServices';
+import { validateSignature } from '../../../utils/githubServices';
 
 /**
  ** GITHUB WEBHOOK ENDPOINT
@@ -12,7 +13,18 @@ import { setRedisData } from '../../utils/redisServices';
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    // const signature = request.headers.get('x-hub-signature-256');
+    // signature validation
+    const signature = request.headers.get('x-hub-signature-256');
+    if (!signature || !validateSignature(request, signature)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Unauthorized!',
+        },
+        { status: 401 }
+      );
+    }
+
     const eventType = request.headers.get('x-github-event') || 'unknown';
 
     // events validation

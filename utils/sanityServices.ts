@@ -1,6 +1,10 @@
 import { createClient } from '@sanity/client';
 import { AllPosts, AllPostsType, Post } from '../public/types/types';
 
+/**
+ ** SANITY CLIENT CONFIG
+ * @returns A promise that resolves to a Sanity client
+ */
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: 'production',
@@ -8,6 +12,11 @@ export const client = createClient({
   apiVersion: '2025-04-26', // use current date (YYYY-MM-DD) to target the latest API version. Note: this should always be hard coded. Setting API version based on a dynamic value (e.g. new Date()) may break your application at a random point in the future.
 });
 
+/**
+ ** GET ALL POSTS FROM SANITY
+ * @param docName - The type of document to query
+ * @returns A promise that resolves to an array of posts
+ */
 export async function getAllPosts(docName: AllPostsType): Promise<AllPosts[]> {
   try {
     const query = `*[_type == $docName]{
@@ -33,6 +42,12 @@ export async function getAllPosts(docName: AllPostsType): Promise<AllPosts[]> {
   }
 }
 
+/**
+ ** GET SINGLE POST FROM SANITY
+ * @param docName - The type of document to query
+ * @param postId - The ID of the post to fetch
+ * @returns A promise that resolves to the post data
+ */
 export async function getSinglePost(
   docName: AllPostsType,
   postId: string

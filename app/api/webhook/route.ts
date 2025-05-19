@@ -16,7 +16,7 @@ import { getRedisClient } from '../../utils/redisClient';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const body = (await request.json()) as GitHookPayload; //? doesn't have github data?
+    const body = (await request.json()) as GitHookPayload;
 
     // const signature = request.headers.get('x-hub-signature-256');
     const eventType = request.headers.get('x-github-event') || 'unknown';
@@ -24,7 +24,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ message: 'Pong!' });
     }
 
-    console.log('received this payload: ', body); // ? how to log this?
+    console.log('+---------------------POST-DATA------------------+');
+    console.log('received this payload: ', body);
 
     const timestamp = new Date().toISOString();
     const webhookData: WebhookData = {

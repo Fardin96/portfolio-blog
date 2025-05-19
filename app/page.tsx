@@ -20,7 +20,7 @@ async function fetchWebhookData(
     console.log('+--------------------main-page------------------+');
     console.log('response.json(): ', data);
 
-    setWebhookData(data || []);
+    setWebhookData(data.webhooks || []);
     // setError(null);
   } catch (err) {
     console.error('Error fetching webhook data:', err);
@@ -63,7 +63,7 @@ export default function Home(): React.ReactElement {
         <SocialIcons />
       </div>
 
-      <p>{JSON.stringify(webhookData, null, 2)}</p>
+      <p>repository data: {JSON.stringify(webhookData[0].payload, null, 2)}</p>
 
       {/* 
       <button

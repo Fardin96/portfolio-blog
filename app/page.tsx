@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import SocialIcons from '../components/SocialIcons';
 import { WebhookData } from '../public/types/webhookTypes';
 
-type SetWebhookDataType = (data: WebhookData[]) => void;
+type SetWebhookDataType = (data: WebhookData) => void;
 
 async function fetchWebhookData(
   setWebhookData: SetWebhookDataType
@@ -20,7 +20,7 @@ async function fetchWebhookData(
     console.log('+--------------------main-page------------------+');
     console.log('response.json(): ', data);
 
-    setWebhookData(data.webhooks || []);
+    setWebhookData(data.webhookData || null);
     // setError(null);
   } catch (err) {
     console.error('Error fetching webhook data:', err);
@@ -32,7 +32,7 @@ async function fetchWebhookData(
 
 export default function Home(): React.ReactElement {
   // const [visible, setVisible] = useState(false);
-  const [webhookData, setWebhookData] = useState<WebhookData[]>([]);
+  const [webhookData, setWebhookData] = useState<WebhookData | null>(null);
   // const [loading, setLoading] = useState<boolean>(true);
   // const [error, setError] = useState<string | null>(null);
   // const [refreshKey, setRefreshKey] = useState<number>(0);

@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { WebhookDataResponse } from '../../../../public/types/webhookTypes';
-import { createClient } from 'redis';
 import { getRedisClient } from '../../../utils/redisClient';
 
-// const redis = await createClient({ url: process.env.REDIS_URL }).connect();
-
+/**
+ ** GET WEBHOOK DATA
+ * @param request - NextRequest
+ * @returns NextResponse
+ */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const redisClient = await getRedisClient();
+    // redis client validation
     if (!redisClient) {
       return NextResponse.json(
         {
-          webhooks: [],
+          webhookData: null,
           error: 'Redis client not found!',
         } as WebhookDataResponse,
         { status: 400 }
@@ -20,29 +23,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const webhookData = await redisClient.get('webhookData');
 
-    let webhooks = [];
-    if (webhookData) {
-      // ? why is this not working?
-      // webhooks = await JSON.parse({ webhookData } as string);
-
-      // convert to array if not already
-      // if (!Array.isArray(webhooks)) {
-      webhooks = [webhookData];
-      // }
-    }
-
     console.log('+---------------------GET-DATA------------------+');
-    console.log('webhookdata: ', webhookData);
-    console.log('webhooks: ', webhooks);
+    console.log('webhookData: ', webhookData);
 
     return NextResponse.json({
-      webhooks: webhooks,
+      webhookData: webhookData,
     } as WebhookDataResponse);
   } catch (error) {
     console.log('Error @ webhook-GET: ', error);
 
     return NextResponse.json(
-      { error: 'Webhook GET error!', webhooks: [] } as WebhookDataResponse,
+      { error: 'Webhook GET error!', webhookData: null } as WebhookDataResponse,
       { status: 400 }
     );
   }

@@ -27,9 +27,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const body = (await request.json()) as GitHookPayload;
 
-    // console.log('+---------------------POST-DATA------------------+');
-    // console.log('received this payload: ', body);
-
     // payload
     const timestamp = new Date().toISOString();
     const payload = {
@@ -43,6 +40,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       eventType,
       payload,
     };
+
+    console.log('+---------------------POST-DATA------------------+');
+    // console.log('received this payload: ', body);
+    console.log('sending this payload: ', webhookData);
 
     // store data in redis DB
     const redisClient = await getRedisClient();

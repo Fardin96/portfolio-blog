@@ -24,6 +24,7 @@ export function validateSignature(
 
     console.log('+--------------validateSignature--------------+');
     console.log('sig: ', signature);
+    console.log('digest: ', digest);
     console.log(
       'sig validation: ',
       crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature))

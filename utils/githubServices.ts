@@ -47,9 +47,13 @@ export function validateSignature(
     const expectedSignature = hmac.update(bodyString).digest('hex');
 
     console.log('+--------------validateSignature--------------+');
+    console.log('request header: ', request.headers);
+    console.log('body string: ', bodyString);
+    console.log('+---------------------------------------------+');
     console.log('signatureHeader: ', signatureHeader);
     console.log('signature: ', signature);
     console.log('expectedSignature: ', expectedSignature);
+    console.log('+---------------------------------------------+');
     console.log(
       'sig validation: ',
       crypto.timingSafeEqual(
@@ -57,7 +61,7 @@ export function validateSignature(
         Buffer.from(signature, 'utf-8')
       )
     );
-    console.log('+----------------------------------------------+');
+    console.log('+---------------------X------------------------+');
 
     return crypto.timingSafeEqual(
       Buffer.from(expectedSignature, 'utf-8'),

@@ -14,8 +14,8 @@ import { validateSignature } from '../../../utils/githubServices';
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // signature validation
-    const signature = request.headers.get('x-hub-signature-256');
-    if (signature && validateSignature(request, signature)) {
+    const signature = request.headers.get('X-Hub-Signature-256');
+    if (!(signature && validateSignature(request, signature))) {
       return NextResponse.json(
         {
           success: false,

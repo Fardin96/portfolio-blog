@@ -2,6 +2,23 @@ import crypto from 'crypto';
 import { NextRequest } from 'next/server';
 
 /**
+ ** Get the body of the request as a string
+ * @param request - NextRequest
+ * @returns string
+ */
+function getBodyString(request: NextRequest): string {
+  if (typeof request.body === 'string') {
+    return request.body;
+  }
+
+  try {
+    return JSON.stringify(request.body);
+  } catch (error) {
+    throw new Error('Invalid body');
+  }
+}
+
+/**
  ** VALIDATE GITHUB SIGNATURE
  * @param request - NextRequest
  * @param signatureHeader - string
@@ -24,25 +41,23 @@ export function validateSignature(
       throw new Error('Invalid algorithm');
     }
 
-    const hmac = crypto.createHmac('sha256', secret);
-    // const expectedSignature =
-    //   'sha256=' + hmac.update(JSON.stringify(request.body)).digest('hex');
-    const expectedSignature = hmac
-      .update(JSON.stringify(request.body))
-      .digest('hex');
+    const bodyString: string = getBodyString(request); // validate body data type
 
-    console.log('+--------------validateSignature--------------+');
-    console.log('signatureHeader: ', signatureHeader);
-    console.log('signature: ', signature);
-    console.log('expectedSignature: ', expectedSignature);
-    console.log(
-      'sig validation: ',
-      crypto.timingSafeEqual(
-        Buffer.from(expectedSignature, 'utf-8'),
-        Buffer.from(signature, 'utf-8')
-      )
-    );
-    console.log('+----------------------------------------------+');
+    const hmac = crypto.createHmac('sha256', secret);
+    const expectedSignature = hmac.update(bodyString).digest('hex');
+
+    // console.log('+--------------validateSignature--------------+');
+    // console.log('signatureHeader: ', signatureHeader);
+    // console.log('signature: ', signature);
+    // console.log('expectedSignature: ', expectedSignature);
+    // console.log(
+    //   'sig validation: ',
+    //   crypto.timingSafeEqual(
+    //     Buffer.from(expectedSignature, 'utf-8'),
+    //     Buffer.from(signature, 'utf-8')
+    //   )
+    // );
+    // console.log('+----------------------------------------------+');
 
     return crypto.timingSafeEqual(
       Buffer.from(expectedSignature, 'utf-8'),

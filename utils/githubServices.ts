@@ -48,7 +48,7 @@ export async function validateSignature(
 
     console.log('+--------------validateSignature--------------+');
     // console.log('request header: ', request.headers);
-    console.log('await request.text(): ', await request.text());
+    // console.log('await request.text(): ', await request.text());
     console.log('body string: ', bodyString);
     console.log('+---------------------------------------------+');
     // console.log('signatureHeader: ', signatureHeader);

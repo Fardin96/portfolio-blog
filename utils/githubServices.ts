@@ -14,7 +14,7 @@ function getBodyString(request: NextRequest): string {
   try {
     return JSON.stringify(request.body);
   } catch (error) {
-    throw new Error('Invalid body');
+    throw new Error('Unknown request');
   }
 }
 
@@ -46,18 +46,18 @@ export function validateSignature(
     const hmac = crypto.createHmac('sha256', secret);
     const expectedSignature = hmac.update(bodyString).digest('hex');
 
-    // console.log('+--------------validateSignature--------------+');
-    // console.log('signatureHeader: ', signatureHeader);
-    // console.log('signature: ', signature);
-    // console.log('expectedSignature: ', expectedSignature);
-    // console.log(
-    //   'sig validation: ',
-    //   crypto.timingSafeEqual(
-    //     Buffer.from(expectedSignature, 'utf-8'),
-    //     Buffer.from(signature, 'utf-8')
-    //   )
-    // );
-    // console.log('+----------------------------------------------+');
+    console.log('+--------------validateSignature--------------+');
+    console.log('signatureHeader: ', signatureHeader);
+    console.log('signature: ', signature);
+    console.log('expectedSignature: ', expectedSignature);
+    console.log(
+      'sig validation: ',
+      crypto.timingSafeEqual(
+        Buffer.from(expectedSignature, 'utf-8'),
+        Buffer.from(signature, 'utf-8')
+      )
+    );
+    console.log('+----------------------------------------------+');
 
     return crypto.timingSafeEqual(
       Buffer.from(expectedSignature, 'utf-8'),

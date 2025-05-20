@@ -4,12 +4,12 @@ import { NextRequest } from 'next/server';
 /**
  ** VALIDATE GITHUB SIGNATURE
  * @param request - NextRequest
- * @param signature - string
+ * @param signatureHeader - string
  * @returns boolean
  */
 export function validateSignature(
   request: NextRequest,
-  signature: string
+  signatureHeader: string
 ): boolean {
   try {
     const secret = process.env.GITHUB_WEBHOOK_SECRET;
@@ -18,20 +18,36 @@ export function validateSignature(
       throw new Error('SECRET is not set');
     }
 
+    const [algorithm, signature] = signatureHeader.split('=');
+
+    if (algorithm !== 'sha256') {
+      throw new Error('Invalid algorithm');
+    }
+
     const hmac = crypto.createHmac('sha256', secret);
-    const digest =
-      'sha256=' + hmac.update(JSON.stringify(request.body)).digest('hex');
+    // const expectedSignature =
+    //   'sha256=' + hmac.update(JSON.stringify(request.body)).digest('hex');
+    const expectedSignature = hmac
+      .update(JSON.stringify(request.body))
+      .digest('hex');
 
     console.log('+--------------validateSignature--------------+');
-    console.log('sig: ', signature);
-    console.log('digest: ', digest);
+    console.log('signatureHeader: ', signatureHeader);
+    console.log('signature: ', signature);
+    console.log('expectedSignature: ', expectedSignature);
     console.log(
       'sig validation: ',
-      crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature))
+      crypto.timingSafeEqual(
+        Buffer.from(expectedSignature, 'utf-8'),
+        Buffer.from(signature, 'utf-8')
+      )
     );
     console.log('+----------------------------------------------+');
 
-    return crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
+    return crypto.timingSafeEqual(
+      Buffer.from(expectedSignature, 'utf-8'),
+      Buffer.from(signature, 'utf-8')
+    );
   } catch (error) {
     console.error('Error @ validateSignature: ', error);
     return false;

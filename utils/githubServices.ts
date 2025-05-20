@@ -6,13 +6,13 @@ import { NextRequest } from 'next/server';
  * @param request - NextRequest
  * @returns string
  */
-function getBodyString(request: NextRequest): string {
+async function getBodyString(request: NextRequest): Promise<string> {
   if (typeof request.body === 'string') {
     return request.body;
   }
 
   try {
-    return JSON.stringify(request.body);
+    return request.text();
   } catch (error) {
     throw new Error('Unknown request');
   }
@@ -24,10 +24,10 @@ function getBodyString(request: NextRequest): string {
  * @param signatureHeader - string
  * @returns boolean
  */
-export function validateSignature(
+export async function validateSignature(
   request: NextRequest,
   signatureHeader: string
-): boolean {
+): Promise<boolean> {
   try {
     const secret = process.env.GITHUB_WEBHOOK_SECRET;
 
@@ -41,17 +41,17 @@ export function validateSignature(
       throw new Error('Invalid algorithm');
     }
 
-    const bodyString: string = getBodyString(request); // validate body data type
+    const bodyString: string = await getBodyString(request); // validate body data type
 
     const hmac = crypto.createHmac('sha256', secret);
     const expectedSignature = hmac.update(bodyString).digest('hex');
 
     console.log('+--------------validateSignature--------------+');
-    console.log('request header: ', request.headers);
-    console.log('body string: ', request.body);
+    // console.log('request header: ', request.headers);
+    console.log('await request.text(): ', await request.text());
     console.log('body string: ', bodyString);
     console.log('+---------------------------------------------+');
-    console.log('signatureHeader: ', signatureHeader);
+    // console.log('signatureHeader: ', signatureHeader);
     console.log('signature: ', signature);
     console.log('expectedSignature: ', expectedSignature);
     console.log('+---------------------------------------------+');

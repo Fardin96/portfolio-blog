@@ -15,7 +15,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // signature validation
     const signature = request.headers.get('X-Hub-Signature-256');
-    if (!(signature && validateSignature(request, signature))) {
+    if (!(signature && (await validateSignature(request, signature)))) {
       return NextResponse.json(
         {
           success: false,
@@ -25,9 +25,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const eventType = request.headers.get('x-github-event') || 'unknown';
-
     // events validation
+    const eventType = request.headers.get('x-github-event') || 'unknown';
     if (eventType === 'ping') {
       return NextResponse.json({ message: 'Pong!' });
     } else if (eventType === 'unknown') {

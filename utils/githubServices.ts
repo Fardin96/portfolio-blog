@@ -48,6 +48,7 @@ export function validateSignature(
 
     console.log('+--------------validateSignature--------------+');
     console.log('request header: ', request.headers);
+    console.log('body string: ', request.body);
     console.log('body string: ', bodyString);
     console.log('+---------------------------------------------+');
     console.log('signatureHeader: ', signatureHeader);

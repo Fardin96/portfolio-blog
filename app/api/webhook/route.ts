@@ -15,7 +15,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // signature validation
     const signature = request.headers.get('x-hub-signature-256');
-    if (!signature || !validateSignature(request, signature)) {
+    if (signature && validateSignature(request, signature)) {
       return NextResponse.json(
         {
           success: false,

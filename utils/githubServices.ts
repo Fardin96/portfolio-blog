@@ -23,6 +23,7 @@ export function validateSignature(
       'sha256=' + hmac.update(JSON.stringify(request.body)).digest('hex');
 
     console.log('+--------------validateSignature--------------+');
+    console.log('sig: ', signature);
     console.log(
       'sig validation: ',
       crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature))

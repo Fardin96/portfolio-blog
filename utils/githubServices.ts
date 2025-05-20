@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { NextRequest } from 'next/server';
+import { GitHookPayload } from '../public/types/webhookTypes';
 
 /**
  ** Get the body of the request as a string
@@ -25,31 +26,31 @@ async function getBodyString(request: NextRequest): Promise<string> {
  * @returns boolean
  */
 export async function validateSignature(
-  request: NextRequest,
+  body: GitHookPayload,
   signatureHeader: string
 ): Promise<boolean> {
   try {
+    // validate webhook secret
     const secret = process.env.GITHUB_WEBHOOK_SECRET;
-
     if (!secret) {
-      throw new Error('SECRET is not set');
+      throw new Error('Unknown enviornment');
     }
 
+    // validate signature algorithm
     const [algorithm, signature] = signatureHeader.split('=');
-
     if (algorithm !== 'sha256') {
-      throw new Error('Invalid algorithm');
+      throw new Error('Unknown request');
     }
 
-    const bodyString: string = await getBodyString(request); // validate body data type
+    // const bodyString: string = await getBodyString(request); // validate body data type
 
     const hmac = crypto.createHmac('sha256', secret);
-    const expectedSignature = hmac.update(bodyString).digest('hex');
+    const expectedSignature = hmac.update(JSON.stringify(body)).digest('hex');
 
     console.log('+--------------validateSignature--------------+');
     // console.log('request header: ', request.headers);
     // console.log('await request.text(): ', await request.text());
-    console.log('body string: ', bodyString);
+    console.log('body string: ', JSON.stringify(body));
     console.log('+---------------------------------------------+');
     // console.log('signatureHeader: ', signatureHeader);
     console.log('signature: ', signature);
@@ -64,6 +65,7 @@ export async function validateSignature(
     );
     console.log('+---------------------X------------------------+');
 
+    // return signature validation
     return crypto.timingSafeEqual(
       Buffer.from(expectedSignature, 'utf-8'),
       Buffer.from(signature, 'utf-8')

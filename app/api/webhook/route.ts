@@ -15,7 +15,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // signature validation
     const signature = request.headers.get('X-Hub-Signature-256');
-    if (!(signature && (await validateSignature(request, signature)))) {
+    const body = (await request.json()) as GitHookPayload;
+    if (!(signature && (await validateSignature(body, signature)))) {
       return NextResponse.json(
         {
           success: false,
@@ -36,7 +37,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
     }
 
-    const body = (await request.json()) as GitHookPayload;
     // console.log('+---------------------POST-DATA------------------+');
     // console.log('received this payload: ', body);
 
@@ -46,8 +46,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       commits: body.commits,
       head_commit: body.head_commit,
     };
-
-    // required data
     const webhookData: WebhookData = {
       timestamp,
       eventType,

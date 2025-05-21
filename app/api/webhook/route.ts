@@ -16,7 +16,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // signature validation
     const signature = request.headers.get('X-Hub-Signature-256');
     const body = (await request.json()) as GitHookPayload;
-    if (!(signature && (await validateSignature(body, signature)))) {
+    if (!(signature && validateSignature(body, signature))) {
       return NextResponse.json(
         {
           success: false,
@@ -36,9 +36,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         message: 'Unknown event type!',
       });
     }
-
-    // console.log('+---------------------POST-DATA------------------+');
-    // console.log('received this payload: ', body);
 
     // payload
     const timestamp = new Date().toISOString();

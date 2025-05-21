@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { NextRequest } from 'next/server';
 import { GitHookPayload } from '../public/types/webhookTypes';
 
 /**
@@ -8,15 +7,15 @@ import { GitHookPayload } from '../public/types/webhookTypes';
  * @param signatureHeader - string
  * @returns boolean
  */
-export async function validateSignature(
+export function validateSignature(
   body: GitHookPayload,
   signatureHeader: string
-): Promise<boolean> {
+): boolean {
   try {
     // validate webhook secret
     const secret = process.env.GITHUB_WEBHOOK_SECRET;
     if (!secret) {
-      throw new Error('Unknown enviornment');
+      throw new Error('Unknown request');
     }
 
     // validate signature algorithm
@@ -27,21 +26,6 @@ export async function validateSignature(
 
     const hmac = crypto.createHmac('sha256', secret);
     const expectedSignature = hmac.update(JSON.stringify(body)).digest('hex');
-
-    console.log('+--------------validateSignature--------------+');
-    console.log('body string: ', JSON.stringify(body));
-    console.log('+---------------------------------------------+');
-    console.log('signature: ', signature);
-    console.log('expectedSignature: ', expectedSignature);
-    console.log('+---------------------------------------------+');
-    console.log(
-      'sig validation: ',
-      crypto.timingSafeEqual(
-        Buffer.from(expectedSignature, 'utf-8'),
-        Buffer.from(signature, 'utf-8')
-      )
-    );
-    console.log('+---------------------X------------------------+');
 
     // return signature validation
     return crypto.timingSafeEqual(

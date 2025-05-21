@@ -22,9 +22,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // console.log('+---------------------GET-DATA------------------+');
-    // console.log('webhookData: ', webhookData);
-
     return NextResponse.json({
       webhookData: webhookData,
     } as WebhookDataResponse);

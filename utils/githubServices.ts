@@ -3,23 +3,6 @@ import { NextRequest } from 'next/server';
 import { GitHookPayload } from '../public/types/webhookTypes';
 
 /**
- ** Get the body of the request as a string
- * @param request - NextRequest
- * @returns string
- */
-async function getBodyString(request: NextRequest): Promise<string> {
-  if (typeof request.body === 'string') {
-    return request.body;
-  }
-
-  try {
-    return request.text();
-  } catch (error) {
-    throw new Error('Unknown request');
-  }
-}
-
-/**
  ** VALIDATE GITHUB SIGNATURE
  * @param request - NextRequest
  * @param signatureHeader - string
@@ -42,17 +25,12 @@ export async function validateSignature(
       throw new Error('Unknown request');
     }
 
-    // const bodyString: string = await getBodyString(request); // validate body data type
-
     const hmac = crypto.createHmac('sha256', secret);
     const expectedSignature = hmac.update(JSON.stringify(body)).digest('hex');
 
     console.log('+--------------validateSignature--------------+');
-    // console.log('request header: ', request.headers);
-    // console.log('await request.text(): ', await request.text());
     console.log('body string: ', JSON.stringify(body));
     console.log('+---------------------------------------------+');
-    // console.log('signatureHeader: ', signatureHeader);
     console.log('signature: ', signature);
     console.log('expectedSignature: ', expectedSignature);
     console.log('+---------------------------------------------+');

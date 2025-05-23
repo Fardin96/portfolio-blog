@@ -17,7 +17,7 @@ export default function Blogs(): React.ReactElement {
 
   useEffect(() => {
     fetchWebhookData(setWebhookData);
-    getRepositoryData('');
+    getRepositoryData();
   }, []);
 
   const fetchData = async (): Promise<void> => {

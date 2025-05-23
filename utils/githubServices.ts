@@ -43,19 +43,32 @@ export function validateSignature(
   }
 }
 
-const octokit = new Octokit({
-  auth: process.env.REPOSITORY_ACCESS_TOKEN,
-});
+function initOctokit(): Octokit {
+  try {
+    const octokit = new Octokit({
+      auth: process.env.REPOSITORY_ACCESS_TOKEN,
+    });
+
+    return octokit;
+  } catch (error) {
+    console.log('+----------------------GIT-DATA-------------------+');
+    console.error('Error @ initOctokit: ', error);
+  }
+}
 
 export async function getRepositoryData(path: string = '') {
-  const { data } = await octokit.repos.getContent({
-    owner,
-    repo,
-    path,
-    ref: branch,
-  });
+  console.log('+------------------getRepositoryData-------------------------+');
+  try {
+    const { data } = await initOctokit().repos.getContent({
+      owner,
+      repo,
+      path,
+      ref: branch,
+    });
 
-  console.log('+----------------------GIT-DATA-------------------+');
-  console.log('data from github: ', data);
-  // // console.log('data: ', data);
+    console.log('+----------------------GIT-DATA-------------------+');
+    console.log('data from github: ', data);
+  } catch (error) {
+    console.error('Error @ getRepositoryData: ', error);
+  }
 }

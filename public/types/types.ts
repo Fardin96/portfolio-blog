@@ -1,3 +1,5 @@
+import { WebhookData } from './webhookTypes';
+
 export type ProjectDetails = {
   title: string;
   description: string;
@@ -68,3 +70,5 @@ export type UseThemeReturnType = {
   themes: string[];
   systemTheme?: string;
 };
+
+export type SetWebhookDataType = (data: WebhookData | null) => void;

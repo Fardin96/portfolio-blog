@@ -1,5 +1,10 @@
 import crypto from 'crypto';
 import { GitHookPayload } from '../public/types/webhookTypes';
+import { Octokit } from '@octokit/rest';
+
+const owner = process.env.GITHUB_OWNER || 'yourusername';
+const repo = process.env.GITHUB_REPO || 'your-docs-repo';
+const branch = process.env.GITHUB_BRANCH || 'main';
 
 /**
  ** VALIDATE GITHUB SIGNATURE
@@ -36,4 +41,21 @@ export function validateSignature(
     console.error('Error @ validateSignature: ', error);
     return false;
   }
+}
+
+const octokit = new Octokit({
+  auth: process.env.REPOSITORY_ACCESS_TOKEN,
+});
+
+export async function getRepositoryData(path: string = '') {
+  const { data } = await octokit.repos.getContent({
+    owner,
+    repo,
+    path,
+    ref: branch,
+  });
+
+  console.log('+----------------------GIT-DATA-------------------+');
+  console.log('data from github: ', data);
+  // // console.log('data: ', data);
 }

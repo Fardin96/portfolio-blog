@@ -5,11 +5,20 @@ import { useEffect, useState } from 'react';
 import { AllPosts } from '../../public/types/types';
 import { getAllPosts } from '../../utils/sanityServices';
 import { formatDate } from '../../utils/utils';
+import { fetchWebhookData } from '../../utils/webhookServices';
+import { WebhookData } from '../../public/types/webhookTypes';
+import { getRepositoryData } from '../../utils/githubServices';
 
 export default function Blogs(): React.ReactElement {
   const [data, setData] = useState<AllPosts[]>([]);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  const [webhookData, setWebhookData] = useState<WebhookData | null>(null);
+
+  useEffect(() => {
+    fetchWebhookData(setWebhookData);
+    getRepositoryData('');
+  }, []);
 
   const fetchData = async (): Promise<void> => {
     setError('');

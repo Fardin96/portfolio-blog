@@ -3,34 +3,7 @@ import React, { useEffect, useState } from 'react';
 import SocialIcons from '../components/SocialIcons';
 import { WebhookData } from '../public/types/webhookTypes';
 
-type SetWebhookDataType = (data: WebhookData | null) => void;
-
-async function fetchWebhookData(
-  setWebhookData: SetWebhookDataType
-): Promise<void> {
-  try {
-    const response = await fetch('/api/webhook/data');
-    if (!response.ok) {
-      throw new Error('Failed to fetch webhook data');
-    }
-
-    const data = await response.json();
-    console.log('+--------------------main-page------------------+');
-    console.log('response.json(): ', data);
-
-    setWebhookData(data.webhookData || null);
-  } catch (err) {
-    console.error('Error fetching webhook data:', err);
-  }
-}
-
 export default function Home(): React.ReactElement {
-  const [webhookData, setWebhookData] = useState<WebhookData | null>(null);
-
-  useEffect(() => {
-    fetchWebhookData(setWebhookData);
-  }, []);
-
   return (
     <div className='flex flex-col items-center justify-center py-8'>
       <h1 className='text-4xl font-bold mb-2'>👋🏼 This is Farabi</h1>

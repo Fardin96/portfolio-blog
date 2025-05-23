@@ -15,13 +15,6 @@ export default function Blogs(): React.ReactElement {
   const [loading, setLoading] = useState<boolean>(true);
   const [webhookData, setWebhookData] = useState<WebhookData | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      await fetchWebhookData(setWebhookData);
-      await getRepositoryData();
-    })();
-  }, []);
-
   const fetchData = async (): Promise<void> => {
     setError('');
 
@@ -37,6 +30,13 @@ export default function Blogs(): React.ReactElement {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      await fetchWebhookData(setWebhookData);
+      await getRepositoryData();
+    })();
+  }, []);
 
   useEffect(() => {
     fetchData();

@@ -43,23 +43,36 @@ export function validateSignature(
   }
 }
 
-function initOctokit(): Octokit {
+async function initOctokit(): Promise<Octokit> {
   try {
     const octokit = new Octokit({
       auth: process.env.REPOSITORY_ACCESS_TOKEN,
     });
 
+    const {
+      data: { login },
+    } = await octokit.users.getAuthenticated();
+
+    console.log('+----------------------initOctokit-------------------+');
+    console.log(
+      'process.env.REPOSITORY_ACCESS_TOKEN: ',
+      process.env.REPOSITORY_ACCESS_TOKEN
+    );
+    console.log('octokit: ', octokit);
+    console.log('login: ', login);
+
     return octokit;
   } catch (error) {
-    console.log('+----------------------GIT-DATA-------------------+');
+    console.log('+----------------------initOctokit-------------------+');
     console.error('Error @ initOctokit: ', error);
   }
 }
 
-export async function getRepositoryData(path: string = '') {
+export async function getRepositoryData(path: string = ''): Promise<void> {
   console.log('+------------------getRepositoryData-------------------------+');
   try {
-    const { data } = await initOctokit().repos.getContent({
+    const octokit = await initOctokit();
+    const { data } = await octokit.repos.getContent({
       owner,
       repo,
       path,

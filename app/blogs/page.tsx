@@ -7,6 +7,7 @@ import { getAllPosts } from '../../utils/sanityServices';
 import { formatDate } from '../../utils/utils';
 import { fetchWebhookData } from '../../utils/webhookServices';
 import { WebhookData } from '../../public/types/webhookTypes';
+import { getRepositoryData } from '../../utils/githubServices';
 
 export default function Blogs(): React.ReactElement {
   const [data, setData] = useState<AllPosts[]>([]);
@@ -30,16 +31,20 @@ export default function Blogs(): React.ReactElement {
     }
   };
 
+  const fetchGithubData = async (): Promise<void> => {
+    try {
+      const response = await fetch('/api/github/repository');
+      const result = await response.json();
+      console.log('GitHub repository data:', result);
+    } catch (error) {
+      console.error('Error fetching repository data:', error);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       await fetchWebhookData(setWebhookData);
-      try {
-        const response = await fetch('/api/github/repository');
-        const result = await response.json();
-        console.log('GitHub repository data:', result);
-      } catch (error) {
-        console.error('Error fetching repository data:', error);
-      }
+      await fetchGithubData();
     })();
   }, []);
 

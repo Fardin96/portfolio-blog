@@ -78,6 +78,9 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
       repo,
       path,
       ref: branch,
+      mediaType: {
+        format: 'application/vnd.github.html+json', // returns md content in html format
+      },
     });
 
     console.log('+----------------------GIT-DATA-------------------+');

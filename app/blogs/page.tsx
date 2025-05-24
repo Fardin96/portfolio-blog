@@ -33,11 +33,10 @@ export default function Blogs(): React.ReactElement {
 
   const fetchGithubData = async (): Promise<void> => {
     try {
-      const response = await fetch('/api/github/repository', {
-        body: new URLSearchParams({
-          searchParams: 'http-response-fundamentals',
-        }),
-      });
+      const response = await fetch(
+        '/api/github/repository?path=http-response-fundamentals'
+      );
+
       const result = await response.json();
       console.log('GitHub repository data:', result);
     } catch (error) {

@@ -49,17 +49,17 @@ async function initOctokit(): Promise<Octokit> {
       auth: process.env.REPOSITORY_ACCESS_TOKEN,
     });
 
-    const {
-      data: { login },
-    } = await octokit.users.getAuthenticated();
+    // const {
+    //   data: { login },
+    // } = await octokit.users.getAuthenticated();
 
-    console.log('+----------------------initOctokit-------------------+');
-    console.log(
-      'process.env.REPOSITORY_ACCESS_TOKEN: ',
-      process.env.REPOSITORY_ACCESS_TOKEN
-    );
-    console.log('octokit: ', octokit);
-    console.log('login: ', login);
+    // console.log('+----------------------initOctokit-------------------+');
+    // console.log(
+    //   'process.env.REPOSITORY_ACCESS_TOKEN: ',
+    //   process.env.REPOSITORY_ACCESS_TOKEN
+    // );
+    // console.log('octokit: ', octokit);
+    // console.log('login: ', login);
 
     return octokit;
   } catch (error) {

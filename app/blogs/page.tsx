@@ -34,7 +34,7 @@ export default function Blogs(): React.ReactElement {
   const fetchGithubData = async (): Promise<void> => {
     try {
       const response = await fetch(
-        '/api/github/repository?path=http-response-fundamentals'
+        '/api/github/repository?path=http-response-fundamentals/http-response-fundamentals.md'
       );
 
       const result = await response.json();

@@ -88,7 +88,7 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
     });
 
     const { data: data2 } = await octokit.request(
-      `GET /repos/{owner}/{repo}/contents/{path}}`,
+      `GET /repos/{owner}/{repo}/contents/{path}`,
       {
         owner: owner,
         repo: repo,

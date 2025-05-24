@@ -65,10 +65,11 @@ async function initOctokit(): Promise<Octokit> {
   } catch (error) {
     console.log('+----------------------initOctokit-------------------+');
     console.error('Error @ initOctokit: ', error);
+    throw error;
   }
 }
 
-export async function getRepositoryData(path: string = ''): Promise<void> {
+export async function getRepositoryData(path: string = ''): Promise<any> {
   console.log('+------------------getRepositoryData-------------------------+');
   try {
     const octokit = await initOctokit();
@@ -81,7 +82,10 @@ export async function getRepositoryData(path: string = ''): Promise<void> {
 
     console.log('+----------------------GIT-DATA-------------------+');
     console.log('data from github: ', data);
+
+    return data;
   } catch (error) {
     console.error('Error @ getRepositoryData: ', error);
+    throw error;
   }
 }

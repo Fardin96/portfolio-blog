@@ -4,7 +4,7 @@ import {
   GitHookPayload,
 } from '../../../public/types/webhookTypes';
 import { setRedisData } from '../../../utils/redisServices';
-import { validateSignature } from '../../../utils/githubServices';
+import { validateGithubSignature } from '../../../utils/authServices';
 
 /**
  ** GITHUB WEBHOOK ENDPOINT
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // signature validation
     const signature = request.headers.get('X-Hub-Signature-256');
     const body = (await request.json()) as GitHookPayload;
-    if (!(signature && validateSignature(body, signature))) {
+    if (!(signature && validateGithubSignature(body, signature))) {
       return NextResponse.json(
         {
           success: false,

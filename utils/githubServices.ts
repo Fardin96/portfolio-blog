@@ -78,32 +78,28 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
       repo,
       path,
       ref: branch,
-      // mediaType: {
-      //   format: 'application/vnd.github.html+json', // returns md content in html format
-      // },
       headers: {
-        accept: 'application/vnd.github.html+json',
+        accept: 'application/vnd.github.html+json', // returns md content in html format
         'X-GitHub-Api-Version': '2022-11-28',
       },
     });
 
-    const { data: data2 } = await octokit.request(
-      `GET /repos/{owner}/{repo}/contents/{path}`,
-      {
-        owner: owner,
-        repo: repo,
-        path: path,
-        headers: {
-          accept: 'application/vnd.github.html+json',
-          'X-GitHub-Api-Version': '2022-11-28',
-        },
-      }
-    );
+    // const { data: data2 } = await octokit.request(
+    //   `GET /repos/{owner}/{repo}/contents/{path}`,
+    //   {
+    //     owner: owner,
+    //     repo: repo,
+    //     path: path,
+    //     headers: {
+    //       accept: 'application/vnd.github.html+json',
+    //       'X-GitHub-Api-Version': '2022-11-28',
+    //     },
+    //   }
+    // );
 
     console.log('+----------------------GIT-DATA-------------------+');
     console.log('data from github octokit.repos.getContent: ', data);
-    console.log('+-------------------------------------------------+');
-    console.log('data from github octokit.request: ', data2);
+    // console.log('+-------------------------------------------------+'); console.log('data from github octokit.request: ', data2);
 
     return data;
   } catch (error) {

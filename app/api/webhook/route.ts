@@ -14,27 +14,26 @@ import { validateGithubSignature } from '../../../utils/authServices';
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const signature = request.headers.get('X-Hub-Signature-256');
-    const body = (await request.json()) as GitHookPayload;
 
+    // handle JSON parsing error
+    let body: GitHookPayload;
+    try {
+      body = (await request.json()) as GitHookPayload;
+    } catch (jsonError: unknown) {
+      console.error('Error parsing JSON body:', jsonError);
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized!' },
+        { status: 400 }
+      );
+    }
+
+    // auth
     const isValid =
       signature && // signature exists
       body && // body exists
       Object.keys(body).length > 0 && // body is not empty
       validateGithubSignature(body, signature); // signature is valid
 
-    console.log('+-----------------POST--------------+');
-    console.log('signature: ', signature);
-    console.log('body: ', body);
-    console.log(
-      'keys: ',
-      Object.keys(body),
-      ' length: ',
-      Object.keys(body).length
-    );
-    console.log('isValid: ', isValid);
-    console.log('+-------------------------------+');
-
-    // auth
     if (!isValid) {
       return NextResponse.json(
         {
@@ -50,10 +49,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (eventType === 'ping') {
       return NextResponse.json({ message: 'Pong!' });
     } else if (eventType === 'unknown') {
-      return NextResponse.json({
-        success: false,
-        message: 'Unknown event type!',
-      });
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Unauthorized!',
+        },
+        { status: 401 }
+      );
     }
 
     // payload

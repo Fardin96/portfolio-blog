@@ -40,6 +40,12 @@ export function validateGithubSignature(
   }
 }
 
+/**
+ ** CREATE SIGNATURE
+ * @param path - string
+ * @param timestamp - string
+ * @returns string
+ */
 export function generateSignature(path: string, timestamp: string): string {
   const data = `${path}${timestamp}`;
 
@@ -49,6 +55,27 @@ export function generateSignature(path: string, timestamp: string): string {
   return signature;
 }
 
+/**
+ ** VALIDATE SIGNATURE
+ * @param request - NextRequest
+ * @returns boolean
+ */
 export function validateSignature(request: NextRequest): boolean {
-  return true;
+  const signature = request.headers.get('X-Signature');
+  const timestamp = request.headers.get('X-Timestamp');
+
+  if (!(signature && timestamp)) {
+    return false;
+  }
+
+  const path = request.url.split('?')[1];
+  const data = `${path}${timestamp}`;
+
+  const hmac = crypto.createHmac('sha256', secret);
+  const expectedSignature = hmac.update(data).digest('hex');
+
+  return crypto.timingSafeEqual(
+    Buffer.from(signature, 'utf-8'),
+    Buffer.from(expectedSignature, 'utf-8')
+  );
 }

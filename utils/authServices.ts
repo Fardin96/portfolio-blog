@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { GitHookPayload } from '../public/types/webhookTypes';
+import { NextRequest } from 'next/server';
 
 const secret = process.env.GITHUB_WEBHOOK_SECRET;
 
@@ -37,4 +38,17 @@ export function validateGithubSignature(
     console.error('Error @ validateSignature: ', error);
     return false;
   }
+}
+
+export function generateSignature(path: string, timestamp: string): string {
+  const data = `${path}${timestamp}`;
+
+  const hmac = crypto.createHmac('sha256', secret);
+  const signature = hmac.update(data).digest('hex');
+
+  return signature;
+}
+
+export function validateSignature(request: NextRequest): boolean {
+  return true;
 }

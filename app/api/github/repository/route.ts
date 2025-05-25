@@ -1,10 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRepositoryData } from '../../../../utils/githubServices';
+import { validateSignature } from '../../../../utils/authServices';
 
 export async function GET(request: NextRequest) {
   try {
     // console.log('+----------------------GET-REQUEST-------------------+');
     // console.log('request.url: ', request.url);
+
+    // auth
+    if (!validateSignature(request)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Unauthorized!',
+        },
+        {
+          status: 401,
+        }
+      );
+    }
 
     const { searchParams } = new URL(request.url);
     const path = searchParams.get('path') || '';

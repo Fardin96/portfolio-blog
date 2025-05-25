@@ -13,7 +13,7 @@ import { validateGithubSignature } from '../../../utils/authServices';
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    // signature validation
+    // auth
     const signature = request.headers.get('X-Hub-Signature-256');
     const body = (await request.json()) as GitHookPayload;
     if (!(signature && validateGithubSignature(body, signature))) {

@@ -58,7 +58,7 @@ function isValidSignature(
  * @returns boolean
  */
 export function validateGithubSignature(
-  body: GitHookPayload,
+  bodyString: string,
   signatureHeader: string
 ): boolean {
   try {
@@ -68,7 +68,7 @@ export function validateGithubSignature(
       throw new Error('Unknown request');
     }
 
-    const expectedSignature = generateHmacHexSignature(JSON.stringify(body));
+    const expectedSignature = generateHmacHexSignature(bodyString);
 
     return isValidSignature(signature, expectedSignature);
   } catch (error) {

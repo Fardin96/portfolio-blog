@@ -16,25 +16,41 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const signature = request.headers.get('X-Hub-Signature-256');
 
     // handle JSON parsing error
-    let body: GitHookPayload;
-    try {
-      body = (await request.json()) as GitHookPayload;
-    } catch (jsonError: unknown) {
-      console.error('Error parsing JSON body:', jsonError);
+    const reqClone: NextRequest = request.clone() as NextRequest;
+    const bodyTxt = await reqClone.text();
+    let body: GitHookPayload | undefined = undefined;
+
+    if (bodyTxt.length === 0) {
       return NextResponse.json(
         { success: false, message: 'Unauthorized!' },
         { status: 400 }
       );
     }
 
-    // auth
-    const isValid =
-      signature && // signature exists
-      body && // body exists
-      Object.keys(body).length > 0 && // body is not empty
-      validateGithubSignature(body, signature); // signature is valid
+    // if body is not empty
+    try {
+      body = await request.json();
+      console.log('body: ', body);
+    } catch (jsonError: unknown) {
+      console.error('Error parsing JSON body:', jsonError);
+      return NextResponse.json(
+        // { success: false, message: 'Unauthorized!' },
+        { success: false, message: 'Invalid request body: Malformed JSON.' },
+        { status: 400 }
+      );
+    }
 
-    if (!isValid) {
+    // auth
+    const isSignatureValid =
+      signature && validateGithubSignature(bodyTxt, signature); // Use raw bodyTxt for signature validation
+
+    // Check if the body (if it was expected and parsed) is not empty.
+    // This check is separate because signature validation uses the raw text.
+    const isBodyPopulated: boolean = body
+      ? Object.keys(body).length > 0 // if false: body is not empty; no keys either!
+      : false;
+
+    if (!(isSignatureValid && isBodyPopulated)) {
       return NextResponse.json(
         {
           success: false,
@@ -61,8 +77,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // payload
     const timestamp = new Date().toISOString();
     const payload = {
-      commits: body.commits,
-      head_commit: body.head_commit,
+      commits: body!.commits, // Added non-null assertion as body will be populated if we reach here
+      head_commit: body!.head_commit, // Added non-null assertion
     };
     const webhookData: WebhookData = {
       timestamp,

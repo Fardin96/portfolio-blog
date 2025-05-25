@@ -1,8 +1,55 @@
-import crypto from 'crypto';
+import crypto, { sign } from 'crypto';
 import { NextRequest } from 'next/server';
 import { GitHookPayload } from '../public/types/webhookTypes';
 
 const secret = process.env.GITHUB_WEBHOOK_SECRET;
+
+/**
+ ** CREATE HMAC-HEX SIGNATURE
+ * @param path - string
+ * @param timestamp - string
+ * @returns string
+ */
+export function generateHmacHexSignature(
+  data: string,
+  algorithm?: string,
+  key?: string
+): string {
+  try {
+    // default values
+    algorithm = algorithm || 'sha256';
+    key = key || secret;
+
+    // validate webhook secret
+    if (!key) {
+      throw new Error('Unknown Error');
+    }
+
+    const hmac = crypto.createHmac(algorithm, key); // hash function
+    const signature = hmac.update(data).digest('hex'); // generate signature
+
+    return signature;
+  } catch (error) {
+    console.error('Error @ generateHmacHexSignature: ', error);
+    throw error;
+  }
+}
+
+/**
+ ** TIMING SAFE SIGNATRUE VALIDATION (HMAC-HEX)
+ * @param signature - string
+ * @param expectedSignature - string
+ * @returns boolean
+ */
+function isValidSignature(
+  signature: string,
+  expectedSignature: string
+): boolean {
+  return crypto.timingSafeEqual(
+    Buffer.from(signature, 'utf-8'),
+    Buffer.from(expectedSignature, 'utf-8')
+  );
+}
 
 /**
  ** VALIDATE GITHUB SIGNATURE
@@ -15,47 +62,17 @@ export function validateGithubSignature(
   signatureHeader: string
 ): boolean {
   try {
-    // validate webhook secret
-    if (!secret) {
-      throw new Error('Unknown Error');
-    }
-
     // validate signature algorithm
     const [algorithm, signature] = signatureHeader.split('=');
     if (algorithm !== 'sha256') {
       throw new Error('Unknown request');
     }
 
-    const hmac = crypto.createHmac('sha256', secret);
-    const expectedSignature = hmac.update(JSON.stringify(body)).digest('hex');
+    const expectedSignature = generateHmacHexSignature(JSON.stringify(body));
 
-    // return signature validation
-    return crypto.timingSafeEqual(
-      Buffer.from(expectedSignature, 'utf-8'),
-      Buffer.from(signature, 'utf-8')
-    );
+    return isValidSignature(signature, expectedSignature);
   } catch (error) {
     console.error('Error @ validateSignature: ', error);
-    throw error;
-  }
-}
-
-/**
- ** CREATE SIGNATURE
- * @param path - string
- * @param timestamp - string
- * @returns string
- */
-export function generateSignature(path: string, timestamp: string): string {
-  try {
-    const data = `${path}${timestamp}`; // required data format
-
-    const hmac = crypto.createHmac('sha256', secret);
-    const signature = hmac.update(data).digest('hex'); // generate signature
-
-    return signature;
-  } catch (error) {
-    console.error('Error @ createSignature: ', error);
     throw error;
   }
 }
@@ -79,14 +96,9 @@ export function validateSignature(request: NextRequest): boolean {
     const path = request.url.split('?')[1];
     const data = `${path}${timestamp}`;
 
-    const hmac = crypto.createHmac('sha256', secret);
-    const expectedSignature = hmac.update(data).digest('hex'); // create signature
+    const expectedSignature = generateHmacHexSignature(data);
 
-    // return signature validation
-    return crypto.timingSafeEqual(
-      Buffer.from(signature, 'utf-8'),
-      Buffer.from(expectedSignature, 'utf-8')
-    );
+    return isValidSignature(signature, expectedSignature);
   } catch (error) {
     console.error('Error @ validateSignature: ', error);
     throw error;

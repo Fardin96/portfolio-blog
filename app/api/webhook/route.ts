@@ -16,7 +16,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // auth
     const signature = request.headers.get('X-Hub-Signature-256');
     const body = (await request.json()) as GitHookPayload;
-    if (!(signature && validateGithubSignature(body, signature))) {
+    if (
+      !(
+        signature &&
+        body &&
+        Object.keys(body).length > 0 &&
+        validateGithubSignature(body, signature)
+      )
+    ) {
       return NextResponse.json(
         {
           success: false,

@@ -1,4 +1,4 @@
-import crypto, { sign } from 'crypto';
+import crypto from 'crypto';
 import { NextRequest } from 'next/server';
 import { GitHookPayload } from '../public/types/webhookTypes';
 

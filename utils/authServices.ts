@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { GitHookPayload } from '../public/types/webhookTypes';
 import { NextRequest } from 'next/server';
+import { GitHookPayload } from '../public/types/webhookTypes';
 
 const secret = process.env.GITHUB_WEBHOOK_SECRET;
 
@@ -36,7 +36,7 @@ export function validateGithubSignature(
     );
   } catch (error) {
     console.error('Error @ validateSignature: ', error);
-    return false;
+    throw error;
   }
 }
 
@@ -47,12 +47,17 @@ export function validateGithubSignature(
  * @returns string
  */
 export function generateSignature(path: string, timestamp: string): string {
-  const data = `${path}${timestamp}`;
+  try {
+    const data = `${path}${timestamp}`; // required data format
 
-  const hmac = crypto.createHmac('sha256', secret);
-  const signature = hmac.update(data).digest('hex');
+    const hmac = crypto.createHmac('sha256', secret);
+    const signature = hmac.update(data).digest('hex'); // generate signature
 
-  return signature;
+    return signature;
+  } catch (error) {
+    console.error('Error @ createSignature: ', error);
+    throw error;
+  }
 }
 
 /**
@@ -61,21 +66,29 @@ export function generateSignature(path: string, timestamp: string): string {
  * @returns boolean
  */
 export function validateSignature(request: NextRequest): boolean {
-  const signature = request.headers.get('X-Signature');
-  const timestamp = request.headers.get('X-Timestamp');
+  try {
+    const signature = request.headers.get('X-Signature');
+    const timestamp = request.headers.get('X-Timestamp');
 
-  if (!(signature && timestamp)) {
-    return false;
+    // check if exists
+    if (!(signature && timestamp)) {
+      return false;
+    }
+
+    // extract and format required fields
+    const path = request.url.split('?')[1];
+    const data = `${path}${timestamp}`;
+
+    const hmac = crypto.createHmac('sha256', secret);
+    const expectedSignature = hmac.update(data).digest('hex'); // create signature
+
+    // return signature validation
+    return crypto.timingSafeEqual(
+      Buffer.from(signature, 'utf-8'),
+      Buffer.from(expectedSignature, 'utf-8')
+    );
+  } catch (error) {
+    console.error('Error @ validateSignature: ', error);
+    throw error;
   }
-
-  const path = request.url.split('?')[1];
-  const data = `${path}${timestamp}`;
-
-  const hmac = crypto.createHmac('sha256', secret);
-  const expectedSignature = hmac.update(data).digest('hex');
-
-  return crypto.timingSafeEqual(
-    Buffer.from(signature, 'utf-8'),
-    Buffer.from(expectedSignature, 'utf-8')
-  );
 }

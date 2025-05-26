@@ -1,12 +1,11 @@
 import { createClient, RedisClientType } from 'redis';
 
+let redisClient: RedisClientType | null = null;
+
 /**
  ** GET REDIS CLIENT
  * @returns RedisClientType | null
  */
-
-let redisClient: RedisClientType | null = null;
-
 export async function getRedisClient(): Promise<RedisClientType | null> {
   try {
     // check for existing redis connection
@@ -27,6 +26,14 @@ export async function getRedisClient(): Promise<RedisClientType | null> {
   }
 }
 
+async function ensureRedisClient(): Promise<void> {
+  const redis: RedisClientType | null = await getRedisClient();
+
+  if (!redis) {
+    throw new Error('Redis client not found @ ensureRedisClient!');
+  }
+}
+
 /**
  ** SET REDIS DATA
  * @param key - string
@@ -34,12 +41,20 @@ export async function getRedisClient(): Promise<RedisClientType | null> {
  */
 export async function setRedisData(key: string, value: string): Promise<void> {
   try {
-    const redisClient: RedisClientType | null = await getRedisClient();
-    if (!redisClient) {
-      throw new Error('Redis client not found @ setRedisData!');
+    await ensureRedisClient();
+
+    const existing = await getRedisData(key);
+    let formattedValue: string[] = [];
+
+    if (!existing || Object.keys(existing).length === 0) {
+      formattedValue.push(value);
+      await redisClient.set(key, JSON.stringify(formattedValue));
+      return;
     }
 
-    await redisClient.set(key, value);
+    if (Object.keys(existing).length > 0) {
+      formattedValue = [existing as string, value];
+    }
   } catch (error) {
     console.log('Error @ setRedisData: ', error);
   }
@@ -52,10 +67,7 @@ export async function setRedisData(key: string, value: string): Promise<void> {
  */
 export async function getRedisData(key: string): Promise<string | null | {}> {
   try {
-    const redisClient: RedisClientType | null = await getRedisClient();
-    if (!redisClient) {
-      throw new Error('Redis client not found @ getRedisData!');
-    }
+    await ensureRedisClient();
 
     const data = await redisClient.get(key);
     return data;

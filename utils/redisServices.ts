@@ -18,19 +18,15 @@ export async function getRedisClient(): Promise<RedisClientType | null> {
       url: process.env.REDIS_URL,
     }).connect()) as RedisClientType;
 
+    if (!redisClient) {
+      throw new Error('Redis client not found!');
+    }
+
     return redisClient;
   } catch (error) {
     console.log('Error @ getRedisClient: ', error);
 
     return null;
-  }
-}
-
-async function ensureRedisClient(): Promise<void> {
-  const redis: RedisClientType | null = await getRedisClient();
-
-  if (!redis) {
-    throw new Error('Redis client not found @ ensureRedisClient!');
   }
 }
 
@@ -41,14 +37,14 @@ async function ensureRedisClient(): Promise<void> {
  */
 export async function setRedisData(key: string, value: string): Promise<void> {
   try {
-    await ensureRedisClient();
+    const redis: RedisClientType | null = await getRedisClient();
 
-    const existing = await getRedisData(key);
+    const existing: string | null | {} = await getRedisData(key);
     let formattedValue: string[] = [];
 
     if (!existing || Object.keys(existing).length === 0) {
       formattedValue.push(value);
-      await redisClient.set(key, JSON.stringify(formattedValue));
+      await redis.set(key, JSON.stringify(formattedValue));
       return;
     }
 
@@ -67,9 +63,9 @@ export async function setRedisData(key: string, value: string): Promise<void> {
  */
 export async function getRedisData(key: string): Promise<string | null | {}> {
   try {
-    await ensureRedisClient();
+    const redis: RedisClientType | null = await getRedisClient();
 
-    const data = await redisClient.get(key);
+    const data = await redis.get(key);
     return data;
   } catch (error) {
     console.log('Error @ getRedisData: ', error);

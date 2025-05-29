@@ -60,6 +60,7 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
 
     console.log('+----------------------GIT-DATA-------------------+');
     console.log('data from github octokit.repos.getContent: ', data);
+
     // console.log('+-------------------------------------------------+'); console.log('data from github octokit.request: ', data2);
 
     return data;

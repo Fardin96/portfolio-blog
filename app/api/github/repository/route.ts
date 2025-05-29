@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getRepositoryData } from '../../../../utils/githubServices';
 import { validateSignature } from '../../../../utils/authServices';
 
-export async function GET(request: NextRequest) {
+/**
+ ** GET GITHUB DATA
+ * @param request - NextRequest
+ * @returns NextResponse
+ */
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     // console.log('+----------------------GET-REQUEST-------------------+');
     // console.log('request.url: ', request.url);

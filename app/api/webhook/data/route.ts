@@ -4,10 +4,9 @@ import { getRedisData } from '../../../../utils/redisServices';
 
 /**
  ** GET WEBHOOK DATA
- * @param request - NextRequest
  * @returns NextResponse
  */
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(): Promise<NextResponse> {
   try {
     const webhookData = await getRedisData('webhookData');
 

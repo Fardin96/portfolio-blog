@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import SocialIcons from '../components/SocialIcons';
-import { WebhookData } from '../public/types/webhookTypes';
 
 export default function Home(): React.ReactElement {
   return (

@@ -65,9 +65,24 @@ export async function getRedisData(key: string): Promise<string | null | {}> {
     const redis: RedisClientType | null = await getRedisClient();
 
     const data = await redis.get(key);
+
     return data;
   } catch (error) {
     console.log('Error @ getRedisData: ', error);
     return null;
+  }
+}
+
+/**
+ ** CLEAR ALL REDIS DATA
+ * @param key - string
+ */
+export async function clearRedis(key: string = 'webhookData'): Promise<void> {
+  try {
+    const redis: RedisClientType | null = await getRedisClient();
+
+    await redis.del(key);
+  } catch (error) {
+    console.log('Error @ clearRedis: ', error);
   }
 }

@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GitHookPayload, WebhookData } from '../public/types/webhookTypes';
+import {
+  GitHookPayload,
+  WebhookData,
+  WebhookDataResponse,
+} from '../public/types/webhookTypes';
 import { validateGithubSignature } from './authServices';
 
 export async function getRequestBody(
@@ -32,20 +36,6 @@ export function isBodyPopulated(body: GitHookPayload): boolean {
   return Object.keys(body).length > 0;
 }
 
-export function unauthorizedResponse() {
-  return NextResponse.json(
-    { success: false, message: 'Unauthorized!' },
-    { status: 401 }
-  );
-}
-
-export function successResponse() {
-  return NextResponse.json({
-    success: true,
-    message: 'Github webhook received!',
-  });
-}
-
 export function createWebhookData(
   body: GitHookPayload,
   eventType: string
@@ -60,4 +50,35 @@ export function createWebhookData(
       head_commit: body.head_commit,
     },
   };
+}
+
+export function successResponse() {
+  return NextResponse.json({
+    success: true,
+    message: 'Github webhook received!',
+  });
+}
+
+export function errorResponse() {
+  return NextResponse.json(
+    { error: 'Webhook GET error!', webhookData: null },
+    { status: 400 }
+  );
+}
+
+export function unauthorizedResponse() {
+  return NextResponse.json(
+    { success: false, message: 'Unauthorized!' },
+    { status: 401 }
+  );
+}
+
+export function notFoundResponse() {
+  return NextResponse.json(
+    {
+      error: 'Webhook data not found!',
+      webhookData: null,
+    },
+    { status: 404 }
+  );
 }

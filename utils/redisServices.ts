@@ -86,3 +86,17 @@ export async function clearRedis(key: string = 'webhookData'): Promise<void> {
     console.log('Error @ clearRedis: ', error);
   }
 }
+
+/**
+ ** RESET REDIS CLIENT
+ * @returns void
+ */
+export function resetRedisClient(): void {
+  if (redisClient) {
+    redisClient.quit().catch((e) => {
+      // ignore
+    });
+  }
+
+  redisClient = null;
+}

@@ -43,7 +43,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return unauthorizedResponse();
     }
 
-    // create webhook data
+    // format & set data to redis
     const webhookData = createWebhookData(body, eventType);
     await setRedisData('webhookData', JSON.stringify(webhookData));
 

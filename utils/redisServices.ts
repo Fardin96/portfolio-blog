@@ -38,19 +38,18 @@ export async function getRedisClient(): Promise<RedisClientType | null> {
 export async function setRedisData(key: string, value: string): Promise<void> {
   try {
     const redis: RedisClientType | null = await getRedisClient();
-
     const existing: string | null | {} = await getRedisData(key);
     let formattedValue: string[] = [];
 
+    // if no existing data
     if (!existing || Object.keys(existing).length === 0) {
       formattedValue.push(value);
-      await redis.set(key, JSON.stringify(formattedValue));
-      return;
+    } else {
+      formattedValue = JSON.parse(existing as string);
+      formattedValue.push(value);
     }
 
-    if (Object.keys(existing).length > 0) {
-      formattedValue = [existing as string, value];
-    }
+    await redis.set(key, JSON.stringify(formattedValue));
   } catch (error) {
     console.log('Error @ setRedisData: ', error);
   }

@@ -10,18 +10,6 @@ async function initOctokit(): Promise<Octokit> {
       auth: process.env.REPOSITORY_ACCESS_TOKEN,
     });
 
-    // const {
-    //   data: { login },
-    // } = await octokit.users.getAuthenticated();
-
-    // console.log('+----------------------initOctokit-------------------+');
-    // console.log(
-    //   'process.env.REPOSITORY_ACCESS_TOKEN: ',
-    //   process.env.REPOSITORY_ACCESS_TOKEN
-    // );
-    // console.log('octokit: ', octokit);
-    // console.log('login: ', login);
-
     return octokit;
   } catch (error) {
     console.log('+----------------------initOctokit-------------------+');
@@ -31,7 +19,6 @@ async function initOctokit(): Promise<Octokit> {
 }
 
 export async function getRepositoryData(path: string = ''): Promise<any> {
-  console.log('+------------------getRepositoryData-------------------------+');
   try {
     const octokit = await initOctokit();
     const { data } = await octokit.repos.getContent({
@@ -41,27 +28,14 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
       ref: branch,
       headers: {
         accept: 'application/vnd.github.html+json', // returns md content in html format
+        // application/vnd.github.raw+json // Returns the raw file contents for files and symlinks.
         'X-GitHub-Api-Version': '2022-11-28',
       },
     });
 
-    // const { data: data2 } = await octokit.request(
-    //   `GET /repos/{owner}/{repo}/contents/{path}`,
-    //   {
-    //     owner: owner,
-    //     repo: repo,
-    //     path: path,
-    //     headers: {
-    //       accept: 'application/vnd.github.html+json',
-    //       'X-GitHub-Api-Version': '2022-11-28',
-    //     },
-    //   }
-    // );
-
-    console.log('+----------------------GIT-DATA-------------------+');
-    console.log('data from github octokit.repos.getContent: ', data);
-
-    // console.log('+-------------------------------------------------+'); console.log('data from github octokit.request: ', data2);
+    // console.log('+----------------------GIT-DATA-------------------+');
+    // console.log('data from github octokit.repos.getContent: ', data);
+    // console.log('+-------------------------------------------------+');
 
     return data;
   } catch (error) {

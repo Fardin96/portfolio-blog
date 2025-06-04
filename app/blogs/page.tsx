@@ -1,13 +1,11 @@
 'use client';
 import Link from 'next/link';
-import { blogs } from '../../public/static';
 import { useEffect, useState } from 'react';
 import { AllPosts } from '../../public/types/types';
 import { getAllPosts } from '../../utils/sanityServices';
 import { formatDate } from '../../utils/utils';
 import { fetchWebhookData } from '../../utils/webhookServices';
 import { WebhookData } from '../../public/types/webhookTypes';
-import { getRepositoryData } from '../../utils/githubServices';
 
 export default function Blogs(): React.ReactElement {
   const [data, setData] = useState<AllPosts[]>([]);
@@ -93,7 +91,7 @@ export default function Blogs(): React.ReactElement {
       <h1 className='text-3xl font-bold mb-6'>My Blog</h1>
 
       <div className='space-y-6'>
-        {data.map((blog, idx) => (
+        {data.map((blog) => (
           <div
             key={blog.id}
             className='border rounded-lg p-4 shadow transition-all duration-200 custom-dark-shadow'

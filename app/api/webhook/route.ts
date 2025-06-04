@@ -22,6 +22,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const signature = request.headers.get('X-Hub-Signature-256');
     const bodyTxt = await getRequestBody(request);
 
+    // auth
     if (!bodyTxt) {
       return unauthorizedResponse();
     }
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return unauthorizedResponse();
     }
 
+    // handle eventType
     const eventType = request.headers.get('x-github-event') || 'unknown';
     if (eventType === 'ping') {
       return NextResponse.json({ message: 'Pong!' });
@@ -41,6 +43,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return unauthorizedResponse();
     }
 
+    // create webhook data
     const webhookData = createWebhookData(body, eventType);
     await setRedisData('webhookData', JSON.stringify(webhookData));
 

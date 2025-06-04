@@ -51,6 +51,7 @@ export function createWebhookData(
   eventType: string
 ): WebhookData {
   const timestamp = new Date().toISOString();
+
   return {
     timestamp,
     eventType,

@@ -1,13 +1,13 @@
 import crypto from 'crypto';
 import { NextRequest } from 'next/server';
-import { GitHookPayload } from '../public/types/webhookTypes';
 
 const secret = process.env.GITHUB_WEBHOOK_SECRET;
 
 /**
  ** CREATE HMAC-HEX SIGNATURE
- * @param path - string
- * @param timestamp - string
+ * @param data - string
+ * @param algorithm - string
+ * @param key - string
  * @returns string
  */
 export function generateHmacHexSignature(

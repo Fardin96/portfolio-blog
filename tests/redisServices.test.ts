@@ -4,6 +4,7 @@ import {
   getRedisClient,
   resetRedisClient,
   clearRedis,
+  getRedisData,
 } from '../utils/redisServices';
 
 jest.mock('redis', () => ({
@@ -78,5 +79,38 @@ describe('getRedisClient', () => {
 
     expect(createClient).toHaveBeenCalledTimes(2);
     expect(client).toBe(mockRedisClient);
+  });
+});
+
+describe('getRedisData', () => {
+  beforeEach(() => {
+    mockRedisClient.get.mockResolvedValue('test data');
+  });
+
+  it('should retrive data successfully', async () => {
+    const data = await getRedisData('test-key');
+
+    expect(mockRedisClient.get).toHaveBeenCalledWith('test-key');
+    expect(data).toBe('test data');
+  });
+
+  it('should return null key does not exist', async () => {
+    mockRedisClient.get.mockResolvedValue(null);
+
+    const data = await getRedisData('nonExistantKey');
+
+    expect(data).toBeNull();
+  });
+
+  it('should handle errors gracefully', async () => {
+    mockRedisClient.get.mockRejectedValue(new Error('Redis Error!'));
+
+    const data = await getRedisData('test-key');
+
+    expect(data).toBeNull();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error @ getRedisData: ',
+      expect.any(Error)
+    );
   });
 });

@@ -23,7 +23,6 @@ beforeEach(() => {
     connect: jest.fn(),
     get: jest.fn(),
     set: jest.fn(),
-    del: jest.fn(),
     clear: jest.fn(),
     quit: jest.fn(),
   };
@@ -167,17 +166,17 @@ describe('clearRedis', () => {
   it('should delete key with default value', async () => {
     await clearRedis();
 
-    expect(mockRedisClient.del).toHaveBeenCalledWith('webhookData');
+    expect(mockRedisClient.clear).toHaveBeenCalledWith('webhookData');
   });
 
   it('should delete specified key', async () => {
     await clearRedis('test-key');
 
-    expect(mockRedisClient.del).toHaveBeenCalledWith('test-key');
+    expect(mockRedisClient.clear).toHaveBeenCalledWith('test-key');
   });
 
   it('should handle redis errors gracefully', async () => {
-    mockRedisClient.del.mockRejectedValue(new Error('Delete Error!'));
+    mockRedisClient.clear.mockRejectedValue(new Error('Delete Error!'));
 
     await clearRedis('test-key');
 

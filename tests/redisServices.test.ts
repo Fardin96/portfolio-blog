@@ -5,6 +5,7 @@ import {
   resetRedisClient,
   clearRedis,
   getRedisData,
+  setRedisData,
 } from '../utils/redisServices';
 
 jest.mock('redis', () => ({
@@ -111,6 +112,19 @@ describe('getRedisData', () => {
     expect(consoleSpy).toHaveBeenCalledWith(
       'Error @ getRedisData: ',
       expect.any(Error)
+    );
+  });
+});
+
+describe('setRedisData', () => {
+  it('should create new data when key does not exist', async () => {
+    mockRedisClient.get.mockResolvedValue(null);
+
+    await setRedisData('new-key', 'new-value');
+
+    expect(mockRedisClient.set).toHaveBeenCalledWith(
+      'new-key',
+      JSON.stringify(['new-value'])
     );
   });
 });

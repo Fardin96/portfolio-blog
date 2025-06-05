@@ -23,7 +23,7 @@ beforeEach(() => {
     connect: jest.fn(),
     get: jest.fn(),
     set: jest.fn(),
-    clear: jest.fn(),
+    del: jest.fn(),
     quit: jest.fn(),
   };
 
@@ -38,6 +38,9 @@ afterEach(() => {
   consoleSpy.mockClear();
 });
 
+/**
+ ** TEST GET REDIS CLIENT
+ */
 describe('getRedisClient', () => {
   it('should return existing redis client if already connected', async () => {
     const firstClient = await getRedisClient();
@@ -83,6 +86,9 @@ describe('getRedisClient', () => {
   });
 });
 
+/**
+ ** TEST GET REDIS DATA
+ */
 describe('getRedisData', () => {
   beforeEach(() => {
     mockRedisClient.get.mockResolvedValue('test data');
@@ -116,6 +122,9 @@ describe('getRedisData', () => {
   });
 });
 
+/**
+ ** TEST SET REDIS DATA
+ */
 describe('setRedisData', () => {
   it('should create new data when key does not exist', async () => {
     mockRedisClient.get.mockResolvedValue(null);
@@ -162,21 +171,24 @@ describe('setRedisData', () => {
   });
 });
 
+/**
+ ** TEST CLEAR REDIS
+ */
 describe('clearRedis', () => {
   it('should delete key with default value', async () => {
     await clearRedis();
 
-    expect(mockRedisClient.clear).toHaveBeenCalledWith('webhookData');
+    expect(mockRedisClient.del).toHaveBeenCalledWith('webhookData');
   });
 
   it('should delete specified key', async () => {
     await clearRedis('test-key');
 
-    expect(mockRedisClient.clear).toHaveBeenCalledWith('test-key');
+    expect(mockRedisClient.del).toHaveBeenCalledWith('test-key');
   });
 
   it('should handle redis errors gracefully', async () => {
-    mockRedisClient.clear.mockRejectedValue(new Error('Delete Error!'));
+    mockRedisClient.del.mockRejectedValue(new Error('Delete Error!'));
 
     await clearRedis('test-key');
 

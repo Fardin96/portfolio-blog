@@ -3,9 +3,9 @@ import { createClient } from 'redis';
 import {
   getRedisClient,
   resetRedisClient,
-  clearRedis,
   getRedisData,
   setRedisData,
+  clearRedis,
 } from '../utils/redisServices';
 
 jest.mock('redis', () => ({
@@ -23,6 +23,7 @@ beforeEach(() => {
     connect: jest.fn(),
     get: jest.fn(),
     set: jest.fn(),
+    del: jest.fn(),
     clear: jest.fn(),
     quit: jest.fn(),
   };
@@ -157,6 +158,31 @@ describe('setRedisData', () => {
 
     expect(consoleSpy).toHaveBeenCalledWith(
       'Error @ setRedisData: ',
+      expect.any(Error)
+    );
+  });
+});
+
+describe('clearRedis', () => {
+  it('should delete key with default value', async () => {
+    await clearRedis();
+
+    expect(mockRedisClient.del).toHaveBeenCalledWith('webhookData');
+  });
+
+  it('should delete specified key', async () => {
+    await clearRedis('test-key');
+
+    expect(mockRedisClient.del).toHaveBeenCalledWith('test-key');
+  });
+
+  it('should handle redis errors gracefully', async () => {
+    mockRedisClient.del.mockRejectedValue(new Error('Delete Error!'));
+
+    await clearRedis('test-key');
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error @ clearRedis: ',
       expect.any(Error)
     );
   });

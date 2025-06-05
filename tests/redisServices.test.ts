@@ -127,4 +127,37 @@ describe('setRedisData', () => {
       JSON.stringify(['new-value'])
     );
   });
+
+  it('should append to existing data', async () => {
+    mockRedisClient.get.mockResolvedValue(JSON.stringify(['existing-value']));
+
+    await setRedisData('existing-key', 'new-value');
+
+    expect(mockRedisClient.set).toHaveBeenCalledWith(
+      'existing-key',
+      JSON.stringify(['existing-value', 'new-value'])
+    );
+  });
+
+  it('should handle empty object as no existing data', async () => {
+    mockRedisClient.get.mockResolvedValue('{}');
+
+    await setRedisData('key', 'value');
+
+    expect(mockRedisClient.set).toHaveBeenCalledWith(
+      'key',
+      JSON.stringify(['value'])
+    );
+  });
+
+  it('should handle errors gracefully', async () => {
+    mockRedisClient.set.mockRejectedValue(new Error('Redis Error!'));
+
+    await setRedisData('test-key', 'test-value');
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error @ setRedisData: ',
+      expect.any(Error)
+    );
+  });
 });

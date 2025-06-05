@@ -42,7 +42,7 @@ export async function setRedisData(key: string, value: string): Promise<void> {
     let formattedValue: string[] = [];
 
     // if no existing data
-    if (!existing || Object.keys(existing).length === 0) {
+    if (!existing || existing === '{}' || Object.keys(existing).length === 0) {
       formattedValue.push(value);
     } else {
       formattedValue = JSON.parse(existing as string);

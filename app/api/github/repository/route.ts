@@ -10,9 +10,9 @@ import { unauthorizedResponse } from '../../../../utils/requestValidation';
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    if (!validateSignature(request)) {
-      return unauthorizedResponse();
-    }
+    // if (!validateSignature(request)) {
+    //   return unauthorizedResponse();
+    // }
 
     const { searchParams } = new URL(request.url);
     const path = searchParams.get('path') || '';

@@ -27,8 +27,8 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
       path,
       ref: branch,
       headers: {
-        accept: 'application/vnd.github.html+json', // returns md content in html format
-        // application/vnd.github.raw+json // Returns the raw file contents for files and symlinks.
+        accept: 'application/vnd.github.raw+json', // Returns the raw file contents for files and symlinks.
+        // application/vnd.github.html+json // returns md content in html format
         'X-GitHub-Api-Version': '2022-11-28',
       },
     });

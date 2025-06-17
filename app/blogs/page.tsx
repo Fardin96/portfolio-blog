@@ -88,7 +88,7 @@ export default function Blogs(): React.ReactElement {
 
   return (
     <div>
-      <h1 className='text-3xl font-bold mb-6'>My Blog</h1>
+      <h1 className='text-3xl font-bold mb-6'>My Blogs</h1>
 
       <div className='space-y-6'>
         {data.map((blog) => (

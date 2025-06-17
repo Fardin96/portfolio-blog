@@ -29,7 +29,11 @@ export function isSignatureValid(
   signature: string | null,
   bodyTxt: string
 ): boolean {
-  return signature && validateGithubSignature(bodyTxt, signature);
+  if (!signature) {
+    return false;
+  }
+
+  return validateGithubSignature(bodyTxt, signature);
 }
 
 export function isBodyPopulated(body: GitHookPayload): boolean {

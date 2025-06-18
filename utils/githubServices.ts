@@ -43,3 +43,88 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
     throw error;
   }
 }
+
+export async function getGithubPosts(path: string = ''): Promise<any> {
+  try {
+    const octokit = await initOctokit();
+
+    const query = `
+    query($owner: String!, $repo: String!, $expression: String!) {
+      repository(owner: $owner, name: $repo) {
+        object(expression: $expression) {
+          ... on Tree {
+            entries {
+              name
+              type
+              object {
+                ... on Tree {
+                  entries {
+                    name
+                    type
+                    object {
+                      ... on Blob {
+                        text
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+    const result = await octokit.graphql(query, {
+      owner,
+      repo,
+      expression: `main:${path}`,
+    });
+
+    console.log('+----------------------GIT-DATA-------------------+');
+    console.log('data from github octokit.graphql: ', result);
+    console.log('+-------------------------------------------------+');
+
+    const blogPosts = []; //todo: type this
+
+    if (result.repository?.object?.entries) {
+      for (const entry of result.repository?.object?.entries) {
+        if (entry.type === 'tree' && entry.object?.entries) {
+          const mdFile = entry.object.entries.find(
+            (file: any) =>
+              file.name.endswith('.md') || file.name.endswith('.mdx')
+          );
+
+          if (mdFile?.object.text) {
+            const blogPost = extractBlogMetaData(
+              entry.name,
+              mdFile.object.text,
+              `${path}${entry.name}/${mdFile.name}`
+            );
+
+            blogPosts.push(blogPost);
+          }
+        }
+      }
+    }
+
+    return blogPosts.sort((a, b) => {
+      if (a.date && b.date) {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      }
+
+      if (a.date && !b.date) {
+        return -1;
+      }
+      if (!a.date && b.date) {
+        return 1;
+      }
+
+      return a.title.localeCompare(b.title);
+    });
+  } catch (error) {
+    console.error('Error @ getRepositoryData: ', error);
+    throw error;
+  }
+}

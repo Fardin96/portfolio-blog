@@ -56,11 +56,46 @@ export type Post = {
 export type AllPostsType = 'Project' | 'blog';
 
 export type BlogPost = {
+  id?: string;
   title: string;
   date: string;
-  author: string;
-  content: string;
+  author?: string;
+  content?: string;
+  description?: string;
+  path?: string;
+  // repository: {
+  //   object: {
+  //     entries: {
+  //       name: string;
+  //       type: string;
+  //       object: {
+  //         entries: {
+  //           name: string;
+  //           type: string;
+  //           object: {
+  //             text: string;
+  //           };
+  //         };
+  //       }[];
+  //     };
+  //   };
+  // };
 };
+
+// export interface BlogPost {
+//   id: string;
+//   title: string;
+//   description: string;
+//   date: string;
+//   path: string;
+// }
+
+// export interface AllPosts {
+//   id: string;
+//   title: string;
+//   description: string;
+//   date: string;
+// }
 
 type ThemeValue = 'light' | 'dark' | 'system';
 

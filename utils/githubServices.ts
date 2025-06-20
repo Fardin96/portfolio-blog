@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/rest';
+import { BlogPost } from '../public/types/types';
 
 const owner = process.env.GITHUB_OWNER || 'yourusername';
 const repo = process.env.GITHUB_REPO || 'your-docs-repo';
@@ -76,7 +77,7 @@ export async function getGithubPosts(path: string = ''): Promise<any> {
     }
   `;
 
-    const result = await octokit.graphql(query, {
+    const result: any = await octokit.graphql(query, {
       owner,
       repo,
       expression: `main:${path}`,
@@ -97,7 +98,7 @@ export async function getGithubPosts(path: string = ''): Promise<any> {
           );
 
           if (mdFile?.object.text) {
-            const blogPost = extractBlogMetaData(
+            const blogPost = await extractBlogMetaData(
               entry.name,
               mdFile.object.text,
               `${path}${entry.name}/${mdFile.name}`
@@ -127,4 +128,77 @@ export async function getGithubPosts(path: string = ''): Promise<any> {
     console.error('Error @ getRepositoryData: ', error);
     throw error;
   }
+}
+
+function extractBlogMetaData(
+  dirName: string,
+  content: string,
+  path: string
+): BlogPost {
+  const lines = content.split('\n');
+  let title = dirName;
+  let description = '';
+  let date: string | undefined = undefined;
+
+  // Check if content starts with frontmatter
+  if (lines[0]?.trim() === '---') {
+    const frontmatterEnd = lines.findIndex(
+      (line, index) => index > 0 && line.trim() === '---'
+    );
+
+    if (frontmatterEnd > 0) {
+      // Parse frontmatter
+      const frontmatter = lines.slice(1, frontmatterEnd);
+      for (const line of frontmatter) {
+        const [key, ...valueParts] = line.split(':');
+        const value = valueParts.join(':').trim().replace(/['"]/g, '');
+
+        switch (key.trim().toLowerCase()) {
+          case 'title':
+            title = value;
+            break;
+          case 'description':
+            description = value;
+            break;
+          case 'date':
+            date = value;
+            break;
+        }
+      }
+
+      // If no description in frontmatter, get first paragraph after frontmatter
+      if (!description) {
+        const contentAfterFrontmatter = lines.slice(frontmatterEnd + 1);
+        const firstParagraph = contentAfterFrontmatter.find(
+          (line) => line.trim() && !line.startsWith('#')
+        );
+        description = firstParagraph?.trim() || '';
+      }
+    }
+  } else {
+    // No frontmatter, extract from content
+    const firstHeading = lines.find((line) => line.startsWith('#'));
+    if (firstHeading) {
+      title = firstHeading.replace(/^#+\s*/, '');
+    }
+
+    // Get first non-heading line as description
+    const firstParagraph = lines.find(
+      (line) => line.trim() && !line.startsWith('#')
+    );
+    description = firstParagraph?.trim() || '';
+  }
+
+  // Truncate description if too long
+  if (description.length > 150) {
+    description = description.substring(0, 150) + '...';
+  }
+
+  return {
+    id: dirName,
+    title,
+    description,
+    date,
+    path,
+  };
 }

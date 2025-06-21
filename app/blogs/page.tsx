@@ -6,6 +6,7 @@ import { getAllPosts } from '../../utils/sanityServices';
 import { formatDate } from '../../utils/utils';
 import { fetchWebhookData } from '../../utils/webhookServices';
 import { WebhookData } from '../../public/types/webhookTypes';
+import { getGithubPosts, getRepositoryData } from '../../utils/githubServices';
 
 export default function Blogs(): React.ReactElement {
   const [data, setData] = useState<AllPosts[]>([]);
@@ -18,7 +19,7 @@ export default function Blogs(): React.ReactElement {
 
     try {
       const result = await getAllPosts('blog');
-      setData(result);
+      // setData(result);
     } catch (err) {
       console.error('Failed to fetch posts:', err);
 
@@ -42,12 +43,17 @@ export default function Blogs(): React.ReactElement {
     }
   };
 
+  let res;
   useEffect(() => {
     (async () => {
-      await fetchWebhookData(setWebhookData);
-      await fetchGithubData();
+      // await fetchWebhookData(setWebhookData);
+      await getRepositoryData();
+      await getGithubPosts();
     })();
   }, []);
+
+  // setData(res);
+  // console.log('posts: ', JSON.stringify(res, null, 2));
 
   useEffect(() => {
     fetchData();

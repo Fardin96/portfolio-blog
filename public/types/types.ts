@@ -25,13 +25,6 @@ export type Blog = {
   date: string;
 };
 
-export type AllPosts = {
-  id: string;
-  title: string;
-  description: string;
-  date: string | null;
-};
-
 export type Tag = {
   title: string;
   value: string;
@@ -89,6 +82,16 @@ export type BlogPost = {
 //   date: string;
 //   path: string;
 // }
+
+export type AllPosts = {
+  id?: string;
+  title: string;
+  date: string;
+  author?: string;
+  content?: string;
+  description?: string;
+  path?: string;
+};
 
 // export interface AllPosts {
 //   id: string;

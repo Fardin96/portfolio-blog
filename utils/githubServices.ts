@@ -20,6 +20,7 @@ async function initOctokit(): Promise<Octokit> {
 }
 
 export async function getRepositoryData(path: string = ''): Promise<any> {
+  console.log('+----------------------REST-------------------+');
   try {
     const octokit = await initOctokit();
     const { data } = await octokit.repos.getContent({
@@ -45,7 +46,8 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
   }
 }
 
-export async function getGithubPosts(path: string = ''): Promise<any> {
+export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
+  console.log('+----------------------GRAPH-QL-------------------+');
   try {
     const octokit = await initOctokit();
 
@@ -87,7 +89,7 @@ export async function getGithubPosts(path: string = ''): Promise<any> {
     console.log('data from github octokit.graphql: ', result);
     console.log('+-------------------------------------------------+');
 
-    const blogPosts = []; //todo: type this
+    const blogPosts: BlogPost[] = [];
 
     if (result.repository?.object?.entries) {
       for (const entry of result.repository?.object?.entries) {

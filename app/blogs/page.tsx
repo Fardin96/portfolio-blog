@@ -38,7 +38,8 @@ export default function Blogs(): React.ReactElement {
       );
 
       const result = await response.json();
-      // setData(result.data);
+      setData(result.data);
+      setLoading(false);
       console.log('GitHub repository data:', result);
     } catch (error) {
       console.error('Error fetching repository data:', error);

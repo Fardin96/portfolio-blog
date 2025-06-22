@@ -85,7 +85,10 @@ export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
     });
 
     console.log('+----------------------GIT-DATA-------------------+');
-    console.log('data from github octokit.graphql: ', result);
+    console.log(
+      'data from github octokit.graphql: ',
+      JSON.stringify(result, null, 2)
+    );
     console.log('+-------------------------------------------------+');
 
     const blogPosts: BlogPost[] = [];
@@ -95,7 +98,7 @@ export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
         if (entry.type === 'tree' && entry.object?.entries) {
           const mdFile = entry.object.entries.find(
             (file: any) =>
-              file.name.endswith('.md') || file.name.endswith('.mdx')
+              file.name.endsWith('.md') || file.name.endsWith('.mdx')
           );
 
           if (mdFile?.object.text) {
@@ -110,6 +113,10 @@ export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
         }
       }
     }
+
+    console.log('+-------------------------------------------------+');
+    console.log('blogPosts: ', JSON.stringify(blogPosts, null, 2));
+    console.log('+-------------------------------------------------+');
 
     return blogPosts.sort((a, b) => {
       if (a.date && b.date) {

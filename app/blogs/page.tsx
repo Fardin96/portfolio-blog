@@ -14,7 +14,7 @@ export default function Blogs(): React.ReactElement {
   const [loading, setLoading] = useState<boolean>(true);
   const [webhookData, setWebhookData] = useState<WebhookData | null>(null);
 
-  const fetchData = async (): Promise<void> => {
+  const fetchSanityData = async (): Promise<void> => {
     setError('');
 
     try {
@@ -33,10 +33,12 @@ export default function Blogs(): React.ReactElement {
   const fetchGithubData = async (): Promise<void> => {
     try {
       const response = await fetch(
-        '/api/github/repository?path=http-response-fundamentals/http-response-fundamentals.md'
+        // '/api/github/repository?path=http-response-fundamentals/http-response-fundamentals.md'
+        '/api/github/repository'
       );
 
       const result = await response.json();
+      // setData(result.data);
       console.log('GitHub repository data:', result);
     } catch (error) {
       console.error('Error fetching repository data:', error);
@@ -47,17 +49,16 @@ export default function Blogs(): React.ReactElement {
   useEffect(() => {
     (async () => {
       // await fetchWebhookData(setWebhookData);
-      await getRepositoryData();
-      await getGithubPosts();
+      await fetchGithubData();
     })();
   }, []);
 
   // setData(res);
   // console.log('posts: ', JSON.stringify(res, null, 2));
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchSanityData();
+  // }, []);
 
   // error view
   if (error.length > 0 && data.length === 0) {

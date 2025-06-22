@@ -1,9 +1,9 @@
 import { Octokit } from '@octokit/rest';
 import { BlogPost } from '../public/types/types';
 
-const owner = process.env.GITHUB_OWNER || 'yourusername';
-const repo = process.env.GITHUB_REPO || 'your-docs-repo';
-const branch = process.env.GITHUB_BRANCH || 'main';
+const OWNER = process.env.GITHUB_OWNER || 'yourusername';
+const REPO = process.env.GITHUB_REPO || 'your-docs-repo';
+const BRANCH = process.env.GITHUB_BRANCH || 'main';
 
 async function initOctokit(): Promise<Octokit> {
   try {
@@ -20,14 +20,13 @@ async function initOctokit(): Promise<Octokit> {
 }
 
 export async function getRepositoryData(path: string = ''): Promise<any> {
-  console.log('+----------------------REST-------------------+');
   try {
     const octokit = await initOctokit();
     const { data } = await octokit.repos.getContent({
-      owner,
-      repo,
+      owner: OWNER,
+      repo: REPO,
       path,
-      ref: branch,
+      ref: BRANCH,
       headers: {
         accept: 'application/vnd.github.raw+json', // Returns the raw file contents for files and symlinks.
         // application/vnd.github.html+json // returns md content in html format
@@ -80,8 +79,8 @@ export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
   `;
 
     const result: any = await octokit.graphql(query, {
-      owner,
-      repo,
+      owner: OWNER,
+      repo: REPO,
       expression: `main:${path}`,
     });
 

@@ -1,10 +1,15 @@
 import { Octokit } from '@octokit/rest';
 import { BlogPost } from '../public/types/types';
+import { unstable_cache } from 'next/cache';
 
 const OWNER = process.env.GITHUB_OWNER || 'yourusername';
 const REPO = process.env.GITHUB_REPO || 'your-docs-repo';
 const BRANCH = process.env.GITHUB_BRANCH || 'main';
 
+/**
+ ** INITIALIZE OCTOKIT
+ * @returns
+ */
 async function initOctokit(): Promise<Octokit> {
   try {
     const octokit = new Octokit({
@@ -19,6 +24,13 @@ async function initOctokit(): Promise<Octokit> {
   }
 }
 
+/**
+ ** GET GITHUB REPOSITORY DATA(REST API)
+ * @deprecated use getGithubPosts instead
+ * @param path
+ * @returns
+ */
+// todo: fix this type
 export async function getRepositoryData(path: string = ''): Promise<any> {
   try {
     const octokit = await initOctokit();
@@ -28,7 +40,7 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
       path,
       ref: BRANCH,
       headers: {
-        accept: 'application/vnd.github.raw+json', // Returns the raw file contents for files and symlinks.
+        accept: 'application/vnd.github.raw+json', // returns the raw file
         // application/vnd.github.html+json // returns md content in html format
         'X-GitHub-Api-Version': '2022-11-28',
       },
@@ -45,11 +57,18 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
   }
 }
 
+/**
+ ** GET GITHUB POSTS(GRAPHQL API)
+ * @param path
+ * @returns
+ */
+// todo: re-check all the types related to this function
 export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
   console.log('+----------------------GRAPH-QL-------------------+');
   try {
     const octokit = await initOctokit();
 
+    //todo: refactor: move this to separate file
     const query = `
     query($owner: String!, $repo: String!, $expression: String!) {
       repository(owner: $owner, name: $repo) {
@@ -78,21 +97,24 @@ export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
     }
   `;
 
+    // todo: fix this type
     const result: any = await octokit.graphql(query, {
       owner: OWNER,
       repo: REPO,
       expression: `main:${path}`,
     });
 
-    console.log('+----------------------GIT-DATA-------------------+');
-    console.log(
-      'data from github octokit.graphql: ',
-      JSON.stringify(result, null, 2)
-    );
-    console.log('+-------------------------------------------------+');
+    // console.log('+----------------------GIT-DATA-------------------+');
+    // console.log(
+    //   'data from github octokit.graphql: ',
+    //   JSON.stringify(result, null, 2)
+    // );
+    // console.log('+-------------------------------------------------+');
 
     const blogPosts: BlogPost[] = [];
 
+    // format github blogs
+    // todo: refactor: move this to separate function
     if (result.repository?.object?.entries) {
       for (const entry of result.repository?.object?.entries) {
         if (entry.type === 'tree' && entry.object?.entries) {
@@ -114,10 +136,12 @@ export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
       }
     }
 
-    console.log('+-------------------------------------------------+');
-    console.log('blogPosts: ', JSON.stringify(blogPosts, null, 2));
-    console.log('+-------------------------------------------------+');
+    // console.log('+-------------------------------------------------+');
+    // console.log('blogPosts: ', JSON.stringify(blogPosts, null, 2));
+    // console.log('+-------------------------------------------------+');
 
+    // return sorted blog posts
+    // todo: refactor: move this to separate function
     return blogPosts.sort((a, b) => {
       if (a.date && b.date) {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -138,6 +162,13 @@ export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
   }
 }
 
+/**
+ ** EXTRACT BLOG METADATA
+ * @param dirName
+ * @param content
+ * @param path
+ * @returns
+ */
 function extractBlogMetaData(
   dirName: string,
   content: string,
@@ -209,4 +240,21 @@ function extractBlogMetaData(
     date,
     path,
   };
+}
+
+/**
+ ** GET CACHED GITHUB POSTS(CACHE-CONTROL)
+ * @returns
+ */
+export function getCachedGithubPosts() {
+  unstable_cache(
+    async () => {
+      return await getGithubPosts();
+    },
+    ['github-blogs'],
+    {
+      revalidate: 60 * 60 * 24, // 1 day
+      tags: ['github-blogs'],
+    }
+  );
 }

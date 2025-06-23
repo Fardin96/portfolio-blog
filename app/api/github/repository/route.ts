@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  getGithubPosts,
+  getGithubPostsFromAPI,
   getRepositoryData,
 } from '../../../../utils/githubServices';
 import { validateSignature } from '../../../../utils/authServices';
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const path = searchParams.get('path') || '';
 
     // const data = await getRepositoryData(path);
-    const data = await getGithubPosts(path);
+    const data = await getGithubPostsFromAPI(path);
 
     return NextResponse.json({ success: true, data });
   } catch (error) {

@@ -5,11 +5,11 @@ import { getGithubPosts } from '../../utils/githubServices';
 
 async function fetchGithubBlogs(): Promise<BlogPost[]> {
   try {
-    const data = await getGithubPosts('');
-
+    const data = (await getGithubPosts('')) as BlogPost[];
     return data;
   } catch (error) {
     console.error('Error fetching repository data:', error);
+    return [];
   }
 }
 

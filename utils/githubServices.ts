@@ -63,7 +63,9 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
  * @returns
  */
 // todo: re-check all the types related to this function
-export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
+export async function getGithubPostsFromAPI(
+  path: string = ''
+): Promise<BlogPost[]> {
   console.log('+----------------------GRAPH-QL-------------------+');
   try {
     const octokit = await initOctokit();
@@ -244,12 +246,14 @@ function extractBlogMetaData(
 
 /**
  ** GET CACHED GITHUB POSTS(CACHE-CONTROL)
+ * @param path
  * @returns
  */
-export function getCachedGithubPosts() {
-  unstable_cache(
+// todo: fix this type
+async function getCachedGithubPosts(path: string = '') {
+  return unstable_cache(
     async () => {
-      return await getGithubPosts();
+      return await getGithubPostsFromAPI(path);
     },
     ['github-blogs'],
     {
@@ -257,4 +261,18 @@ export function getCachedGithubPosts() {
       tags: ['github-blogs'],
     }
   );
+}
+
+/**
+ ** GET GITHUB POSTS
+ * @param path
+ * @returns
+ */
+export async function getGithubPosts(path: string = '') {
+  try {
+    return await getCachedGithubPosts(path);
+  } catch (error) {
+    console.error('Error @ getGithubPosts: ', error);
+    return [];
+  }
 }

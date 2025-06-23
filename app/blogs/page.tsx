@@ -1,4 +1,3 @@
-'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { AllPosts } from '../../public/types/types';
@@ -8,51 +7,57 @@ import { fetchWebhookData } from '../../utils/webhookServices';
 import { WebhookData } from '../../public/types/webhookTypes';
 import { getGithubPosts, getRepositoryData } from '../../utils/githubServices';
 
-export default function Blogs(): React.ReactElement {
+const fetchGithubBlogs = async (
+  setData: (data: AllPosts[]) => void,
+  setLoading: (loading: boolean) => void
+): Promise<void> => {
+  try {
+    // const response = await fetch(
+    //   // '/api/github/repository?path=http-response-fundamentals/http-response-fundamentals.md'
+    //   '/api/github/repository'
+    // );
+    const data = await getGithubPosts('');
+
+    // const result = await data.json();
+    setData(data);
+    setLoading(false);
+    console.log('GitHub repository data:', data);
+  } catch (error) {
+    console.error('Error fetching repository data:', error);
+  }
+};
+
+export default async function Blogs(): Promise<React.ReactElement> {
   const [data, setData] = useState<AllPosts[]>([]);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [webhookData, setWebhookData] = useState<WebhookData | null>(null);
 
-  const fetchSanityData = async (): Promise<void> => {
-    setError('');
+  await fetchGithubBlogs(setData, setLoading);
 
-    try {
-      const result = await getAllPosts('blog');
-      // setData(result);
-    } catch (err) {
-      console.error('Failed to fetch posts:', err);
+  // const fetchSanityData = async (): Promise<void> => {
+  //   setError('');
 
-      const errMsg = err instanceof Error ? err.message : 'Unknown Error';
-      setError(`Failed to fetch data: ${errMsg}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //   try {
+  //     const result = await getAllPosts('blog');
+  //     // setData(result);
+  //   } catch (err) {
+  //     console.error('Failed to fetch posts:', err);
 
-  const fetchGithubData = async (): Promise<void> => {
-    try {
-      const response = await fetch(
-        // '/api/github/repository?path=http-response-fundamentals/http-response-fundamentals.md'
-        '/api/github/repository'
-      );
+  //     const errMsg = err instanceof Error ? err.message : 'Unknown Error';
+  //     setError(`Failed to fetch data: ${errMsg}`);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-      const result = await response.json();
-      setData(result.data);
-      setLoading(false);
-      console.log('GitHub repository data:', result);
-    } catch (error) {
-      console.error('Error fetching repository data:', error);
-    }
-  };
-
-  let res;
-  useEffect(() => {
-    (async () => {
-      // await fetchWebhookData(setWebhookData);
-      await fetchGithubData();
-    })();
-  }, []);
+  // let res;
+  // useEffect(() => {
+  //   (async () => {
+  //     // await fetchWebhookData(setWebhookData);
+  //     await fetchGithubBlogs();
+  //   })();
+  // }, []);
 
   // setData(res);
   // console.log('posts: ', JSON.stringify(res, null, 2));

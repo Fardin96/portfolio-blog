@@ -250,18 +250,16 @@ function extractBlogMetaData(
  * @returns
  */
 // todo: fix this type
-async function getCachedGithubPosts(path: string = '') {
-  return unstable_cache(
-    async () => {
-      return await getGithubPostsFromAPI(path);
-    },
-    ['github-blogs'],
-    {
-      revalidate: 60 * 60 * 24, // 1 day
-      tags: ['github-blogs'],
-    }
-  );
-}
+const getCachedGithubPosts = unstable_cache(
+  async (path: string = '') => {
+    return await getGithubPostsFromAPI(path);
+  },
+  ['github-blogs'],
+  {
+    revalidate: 60 * 60 * 24, // 1 day
+    tags: ['github-blogs'],
+  }
+);
 
 /**
  ** GET GITHUB POSTS

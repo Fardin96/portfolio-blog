@@ -5,6 +5,9 @@ import {
   revalidateSuccessResponse,
 } from '../../../utils/Response';
 
+/**
+ **REVALIDATE PATH-POST
+ */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
@@ -25,6 +28,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return revalidateSuccessResponse(pathToRevalidate);
   } catch (error) {
     console.error('Error in revalidation API: ', error);
+    return revalidateErrorResponse();
+  }
+}
+
+/**
+ ** REVALIDATE PATH-GET
+ */
+export async function GET() {
+  try {
+    revalidatePath('/blogs');
+    return revalidateSuccessResponse('/blogs');
+  } catch (error) {
+    console.error('Error in revalidation GET-API: ', error);
     return revalidateErrorResponse();
   }
 }

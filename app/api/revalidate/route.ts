@@ -33,7 +33,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 }
 
 /**
- ** REVALIDATE PATH-GET
+ ** REVALIDATE PATH-GET(MANUAL-TESTING)
  */
 export async function GET() {
   try {

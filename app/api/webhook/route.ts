@@ -48,8 +48,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const webhookData = createWebhookData(body, eventType);
     await setRedisData('webhookData', JSON.stringify(webhookData));
 
-    // revalidate path
-    await fetch('api/revalidate', {
+    // remove cache
+    await fetch('/api/revalidate', {
       method: 'POST',
       body: JSON.stringify({ path: '/blogs' }),
     });

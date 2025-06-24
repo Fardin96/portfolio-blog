@@ -11,6 +11,7 @@ import {
 } from '../../../utils/requestValidation';
 import { successResponse } from '../../../utils/requestValidation';
 import { setRedisData } from '../../../utils/redisServices';
+import { revalidatePath } from 'next/cache';
 
 /**
  ** GITHUB WEBHOOK ENDPOINT
@@ -46,6 +47,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // format & set data to redis
     const webhookData = createWebhookData(body, eventType);
     await setRedisData('webhookData', JSON.stringify(webhookData));
+
+    // revalidate path
+    await fetch('api/revalidate', {
+      method: 'POST',
+      body: JSON.stringify({ path: '/blogs' }),
+    });
 
     return successResponse();
   } catch (error) {

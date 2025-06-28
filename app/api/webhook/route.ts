@@ -49,10 +49,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     await setRedisData('webhookData', JSON.stringify(webhookData));
 
     // remove cache
-    await fetch('/api/revalidate', {
-      method: 'POST',
-      body: JSON.stringify({ path: '/blogs' }),
-    });
+    revalidatePath('/blogs');
 
     return successResponse();
   } catch (error) {

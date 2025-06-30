@@ -39,8 +39,8 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
       path,
       ref: BRANCH,
       headers: {
-        // accept: 'application/vnd.github.raw+json', // returns the raw file
-        accept: 'application/vnd.github.html+json', // returns md content in html format
+        accept: 'application/vnd.github.raw+json', // returns the raw file
+        // accept: 'application/vnd.github.html+json', // returns md content in html format
         'X-GitHub-Api-Version': '2022-11-28',
       },
     });

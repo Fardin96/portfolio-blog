@@ -10,6 +10,8 @@ import {
 } from '../../../utils/githubServices';
 import { mdToHtml } from '../../../utils/mdToHtml';
 import showdown from 'showdown';
+// import styles from '../../mdStyle.module.css';
+import '../../mdStyle.css';
 
 export default async function BlogDetail({
   params,
@@ -20,6 +22,8 @@ export default async function BlogDetail({
   // const data: any = await getCachedGithubPost(`${blogId}/index.md`);
   const data: any = await getRepositoryData(`${blogId}/index.md`);
   // const htmlContent = await mdToHtml(data);
+
+  //* SHOWDOWN CONVERTER
   var converter = new showdown.Converter();
   converter.setOption('tables', true);
   converter.setOption('tasklists', true);
@@ -71,23 +75,23 @@ export default async function BlogDetail({
         ← Back to blogs
       </Link>
 
-      {/* <h1 className='text-3xl font-bold mb-2'>{data?.title}</h1> */}
       <div
-        className='prose max-w-none'
+        className='mdStyle'
         dangerouslySetInnerHTML={{ __html: htmlContent }}
       />
 
-      {/* <div>{htmlContent.value}</div> */}
+      {/* <h1 className='text-3xl font-bold mb-2'>{data?.title}</h1>
+      <div>{htmlContent.value}</div>
 
       <div className='flex items-center text-gray-500 mb-6'>
-        {/* <span>By {data?.author?.name}</span>
-        <span className='mx-2'>•</span> */}
-        {/* <span>{formatDate(data?.date)}</span> */}
+        <span>By {data?.author?.name}</span>
+        <span className='mx-2'>•</span>
+        <span>{formatDate(data?.date)}</span>
       </div>
 
       <div className='prose max-w-none'>
         <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.description}</pre>
-      </div>
+      </div> */}
     </div>
   );
 }

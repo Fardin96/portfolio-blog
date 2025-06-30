@@ -8,6 +8,8 @@ import {
   getCachedGithubPost,
   getRepositoryData,
 } from '../../../utils/githubServices';
+import { mdToHtml } from '../../../utils/mdToHtml';
+import showdown from 'showdown';
 
 export default async function BlogDetail({
   params,
@@ -17,9 +19,20 @@ export default async function BlogDetail({
   const { id: blogId } = await params;
   // const data: any = await getCachedGithubPost(`${blogId}/index.md`);
   const data: any = await getRepositoryData(`${blogId}/index.md`);
+  // const htmlContent = await mdToHtml(data);
+  var converter = new showdown.Converter();
+  converter.setOption('tables', true);
+  converter.setOption('tasklists', true);
+  converter.setOption('strikethrough', true);
+  converter.setOption('underline', true);
+  converter.setOption('footnotes', true);
+  converter.setOption('smartLists', true);
+  converter.setOption('smartypants', true);
+  converter.setOption('openLinksInNewWindow', true);
+  var htmlContent = converter.makeHtml(data);
 
   // console.log('blogId: ', blogId);
-  console.log('data: ', data);
+  // console.log('data: ', data);
 
   // const [data, setData] = useState<Post | null>(null);
   // const [error, setError] = useState<string>('');
@@ -61,8 +74,10 @@ export default async function BlogDetail({
       {/* <h1 className='text-3xl font-bold mb-2'>{data?.title}</h1> */}
       <div
         className='prose max-w-none'
-        dangerouslySetInnerHTML={{ __html: data }}
+        dangerouslySetInnerHTML={{ __html: htmlContent }}
       />
+
+      {/* <div>{htmlContent.value}</div> */}
 
       <div className='flex items-center text-gray-500 mb-6'>
         {/* <span>By {data?.author?.name}</span>

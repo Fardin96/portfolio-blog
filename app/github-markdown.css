@@ -698,12 +698,12 @@
 }
 
 .markdown-body table tr {
-  background-color: var(--bgColor-default);
+  /* background-color: var(--bgColor-default); */
   border-top: 1px solid var(--borderColor-muted);
 }
 
 .markdown-body table tr:nth-child(2n) {
-  background-color: var(--bgColor-muted);
+  /* background-color: var(--bgColor-muted); */
 }
 
 .markdown-body table img {

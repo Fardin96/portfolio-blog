@@ -1,7 +1,7 @@
 .mdStyle {
     font: 400 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #111;
-    background-color: #fbfbfb;
+    color: var(--md-text-color);
+    background-color: var(--md-bg-color);
     -webkit-text-size-adjust: 100%;
     -webkit-font-feature-settings: "kern" 1;
     -moz-font-feature-settings: "kern" 1;
@@ -9,6 +9,8 @@
     font-feature-settings: "kern" 1;
     font-kerning: normal;
     padding: 30px;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 @media only screen and (max-width: 600px) {
@@ -37,8 +39,8 @@ body>#content {
 }
 
 .mdStyle hr {
-    color: #bbb;
-    background-color: #bbb;
+    color: var(--md-hr-color);
+    background-color: var(--md-hr-color);
     height: 1px;
     flex: 0 1 auto;
     margin: 1em 0;
@@ -51,21 +53,21 @@ body>#content {
 }
 
 .mdStyle a {
-    color: #0366d6;
+    color: var(--md-link-color);
     text-decoration: none;
 }
 
 .mdStyle a:visited {
-    color: #0366d6;
+    color: var(--md-link-color);
 }
 
 .mdStyle a:hover {
-    color: #0366d6;
+    color: var(--md-link-color);
     text-decoration: underline;
 }
 
 .mdStyle pre {
-    background-color: #f6f8fa;
+    background-color: var(--md-code-bg);
     border-radius: 3px;
     font-size: 85%;
     line-height: 1.45;
@@ -74,7 +76,7 @@ body>#content {
 }
 
 .mdStyle code {
-    background-color: rgba(27, 31, 35, .05);
+    background-color: var(--md-code-inline-bg);
     border-radius: 3px;
     font-size: 85%;
     margin: 0;
@@ -101,8 +103,8 @@ body>#content {
     margin-bottom: 16px;
     border-left-width: 3px;
     padding: 0 1em;
-    color: #828282;
-    border-left: 4px solid #e8e8e8;
+    color: var(--md-blockquote-color);
+    border-left: 4px solid var(--md-blockquote-border);
     padding-left: 15px;
     font-size: 18px;
     letter-spacing: -1px;
@@ -112,7 +114,7 @@ body>#content {
 .mdStyle blockquote * {
     font-style: normal !important;
     letter-spacing: 0;
-    color: #6a737d !important;
+    color: var(--md-blockquote-color) !important;
 }
 
 .mdStyle table {
@@ -128,22 +130,22 @@ body>#content {
 
 .mdStyle td {
     padding: 6px 13px;
-    border: 1px solid #dfe2e5;
+    border: 1px solid var(--md-table-border);
 }
 
 .mdStyle th {
     font-weight: 600;
     padding: 6px 13px;
-    border: 1px solid #dfe2e5;
+    border: 1px solid var(--md-table-border);
 }
 
 .mdStyle tr {
-    background-color: #fff;
-    border-top: 1px solid #c6cbd1;
+    background-color: var(--md-bg-color);
+    border-top: 1px solid var(--md-table-border);
 }
 
 .mdStyle table tr:nth-child(2n) {
-    background-color: #f6f8fa;
+    background-color: var(--md-table-row-bg);
 }
 
 .mdStyle img {
@@ -154,7 +156,7 @@ body>#content {
     line-height: 24px;
     font-weight: 400;
     font-size: 16px;
-    color: #24292e;
+    color: var(--md-text-color);
 }
 
 .mdStyle ul {
@@ -162,7 +164,7 @@ body>#content {
 }
 
 .mdStyle li {
-    color: #24292e;
+    color: var(--md-text-color);
     font-size: 16px;
     font-weight: 400;
     line-height: 1.5;
@@ -174,14 +176,37 @@ body>#content {
 
 .mdStyle * {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    color: #24292e;
+    color: var(--md-text-color);
 }
 
 .mdStyle h1,
 .mdStyle h2,
 .mdStyle h3 {
-    border-bottom: 1px solid #eaecef;
-    color: #111;
+    border-bottom: 1px solid var(--md-heading-border);
+    color: var(--md-heading-color);
+    padding-top: 0.5em;
+    padding-bottom: 0.3em;
+}
+
+.mdStyle h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.mdStyle h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.mdStyle h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
 }
 
 .mdStyle code>* {

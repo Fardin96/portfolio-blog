@@ -13,6 +13,20 @@
   --ic-git-hover: black;
   --ic-mail-hover: red;
   --drop-shadow: rgba(0, 0, 0, 0.6);
+  
+  /* Add these for markdown content */
+  --md-bg-color: #ffffff;
+  --md-text-color: #24292e;
+  --md-heading-color: #111;
+  --md-link-color: #0366d6;
+  --md-code-bg: #f6f8fa;
+  --md-code-inline-bg: rgba(27, 31, 35, .05);
+  --md-blockquote-color: #6a737d;
+  --md-blockquote-border: #dfe2e5;
+  --md-table-border: #dfe2e5;
+  --md-table-row-bg: #f6f8fa;
+  --md-hr-color: #e1e4e8;
+  --md-heading-border: #eaecef;
 }
 
 html.dark {
@@ -23,6 +37,20 @@ html.dark {
   --ic-git-hover: white;
   --ic-mail-hover: red;
   --drop-shadow: rgba(255, 255, 255, 0.1);
+  
+  /* Add these for markdown content in dark mode */
+  --md-bg-color: #1e293b;
+  --md-text-color: #e1e7ef;
+  --md-heading-color: #f0f6fc;
+  --md-link-color: #58a6ff;
+  --md-code-bg: #161b22;
+  --md-code-inline-bg: rgba(110, 118, 129, .4);
+  --md-blockquote-color: #8b949e;
+  --md-blockquote-border: #30363d;
+  --md-table-border: #30363d;
+  --md-table-row-bg: #0d1117;
+  --md-hr-color: #30363d;
+  --md-heading-border: #21262d;
 }
 
 body {

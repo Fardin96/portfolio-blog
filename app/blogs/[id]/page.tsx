@@ -11,7 +11,6 @@ import {
 import { mdToHtml } from '../../../utils/mdToHtml';
 import showdown from 'showdown';
 // import styles from '../../mdStyle.module.css';
-import '../../mdStyle.css';
 import '../../github-markdown.css';
 
 export default async function BlogDetail({

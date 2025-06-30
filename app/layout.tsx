@@ -17,12 +17,7 @@ export default function RootLayout({
   children,
 }: RootLayoutProps): React.ReactElement {
   return (
-    <html
-      lang='en'
-      className='h-full'
-      suppressHydrationWarning
-      data-theme='dark'
-    >
+    <html lang='en' className='h-full' suppressHydrationWarning>
       <body className='h-full'>
         <ThemeProvider
           attribute='class'

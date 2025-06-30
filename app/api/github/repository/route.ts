@@ -8,6 +8,7 @@ import { unauthorizedResponse } from '../../../../utils/requestValidation';
 
 /**
  ** GET GITHUB REPOSITORY DATA
+ * @deprecated - uses directly
  * @param request - NextRequest
  * @returns NextResponse
  */

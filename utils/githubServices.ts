@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-import { BlogPost } from '../public/types/types';
+import { BlogPost, Post } from '../public/types/types';
 import { unstable_cache } from 'next/cache';
 
 const OWNER = process.env.GITHUB_OWNER || 'yourusername';
@@ -30,7 +30,7 @@ async function initOctokit(): Promise<Octokit> {
  * @param path
  * @returns
  */
-// todo: fix this type
+// todo: fix these types
 export async function getRepositoryData(path: string = ''): Promise<any> {
   try {
     const octokit = await initOctokit();
@@ -40,8 +40,8 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
       path,
       ref: BRANCH,
       headers: {
-        accept: 'application/vnd.github.raw+json', // returns the raw file
-        // application/vnd.github.html+json // returns md content in html format
+        // accept: 'application/vnd.github.raw+json', // returns the raw file
+        accept: 'application/vnd.github.html+json', // returns md content in html format
         'X-GitHub-Api-Version': '2022-11-28',
       },
     });
@@ -50,7 +50,7 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
     // console.log('data from github octokit.repos.getContent: ', data);
     // console.log('+-------------------------------------------------+');
 
-    return data;
+    return data as unknown as Post;
   } catch (error) {
     console.error('Error @ getRepositoryData: ', error);
     throw error;
@@ -250,7 +250,24 @@ function extractBlogMetaData(
  * @returns
  */
 // todo: fix this type
-const getCachedGithubPosts = unstable_cache(
+export const getCachedGithubPost = unstable_cache(
+  async (path: string = '') => {
+    return await getRepositoryData(path);
+  },
+  ['github-blog-post'],
+  {
+    revalidate: 60 * 60 * 24, // 1 day
+    tags: ['github-blog-post'],
+  }
+);
+
+/**
+ ** GET CACHED GITHUB POSTS(CACHE-CONTROL)
+ * @param path
+ * @returns
+ */
+// todo: fix this type
+const getCachedGithubPostList = unstable_cache(
   async (path: string = '') => {
     return await getGithubPostsFromAPI(path);
   },
@@ -268,7 +285,7 @@ const getCachedGithubPosts = unstable_cache(
  */
 export async function getGithubPosts(path: string = '') {
   try {
-    return await getCachedGithubPosts(path);
+    return await getCachedGithubPostList(path);
   } catch (error) {
     console.error('Error @ getGithubPosts: ', error);
     return [];

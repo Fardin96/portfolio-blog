@@ -14,7 +14,7 @@ import { setRedisData } from '../../../utils/redisServices';
 import { revalidatePath } from 'next/cache';
 
 /**
- ** GITHUB WEBHOOK ENDPOINT
+ ** GITHUB WEBHOOK HANDLER ENDPOINT
  * @param request - NextRequest
  * @returns NextResponse
  */

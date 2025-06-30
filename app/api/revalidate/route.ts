@@ -7,6 +7,7 @@ import {
 
 /**
  **REVALIDATE PATH-POST
+ * @deprecated - uses directly
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {

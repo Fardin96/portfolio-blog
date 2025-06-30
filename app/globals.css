@@ -26,7 +26,7 @@
   --md-table-border: #dfe2e5;
   --md-table-row-bg: #f6f8fa;
   --md-hr-color: #e1e4e8;
-  --md-heading-border: #eaecef;
+  --md-heading-border: rgba(128, 128, 128, 0.25); /* 50% lighter gray with 25% transparency */
 }
 
 html.dark {
@@ -50,7 +50,7 @@ html.dark {
   --md-table-border: #30363d;
   --md-table-row-bg: #0d1117;
   --md-hr-color: #30363d;
-  --md-heading-border: #21262d;
+  --md-heading-border: rgba(189, 189, 189, 0.25); /* 50% lighter white with 25% transparency */
 }
 
 body {

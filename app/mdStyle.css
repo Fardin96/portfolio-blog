@@ -1,5 +1,5 @@
 .mdStyle {
-    font: 400 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font: 400 17.6px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: var(--md-text-color);
     background-color: var(--md-bg-color);
     -webkit-text-size-adjust: 100%;
@@ -8,14 +8,16 @@
     -o-font-feature-settings: "kern" 1;
     font-feature-settings: "kern" 1;
     font-kerning: normal;
-    padding: 30px;
-    max-width: 900px;
-    margin: 0 auto;
+    /* padding-left: 30px;
+    padding-right: 30px; */
+    /* border: 1px solid red; */
 }
 
 @media only screen and (max-width: 600px) {
     body {
         padding: 5px;
+        margin: 0;
+        padding: 0;
     }
     body>#content {
         padding: 0px 20px 20px 20px !important;
@@ -69,7 +71,7 @@ body>#content {
 .mdStyle pre {
     background-color: var(--md-code-bg);
     border-radius: 3px;
-    font-size: 85%;
+    font-size: 93.5%;
     line-height: 1.45;
     overflow: auto;
     padding: 16px;
@@ -78,7 +80,7 @@ body>#content {
 .mdStyle code {
     background-color: var(--md-code-inline-bg);
     border-radius: 3px;
-    font-size: 85%;
+    font-size: 93.5%;
     margin: 0;
     word-wrap: break-word;
     padding: .2em .4em;
@@ -106,7 +108,7 @@ body>#content {
     color: var(--md-blockquote-color);
     border-left: 4px solid var(--md-blockquote-border);
     padding-left: 15px;
-    font-size: 18px;
+    font-size: 19.8px;
     letter-spacing: -1px;
     font-style: italic;
 }
@@ -120,7 +122,7 @@ body>#content {
 .mdStyle table {
     border-spacing: 2px;
     display: block;
-    font-size: 14px;
+    font-size: 15.4px;
     overflow: auto;
     width: 100%;
     margin-bottom: 16px;
@@ -155,7 +157,7 @@ body>#content {
 .mdStyle p {
     line-height: 24px;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 17.6px;
     color: var(--md-text-color);
 }
 
@@ -165,7 +167,7 @@ body>#content {
 
 .mdStyle li {
     color: var(--md-text-color);
-    font-size: 16px;
+    font-size: 17.6px;
     font-weight: 400;
     line-height: 1.5;
 }
@@ -189,24 +191,22 @@ body>#content {
 }
 
 .mdStyle h1 {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
+    font-size: 2.5rem;
+    line-height: 2.75rem;
+}
+
+.mdStyle h2 {
+    font-size: 1.8rem;
+    line-height: 2.75rem;
     margin-top: 2rem;
     margin-bottom: 1rem;
 }
 
-.mdStyle h2 {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-}
-
 .mdStyle h3 {
     font-size: 1.5rem;
-    line-height: 2rem;
-    margin-top: 1.25rem;
-    margin-bottom: 0.5rem;
+    line-height: 2.75rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 .mdStyle code>* {

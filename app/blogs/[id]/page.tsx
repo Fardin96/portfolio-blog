@@ -21,6 +21,8 @@ export default async function BlogDetail({
   const { id: blogId } = await params;
   // const data: any = await getCachedGithubPost(`${blogId}/index.md`);
   const data: any = await getRepositoryData(`${blogId}/index.md`);
+  // let data: any;
+  // const htmlContent: any = await getRepositoryData(`${blogId}/index.md`);
   // const htmlContent = await mdToHtml(data);
 
   //* SHOWDOWN CONVERTER
@@ -67,13 +69,22 @@ export default async function BlogDetail({
   // }, []);
 
   return (
-    <div>
-      <Link
-        href='/blogs'
-        className='text-blue-500 hover:text-blue-700 mb-4 inline-block'
-      >
-        ← Back to blogs
-      </Link>
+    <div className='min-h-full flex flex-col px-4 sm:px-8 lg:px-35'>
+      {/* <div className='px-4 md:px-8 lg:px-12 py-4 border-2 border-white-500'> */}
+      <div className=''>
+        <Link
+          href='/blogs'
+          className='text-blue-500 hover:text-blue-700 inline-block'
+        >
+          ← Back to blogs
+        </Link>
+
+        <div className='flex items-center text-gray-500 mb-6'>
+          <span>By {data?.author?.name}</span>
+          <span className='mx-2'>•</span>
+          <span>{formatDate(data?.date)}</span>
+        </div>
+      </div>
 
       <div
         className='mdStyle'
@@ -83,11 +94,7 @@ export default async function BlogDetail({
       {/* <h1 className='text-3xl font-bold mb-2'>{data?.title}</h1>
       <div>{htmlContent.value}</div>
 
-      <div className='flex items-center text-gray-500 mb-6'>
-        <span>By {data?.author?.name}</span>
-        <span className='mx-2'>•</span>
-        <span>{formatDate(data?.date)}</span>
-      </div>
+     
 
       <div className='prose max-w-none'>
         <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.description}</pre>

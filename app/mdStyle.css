@@ -198,14 +198,16 @@ body>#content {
 .mdStyle h2 {
     font-size: 1.8rem;
     line-height: 2.75rem;
-    margin-top: 2rem;
+    /* color: red; */
+    margin-top: 1rem;
     margin-bottom: 1rem;
 }
 
 .mdStyle h3 {
     font-size: 1.5rem;
     line-height: 2.75rem;
-    margin-top: 2rem;
+    /* color: blue; */
+    margin-top: 1rem;
     margin-bottom: 1rem;
 }
 

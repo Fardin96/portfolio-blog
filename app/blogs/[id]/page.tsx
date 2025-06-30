@@ -12,6 +12,7 @@ import { mdToHtml } from '../../../utils/mdToHtml';
 import showdown from 'showdown';
 // import styles from '../../mdStyle.module.css';
 import '../../mdStyle.css';
+import '../../github-markdown.css';
 
 export default async function BlogDetail({
   params,
@@ -87,7 +88,7 @@ export default async function BlogDetail({
       </div>
 
       <div
-        className='mdStyle'
+        className='markdown-body'
         dangerouslySetInnerHTML={{ __html: htmlContent }}
       />
 

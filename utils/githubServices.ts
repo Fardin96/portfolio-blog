@@ -26,7 +26,6 @@ async function initOctokit(): Promise<Octokit> {
 
 /**
  ** GET GITHUB REPOSITORY DATA(REST API)
- * @deprecated use getGithubPosts instead
  * @param path
  * @returns
  */

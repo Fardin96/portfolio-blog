@@ -12,9 +12,9 @@ import {
 export default async function BlogDetail({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<React.ReactElement> {
-  const blogId: string = params?.id;
+  const { id: blogId } = await params;
   // const data: any = await getCachedGithubPost(`${blogId}/index.md`);
   const data: any = await getRepositoryData(`${blogId}/index.md`);
 

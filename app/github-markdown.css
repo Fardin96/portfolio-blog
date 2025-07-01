@@ -26,7 +26,7 @@
     --fgColor-done: #ab7df8;
     --bgColor-default: #0d1117;
     --bgColor-muted: #5889ea21;
-    --bgColor-neutral-muted: #656c7633;
+    --bgColor-neutral-muted: #2466c233;
     --bgColor-attention-muted: #bb800926;
     --borderColor-default: #3d444d;
     --borderColor-muted: #3d444db3;
@@ -138,8 +138,8 @@
     --fgColor-danger: #d1242f;
     --fgColor-done: #8250df;
     --bgColor-default: #ffffff;
-    --bgColor-muted: #f1ecec;
-    --bgColor-neutral-muted: #818b981f;
+    --bgColor-muted: #cfcbcb8a;
+    --bgColor-neutral-muted: #466fa61f;
     --bgColor-attention-muted: #fff8c5;
     --borderColor-default: #d1d9e0;
     --borderColor-muted: #d1d9e0b3;
@@ -194,8 +194,8 @@
   --fgColor-danger: #d1242f;
   --fgColor-done: #8250df;
   --bgColor-default: #ffffff;
-  --bgColor-muted: #8780801e;
-  --bgColor-neutral-muted: #818b981f;
+  --bgColor-muted: #cfcbcb8a;
+  --bgColor-neutral-muted: #cfcbcb8a;
   --bgColor-attention-muted: #fff8c5;
   --borderColor-default: #d1d9e0;
   --borderColor-muted: #d1d9e0b3;
@@ -818,6 +818,7 @@
 
 .markdown-body table tr:nth-child(2n) {
   /* background-color: var(--bgColor-muted); */
+  background-color: var(--bgColor-muted);
 }
 
 .markdown-body table img {

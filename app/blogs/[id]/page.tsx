@@ -7,6 +7,7 @@ import {
 } from '../../../utils/githubServices';
 import showdown from 'showdown';
 import '../../github-markdown.css';
+import { mdToHtml } from '../../../utils/mdToHtml';
 
 export async function generateStaticParams() {
   try {
@@ -28,23 +29,11 @@ export default async function BlogDetail({
 }): Promise<React.ReactElement> {
   const { id: blogId } = await params;
   const data: any = await getGithubPostWithFetch(`${blogId}/index.md`);
-
-  //* SHOWDOWN CONVERTER
-  var converter = new showdown.Converter();
-  converter.setOption('tables', true);
-  converter.setOption('tasklists', true);
-  converter.setOption('strikethrough', true);
-  converter.setOption('underline', true);
-  converter.setOption('footnotes', true);
-  converter.setOption('smartLists', true);
-  converter.setOption('smartypants', true);
-  converter.setOption('openLinksInNewWindow', true);
-  var htmlContent = converter.makeHtml(data);
+  const htmlContent = mdToHtml(data);
 
   return (
     <div className='min-h-full flex flex-col px-4 sm:px-8 lg:px-35'>
-      {/* <div className='px-4 md:px-8 lg:px-12 py-4 border-2 border-white-500'> */}
-      <div className=''>
+      <div>
         <Link
           href='/blogs'
           className='text-blue-500 hover:text-blue-700 inline-block'

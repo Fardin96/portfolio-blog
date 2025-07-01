@@ -366,7 +366,7 @@ export async function getGithubPostsWithFetch(
             },
             next: {
               revalidate: 60 * 60 * 24, // 24 hours
-              tags: [`github-blog-post-${item.name}`],
+              tags: [`github-blog-post-${item.name}/index.md`],
             },
           }
         );

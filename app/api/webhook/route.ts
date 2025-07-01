@@ -54,11 +54,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       ...body?.head_commit?.modified,
     ];
 
-    // remove cache
-    revalidatePath('/blogs');
+    // remove cache for specific posts only
     modifiedFiles.forEach((file) => {
       revalidateTag(`github-blog-post-${file}`);
     });
+
+    // Only invalidate blog list if new posts are added/removed
+    if (
+      body?.head_commit?.added?.length > 0 ||
+      body?.head_commit?.removed?.length > 0 ||
+      body?.head_commit?.modified?.length > 0
+    ) {
+      revalidateTag('github-blogs');
+    }
 
     return successResponse();
   } catch (error) {

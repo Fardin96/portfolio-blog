@@ -240,11 +240,17 @@ function extractBlogMetaData(
 }
 
 /**
- ** GET CACHED GITHUB POSTS(CACHE-CONTROL)
+ ** GET CACHED GITHUB POST(CACHE-CONTROL)
  * @param path
  * @returns
  */
 export function getCachedGithubPost(path: string = '') {
+  console.log(
+    '+----------------------GET-CACHED-GITHUB-POST-------------------+'
+  );
+  console.log('path: ', path);
+  console.log('+-------------------------------------------------+');
+
   return unstable_cache(
     () => getRepositoryData(path),
     [`github-blog-post-${path}`],

@@ -11,7 +11,7 @@ import {
 } from '../../../utils/requestValidation';
 import { successResponse } from '../../../utils/requestValidation';
 import { setRedisData } from '../../../utils/redisServices';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 /**
  ** GITHUB WEBHOOK HANDLER ENDPOINT
@@ -46,10 +46,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // format & set data to redis
     const webhookData = createWebhookData(body, eventType);
-    await setRedisData('webhookData', JSON.stringify(webhookData));
+    await setRedisData('webhookData', JSON.stringify(webhookData)); // todo: modify this to store the least amount of data
+
+    // get modified file paths
+    const modifiedFiles: string[] = [
+      ...body?.head_commit?.removed,
+      ...body?.head_commit?.modified,
+    ];
 
     // remove cache
     revalidatePath('/blogs');
+    modifiedFiles.forEach((file) => {
+      revalidateTag(`github-blog-post-${file}`);
+    });
 
     return successResponse();
   } catch (error) {

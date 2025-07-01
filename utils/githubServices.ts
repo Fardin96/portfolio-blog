@@ -319,3 +319,81 @@ export async function getGithubPostWithFetch(path: string = '') {
     throw error;
   }
 }
+
+/**
+ ** GET GITHUB POSTS LIST WITH FETCH ISR (APP ROUTER STYLE)
+ * @param path
+ * @returns
+ */
+export async function getGithubPostsWithFetch(
+  path: string = ''
+): Promise<BlogPost[]> {
+  try {
+    // Get directory contents using fetch with ISR
+    const response = await fetch(
+      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.REPOSITORY_ACCESS_TOKEN}`,
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+        next: {
+          revalidate: 60 * 60 * 24, // 24 hours
+          tags: ['github-blogs'],
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status}`);
+    }
+
+    const contents = await response.json();
+    const blogPosts: BlogPost[] = [];
+
+    // Process each directory (blog post)
+    for (const item of contents) {
+      if (item.type === 'dir') {
+        // Get the index.md file from each directory
+        const indexResponse = await fetch(
+          `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}${item.name}/index.md`,
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.REPOSITORY_ACCESS_TOKEN}`,
+              Accept: 'application/vnd.github.raw+json',
+              'X-GitHub-Api-Version': '2022-11-28',
+            },
+            next: {
+              revalidate: 60 * 60 * 24, // 24 hours
+              tags: [`github-blog-post-${item.name}`],
+            },
+          }
+        );
+
+        if (indexResponse.ok) {
+          const content = await indexResponse.text();
+          const blogPost = await extractBlogMetaData(
+            item.name,
+            content,
+            `${path}${item.name}/index.md`
+          );
+          blogPosts.push(blogPost);
+        }
+      }
+    }
+
+    // Sort blog posts
+    return blogPosts.sort((a, b) => {
+      if (a.date && b.date) {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      }
+      if (a.date && !b.date) return -1;
+      if (!a.date && b.date) return 1;
+      return a.title.localeCompare(b.title);
+    });
+  } catch (error) {
+    console.error('Error @ getGithubPostsWithFetch: ', error);
+    return [];
+  }
+}

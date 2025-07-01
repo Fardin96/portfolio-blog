@@ -2,15 +2,14 @@ import Link from 'next/link';
 import { formatDate } from '../../../utils/utils';
 import {
   getGithubPostWithFetch,
-  getGithubPosts,
+  getGithubPostsWithFetch,
 } from '../../../utils/githubServices';
 import showdown from 'showdown';
 import '../../github-markdown.css';
 
-// App Router equivalent of getStaticPaths
 export async function generateStaticParams() {
   try {
-    const posts = await getGithubPosts('');
+    const posts = await getGithubPostsWithFetch('');
     return posts.map((post) => ({
       id: post.id,
     }));

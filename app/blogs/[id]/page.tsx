@@ -82,7 +82,9 @@ export default async function BlogDetail({
         <div className='flex items-center text-gray-500 mb-6'>
           <span>By {data?.author?.name}</span>
           <span className='mx-2'>•</span>
-          <span>{formatDate(data?.date)}</span>
+          <p className='text-sm text-gray-400 mb-4'>
+            last updated: {new Date().toLocaleString()}
+          </p>
         </div>
       </div>
 

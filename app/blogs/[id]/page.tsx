@@ -19,8 +19,8 @@ export default async function BlogDetail({
   params: Promise<{ id: string }>;
 }): Promise<React.ReactElement> {
   const { id: blogId } = await params;
-  // const data: any = await getCachedGithubPost(`${blogId}/index.md`);
-  const data: any = await getRepositoryData(`${blogId}/index.md`);
+  const data: any = await getCachedGithubPost(`${blogId}/index.md`);
+  // const data: any = await getRepositoryData(`${blogId}/index.md`);
   // let data: any;
   // const htmlContent: any = await getRepositoryData(`${blogId}/index.md`);
   // const htmlContent = await mdToHtml(data);
@@ -85,6 +85,10 @@ export default async function BlogDetail({
           <span>{formatDate(data?.date)}</span>
         </div>
       </div>
+
+      <p className='text-sm text-gray-400 mb-4'>
+        last updated: {new Date().toLocaleString()}
+      </p>
 
       <div
         className='markdown-body'

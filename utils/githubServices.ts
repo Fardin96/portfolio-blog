@@ -45,10 +45,6 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
       },
     });
 
-    // console.log('+----------------------GIT-DATA-------------------+');
-    // console.log('data from github octokit.repos.getContent: ', data);
-    // console.log('+-------------------------------------------------+');
-
     return data as unknown as Post;
   } catch (error) {
     console.error('Error @ getRepositoryData: ', error);
@@ -248,17 +244,16 @@ function extractBlogMetaData(
  * @param path
  * @returns
  */
-// todo: fix this type
-export const getCachedGithubPost = unstable_cache(
-  async (path: string = '') => {
-    return await getRepositoryData(path);
-  },
-  ['github-blog-post'],
-  {
-    revalidate: 60 * 60 * 24, // 1 day
-    tags: ['github-blog-post'],
-  }
-);
+export function getCachedGithubPost(path: string = '') {
+  return unstable_cache(
+    () => getRepositoryData(path),
+    [`github-blog-post-${path}`],
+    {
+      revalidate: 60 * 60 * 24,
+      tags: [`github-blog-post-${path}`],
+    }
+  )();
+}
 
 /**
  ** GET CACHED GITHUB POSTS(CACHE-CONTROL)

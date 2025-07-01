@@ -285,3 +285,37 @@ export async function getGithubPosts(path: string = '') {
     return [];
   }
 }
+
+/**
+ ** GET GITHUB POST WITH FETCH ISR (APP ROUTER STYLE)
+ * @param path
+ * @returns
+ */
+export async function getGithubPostWithFetch(path: string = '') {
+  try {
+    // Using fetch with App Router ISR syntax
+    const response = await fetch(
+      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.REPOSITORY_ACCESS_TOKEN}`,
+          Accept: 'application/vnd.github.raw+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+        next: {
+          revalidate: 60 * 60 * 24, // 24 hours
+          tags: [`github-blog-post-${path}`],
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status}`);
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error('Error @ getGithubPostWithFetch: ', error);
+    throw error;
+  }
+}

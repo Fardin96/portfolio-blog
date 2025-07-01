@@ -45,13 +45,24 @@ export default function ProjectDetail(): React.ReactElement {
 
       <h1 className='text-3xl font-bold mb-4'>{data?.title}</h1>
 
-      <div className='p-6 rounded-lg mb-6'>
-        <h2 className='text-xl font-semibold mb-2'>Description</h2>
-        <p>{data?.description}</p>
+      <div className='flex gap-4'>
+        <a
+          href={data?.gitHubUrl}
+          className='bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700'
+        >
+          GitHub Repository
+        </a>
+
+        <a
+          href={data?.demoUrl}
+          className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'
+        >
+          Live Demo
+        </a>
       </div>
 
       {data?.tags && data?.tags?.length > 0 && (
-        <div className='mb-6'>
+        <div className='my-6'>
           <h2 className='text-xl font-semibold mb-2'>Technologies Used</h2>
 
           <div className='flex flex-wrap gap-2'>
@@ -69,21 +80,13 @@ export default function ProjectDetail(): React.ReactElement {
         </div>
       )}
 
-      <div className='flex gap-4'>
-        <a
-          href={data?.gitHubUrl}
-          className='bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700'
-        >
-          GitHub Repository
-        </a>
-
-        <a
-          href={data?.demoUrl}
-          className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'
-        >
-          Live Demo
-        </a>
+      <div className='rounded-lg my-6'>
+        <h2 className='text-xl font-semibold mb-2'>Description</h2>
+        <p>{data?.description}</p>
       </div>
+
+      {/* spacing */}
+      <div className='py-4 sm:py-4 lg:py-10' />
     </div>
   );
 }

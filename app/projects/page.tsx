@@ -87,6 +87,9 @@ export default function Projects(): React.ReactElement {
           </div>
         ))}
       </div>
+
+      {/* spacing */}
+      <div className='py-4 sm:py-4 lg:py-10' />
     </div>
   );
 }

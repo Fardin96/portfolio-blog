@@ -68,12 +68,8 @@ export default async function BlogDetail({
         dangerouslySetInnerHTML={{ __html: htmlContent }}
       />
 
-      {/* <h1 className='text-3xl font-bold mb-2'>{data?.title}</h1>
-      <div>{htmlContent.value}</div>
-
-      <div className='prose max-w-none'>
-        <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.description}</pre>
-      </div> */}
+      {/* spacing */}
+      <div className='py-4 sm:py-4 lg:py-10' />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { formatDate } from '../../../utils/utils';
 import {
   getGithubPostWithFetch,
+  getGithubPostsFromAPI,
   getGithubPostsWithFetch,
 } from '../../../utils/githubServices';
 import showdown from 'showdown';
@@ -9,7 +10,8 @@ import '../../github-markdown.css';
 
 export async function generateStaticParams() {
   try {
-    const posts = await getGithubPostsWithFetch('');
+    // const posts = await getGithubPostsWithFetch('');
+    const posts = await getGithubPostsFromAPI('');
     return posts.map((post) => ({
       id: post.id,
     }));

@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
-import { WebhookDataResponse } from '../../../../public/types/webhookTypes';
+import { WebhookDataResponse } from '../../../../utils/types/webhookTypes';
 import { getRedisData } from '../../../../utils/redisServices';
-import {
-  errorResponse,
-  notFoundResponse,
-} from '../../../../utils/requestValidation';
+import { errorResponse, notFoundResponse } from '../../../../utils/Response';
 
 /**
  ** GET WEBHOOK DATA

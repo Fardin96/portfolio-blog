@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   isSignatureValid,
-  unauthorizedResponse,
   isBodyPopulated,
 } from '../../../utils/requestValidation';
 import { createWebhookData } from '../../../utils/requestValidation';
@@ -9,9 +8,10 @@ import {
   getRequestBody,
   parseRequestBody,
 } from '../../../utils/requestValidation';
-import { successResponse } from '../../../utils/requestValidation';
+import { successResponse } from '../../../utils/Response';
+import { unauthorizedResponse } from '../../../utils/Response';
 import { setRedisData } from '../../../utils/redisServices';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 /**
  ** GITHUB WEBHOOK HANDLER ENDPOINT

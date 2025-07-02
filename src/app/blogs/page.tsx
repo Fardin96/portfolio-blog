@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BlogPost } from '../../public/types/types';
+import { BlogPost } from '../../utils/types/types';
 import { formatDate } from '../../utils/utils';
 import { getGithubPosts } from '../../utils/githubServices';
 

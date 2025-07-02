@@ -2,8 +2,8 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getAllPosts } from '../../utils/sanityServices';
-import { AllPosts } from '../../public/types/types';
-import { projects } from '../../public/static';
+import { AllPosts } from '../../utils/types/types';
+import { projects } from '../../../public/static';
 
 export default function Projects(): React.ReactElement {
   const [data, setData] = useState<AllPosts[]>([]);

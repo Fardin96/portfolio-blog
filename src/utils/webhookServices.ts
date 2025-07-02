@@ -1,4 +1,4 @@
-import { SetWebhookDataType } from '../public/types/types';
+import { SetWebhookDataType } from './types/types';
 
 export async function fetchWebhookData(
   setWebhookData: SetWebhookDataType

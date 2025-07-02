@@ -2,7 +2,7 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { Post, RouteParams } from '../../../public/types/types';
+import { Post, RouteParams } from '../../../utils/types/types';
 import { getSinglePost } from '../../../utils/sanityServices';
 
 export default function ProjectDetail(): React.ReactElement {

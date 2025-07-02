@@ -1,5 +1,5 @@
 import { createClient } from '@sanity/client';
-import { AllPosts, AllPostsType, Post } from '../public/types/types';
+import { AllPosts, AllPostsType, Post } from './types/types';
 
 /**
  ** SANITY CLIENT CONFIG

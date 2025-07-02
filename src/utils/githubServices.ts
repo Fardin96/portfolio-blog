@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-import { BlogPost, GithubGraphQLRes, Post } from '../public/types/types';
+import { BlogPost, GithubGraphQLRes, Post } from './types/types';
 import { unstable_cache } from 'next/cache';
 import { query } from './graphql/queries/githubPostsList';
 

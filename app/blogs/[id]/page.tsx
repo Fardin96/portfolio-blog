@@ -1,18 +1,18 @@
 import Link from 'next/link';
 import { formatDate } from '../../../utils/utils';
 import {
-  getGithubPostWithFetch,
-  getGithubPostsFromAPI,
-  getGithubPostsWithFetch,
+  getGithubPostUsingFetch,
+  getGithubPostsListUsingGraphQL,
 } from '../../../utils/githubServices';
-import showdown from 'showdown';
 import '../../github-markdown.css';
 import { mdToHtml } from '../../../utils/mdToHtml';
 
+/**
+ ** GENERATE STATIC PARAMS
+ */
 export async function generateStaticParams() {
   try {
-    // const posts = await getGithubPostsWithFetch('');
-    const posts = await getGithubPostsFromAPI('');
+    const posts = await getGithubPostsListUsingGraphQL('');
     return posts.map((post) => ({
       id: post.id,
     }));
@@ -28,7 +28,7 @@ export default async function BlogDetail({
   params: Promise<{ id: string }>;
 }): Promise<React.ReactElement> {
   const { id: blogId } = await params;
-  const data: any = await getGithubPostWithFetch(`${blogId}/index.md`);
+  const data: any = await getGithubPostUsingFetch(`${blogId}/index.md`);
   const htmlContent = mdToHtml(data);
 
   return (

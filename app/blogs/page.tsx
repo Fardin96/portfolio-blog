@@ -3,18 +3,8 @@ import { BlogPost } from '../../public/types/types';
 import { formatDate } from '../../utils/utils';
 import { getGithubPosts } from '../../utils/githubServices';
 
-async function fetchGithubBlogs(): Promise<BlogPost[]> {
-  try {
-    const data = (await getGithubPosts('')) as BlogPost[];
-    return data;
-  } catch (error) {
-    console.error('Error fetching repository data:', error);
-    return [];
-  }
-}
-
 export default async function Blogs(): Promise<React.ReactElement> {
-  const data: BlogPost[] = await fetchGithubBlogs();
+  const data: BlogPost[] = await getGithubPosts('');
 
   // empty view
   if (data.length === 0) {

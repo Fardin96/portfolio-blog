@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  getGithubPostsFromAPI,
+  getGithubPostsListUsingGraphQL,
   getRepositoryData,
 } from '../../../../utils/githubServices';
 import { validateSignature } from '../../../../utils/authServices';
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const path = searchParams.get('path') || '';
 
     // const data = await getRepositoryData(path);
-    const data = await getGithubPostsFromAPI(path);
+    const data = await getGithubPostsListUsingGraphQL(path);
 
     return NextResponse.json({ success: true, data });
   } catch (error) {

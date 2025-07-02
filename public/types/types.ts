@@ -46,6 +46,26 @@ export type Post = {
   demoUrl: string;
 };
 
+export type GithubGraphQLRes = {
+  repository: {
+    object: {
+      entries: Array<{
+        name: string;
+        type: string;
+        object: {
+          entries: Array<{
+            name: string;
+            type: string;
+            object: {
+              text?: string;
+            };
+          }>;
+        };
+      }>;
+    };
+  };
+};
+
 export type AllPostsType = 'Project' | 'blog';
 
 export type BlogPost = {

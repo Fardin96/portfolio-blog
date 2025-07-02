@@ -1,6 +1,7 @@
 import { Octokit } from '@octokit/rest';
-import { BlogPost, Post } from '../public/types/types';
+import { BlogPost, GithubGraphQLRes, Post } from '../public/types/types';
 import { unstable_cache } from 'next/cache';
+import { query } from './graphql/queries/githubPostsList';
 
 const OWNER = process.env.GITHUB_OWNER || 'yourusername';
 const REPO = process.env.GITHUB_REPO || 'your-docs-repo';
@@ -8,7 +9,7 @@ const BRANCH = process.env.GITHUB_BRANCH || 'main';
 
 /**
  ** INITIALIZE OCTOKIT
- * @returns
+ * @returns Octokit instance
  */
 async function initOctokit(): Promise<Octokit> {
   try {
@@ -26,6 +27,7 @@ async function initOctokit(): Promise<Octokit> {
 
 /**
  ** GET GITHUB REPOSITORY DATA(REST API)
+ * @deprecated: use getGithubPostWithFetch instead
  * @param path
  * @returns
  */
@@ -53,60 +55,56 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
 }
 
 /**
- ** GET GITHUB POSTS(GRAPHQL API)
+ ** GET GITHUB POST WITH FETCH ISR
  * @param path
  * @returns
  */
+export async function getGithubPostUsingFetch(path: string = '') {
+  try {
+    const response = await fetch(
+      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.REPOSITORY_ACCESS_TOKEN}`,
+          Accept: 'application/vnd.github.raw+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+        next: {
+          revalidate: 60 * 60 * 24, // 24 hours
+          tags: [`github-blog-post-${path}`],
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status}`);
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error('Error @ getGithubPostWithFetch: ', error);
+    throw error;
+  }
+}
+
+/**
+ ** GET GITHUB POSTS(GRAPHQL API)
+ * @param path
+ * @returns Promise<BlogPost[]>
+ */
 // todo: re-check all the types related to this function
-export async function getGithubPostsFromAPI(
+export async function getGithubPostsListUsingGraphQL(
   path: string = ''
 ): Promise<BlogPost[]> {
   console.log('+----------------------GRAPH-QL-------------------+');
   try {
     const octokit = await initOctokit();
 
-    //todo: refactor: move this to separate file
-    const query = `
-    query($owner: String!, $repo: String!, $expression: String!) {
-      repository(owner: $owner, name: $repo) {
-        object(expression: $expression) {
-          ... on Tree {
-            entries {
-              name
-              type
-              object {
-                ... on Tree {
-                  entries {
-                    name
-                    type
-                    object {
-                      ... on Blob {
-                        text
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
-    // todo: fix this type
-    const result: any = await octokit.graphql(query, {
+    const result: GithubGraphQLRes = await octokit.graphql(query, {
       owner: OWNER,
       repo: REPO,
       expression: `main:${path}`,
     });
-
-    // console.log('+----------------------GIT-DATA-------------------+');
-    // console.log(
-    //   'data from github octokit.graphql: ',
-    //   JSON.stringify(result, null, 2)
-    // );
-    // console.log('+-------------------------------------------------+');
 
     const blogPosts: BlogPost[] = [];
 
@@ -132,10 +130,6 @@ export async function getGithubPostsFromAPI(
         }
       }
     }
-
-    // console.log('+-------------------------------------------------+');
-    // console.log('blogPosts: ', JSON.stringify(blogPosts, null, 2));
-    // console.log('+-------------------------------------------------+');
 
     // return sorted blog posts
     // todo: refactor: move this to separate function
@@ -164,7 +158,7 @@ export async function getGithubPostsFromAPI(
  * @param dirName
  * @param content
  * @param path
- * @returns
+ * @returns BlogPost
  */
 function extractBlogMetaData(
   dirName: string,
@@ -240,30 +234,14 @@ function extractBlogMetaData(
 }
 
 /**
- ** GET CACHED GITHUB POST(CACHE-CONTROL)
- * @param path
- * @returns
- */
-export function getCachedGithubPost(path: string = '') {
-  return unstable_cache(
-    () => getRepositoryData(path),
-    [`github-blog-post-${path}`],
-    {
-      revalidate: 60 * 60 * 24,
-      tags: [`github-blog-post-${path}`],
-    }
-  )();
-}
-
-/**
  ** GET CACHED GITHUB POSTS(CACHE-CONTROL)
  * @param path
  * @returns
  */
 // todo: fix this type
-const getCachedGithubPostList = unstable_cache(
+const getCachedGithubPostsList = unstable_cache(
   async (path: string = '') => {
-    return await getGithubPostsFromAPI(path);
+    return await getGithubPostsListUsingGraphQL(path);
   },
   ['github-blogs'],
   {
@@ -279,121 +257,9 @@ const getCachedGithubPostList = unstable_cache(
  */
 export async function getGithubPosts(path: string = '') {
   try {
-    return await getCachedGithubPostList(path);
+    return await getCachedGithubPostsList(path);
   } catch (error) {
     console.error('Error @ getGithubPosts: ', error);
-    return [];
-  }
-}
-
-/**
- ** GET GITHUB POST WITH FETCH ISR (APP ROUTER STYLE)
- * @param path
- * @returns
- */
-export async function getGithubPostWithFetch(path: string = '') {
-  try {
-    // Using fetch with App Router ISR syntax
-    const response = await fetch(
-      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.REPOSITORY_ACCESS_TOKEN}`,
-          Accept: 'application/vnd.github.raw+json',
-          'X-GitHub-Api-Version': '2022-11-28',
-        },
-        next: {
-          revalidate: 60 * 60 * 24, // 24 hours
-          tags: [`github-blog-post-${path}`],
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.status}`);
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error('Error @ getGithubPostWithFetch: ', error);
-    throw error;
-  }
-}
-
-/**
- ** GET GITHUB POSTS LIST WITH FETCH ISR (APP ROUTER STYLE)
- * @param path
- * @returns
- */
-export async function getGithubPostsWithFetch(
-  path: string = ''
-): Promise<BlogPost[]> {
-  try {
-    // Get directory contents using fetch with ISR
-    const response = await fetch(
-      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.REPOSITORY_ACCESS_TOKEN}`,
-          Accept: 'application/vnd.github+json',
-          'X-GitHub-Api-Version': '2022-11-28',
-        },
-        next: {
-          revalidate: 60 * 60 * 24, // 24 hours
-          tags: ['github-blogs'],
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.status}`);
-    }
-
-    const contents = await response.json();
-    const blogPosts: BlogPost[] = [];
-
-    // Process each directory (blog post)
-    for (const item of contents) {
-      if (item.type === 'dir') {
-        // Get the index.md file from each directory
-        const indexResponse = await fetch(
-          `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}${item.name}/index.md`,
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.REPOSITORY_ACCESS_TOKEN}`,
-              Accept: 'application/vnd.github.raw+json',
-              'X-GitHub-Api-Version': '2022-11-28',
-            },
-            next: {
-              revalidate: 60 * 60 * 24, // 24 hours
-              tags: [`github-blog-post-${item.name}/index.md`],
-            },
-          }
-        );
-
-        if (indexResponse.ok) {
-          const content = await indexResponse.text();
-          const blogPost = await extractBlogMetaData(
-            item.name,
-            content,
-            `${path}${item.name}/index.md`
-          );
-          blogPosts.push(blogPost);
-        }
-      }
-    }
-
-    // Sort blog posts
-    return blogPosts.sort((a, b) => {
-      if (a.date && b.date) {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      }
-      if (a.date && !b.date) return -1;
-      if (!a.date && b.date) return 1;
-      return a.title.localeCompare(b.title);
-    });
-  } catch (error) {
-    console.error('Error @ getGithubPostsWithFetch: ', error);
     return [];
   }
 }

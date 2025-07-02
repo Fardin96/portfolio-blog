@@ -1,7 +1,11 @@
 import { Octokit } from '@octokit/rest';
-import { BlogPost, GithubGraphQLRes, Post } from './types/types';
 import { unstable_cache } from 'next/cache';
 import { query } from './graphql/queries/githubPostsList';
+import {
+  formatGitGraphQlResponse,
+  sortedBlogPosts,
+} from './githubServicesHelpers';
+import { BlogPost, GithubGraphQLRes, Post } from './types/types';
 
 const OWNER = process.env.GITHUB_OWNER || 'yourusername';
 const REPO = process.env.GITHUB_REPO || 'your-docs-repo';
@@ -57,9 +61,11 @@ export async function getRepositoryData(path: string = ''): Promise<any> {
 /**
  ** GET GITHUB POST WITH FETCH ISR
  * @param path
- * @returns
+ * @returns Promise<string>
  */
-export async function getGithubPostUsingFetch(path: string = '') {
+export async function getGithubPostUsingFetch(
+  path: string = ''
+): Promise<string> {
   try {
     const response = await fetch(
       `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`,
@@ -92,11 +98,9 @@ export async function getGithubPostUsingFetch(path: string = '') {
  * @param path
  * @returns Promise<BlogPost[]>
  */
-// todo: re-check all the types related to this function
 export async function getGithubPostsListUsingGraphQL(
   path: string = ''
 ): Promise<BlogPost[]> {
-  console.log('+----------------------GRAPH-QL-------------------+');
   try {
     const octokit = await initOctokit();
 
@@ -106,47 +110,9 @@ export async function getGithubPostsListUsingGraphQL(
       expression: `main:${path}`,
     });
 
-    const blogPosts: BlogPost[] = [];
+    const blogPosts: BlogPost[] = formatGitGraphQlResponse(path, result);
 
-    // format github blogs
-    // todo: refactor: move this to separate function
-    if (result.repository?.object?.entries) {
-      for (const entry of result.repository?.object?.entries) {
-        if (entry.type === 'tree' && entry.object?.entries) {
-          const mdFile = entry.object.entries.find(
-            (file: any) =>
-              file.name.endsWith('.md') || file.name.endsWith('.mdx')
-          );
-
-          if (mdFile?.object.text) {
-            const blogPost = await extractBlogMetaData(
-              entry.name,
-              mdFile.object.text,
-              `${path}${entry.name}/${mdFile.name}`
-            );
-
-            blogPosts.push(blogPost);
-          }
-        }
-      }
-    }
-
-    // return sorted blog posts
-    // todo: refactor: move this to separate function
-    return blogPosts.sort((a, b) => {
-      if (a.date && b.date) {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      }
-
-      if (a.date && !b.date) {
-        return -1;
-      }
-      if (!a.date && b.date) {
-        return 1;
-      }
-
-      return a.title.localeCompare(b.title);
-    });
+    return sortedBlogPosts(blogPosts);
   } catch (error) {
     console.error('Error @ getRepositoryData: ', error);
     throw error;
@@ -154,91 +120,10 @@ export async function getGithubPostsListUsingGraphQL(
 }
 
 /**
- ** EXTRACT BLOG METADATA
- * @param dirName
- * @param content
- * @param path
- * @returns BlogPost
- */
-function extractBlogMetaData(
-  dirName: string,
-  content: string,
-  path: string
-): BlogPost {
-  const lines = content.split('\n');
-  let title = dirName;
-  let description = '';
-  let date: string | undefined = undefined;
-
-  // Check if content starts with frontmatter
-  if (lines[0]?.trim() === '---') {
-    const frontmatterEnd = lines.findIndex(
-      (line, index) => index > 0 && line.trim() === '---'
-    );
-
-    if (frontmatterEnd > 0) {
-      // Parse frontmatter
-      const frontmatter = lines.slice(1, frontmatterEnd);
-      for (const line of frontmatter) {
-        const [key, ...valueParts] = line.split(':');
-        const value = valueParts.join(':').trim().replace(/['"]/g, '');
-
-        switch (key.trim().toLowerCase()) {
-          case 'title':
-            title = value;
-            break;
-          case 'description':
-            description = value;
-            break;
-          case 'date':
-            date = value;
-            break;
-        }
-      }
-
-      // If no description in frontmatter, get first paragraph after frontmatter
-      if (!description) {
-        const contentAfterFrontmatter = lines.slice(frontmatterEnd + 1);
-        const firstParagraph = contentAfterFrontmatter.find(
-          (line) => line.trim() && !line.startsWith('#')
-        );
-        description = firstParagraph?.trim() || '';
-      }
-    }
-  } else {
-    // No frontmatter, extract from content
-    const firstHeading = lines.find((line) => line.startsWith('#'));
-    if (firstHeading) {
-      title = firstHeading.replace(/^#+\s*/, '');
-    }
-
-    // Get first non-heading line as description
-    const firstParagraph = lines.find(
-      (line) => line.trim() && !line.startsWith('#')
-    );
-    description = firstParagraph?.trim() || '';
-  }
-
-  // Truncate description if too long
-  if (description.length > 150) {
-    description = description.substring(0, 150) + '...';
-  }
-
-  return {
-    id: dirName,
-    title,
-    description,
-    date,
-    path,
-  };
-}
-
-/**
  ** GET CACHED GITHUB POSTS(CACHE-CONTROL)
  * @param path
- * @returns
+ * @returns Promise<BlogPost[]>
  */
-// todo: fix this type
 const getCachedGithubPostsList = unstable_cache(
   async (path: string = '') => {
     return await getGithubPostsListUsingGraphQL(path);
@@ -251,11 +136,11 @@ const getCachedGithubPostsList = unstable_cache(
 );
 
 /**
- ** GET GITHUB POSTS
+ ** GET CACHED GITHUB POSTS
  * @param path
- * @returns
+ * @returns Promise<BlogPost[]>
  */
-export async function getGithubPosts(path: string = '') {
+export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
   try {
     return await getCachedGithubPostsList(path);
   } catch (error) {

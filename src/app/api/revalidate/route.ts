@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 import {
+  internalServerErrorResponse,
   revalidateErrorResponse,
   revalidateSuccessResponse,
 } from '../../../utils/Response';
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return revalidateSuccessResponse(pathToRevalidate);
   } catch (error) {
     console.error('Error in revalidation API: ', error);
-    return revalidateErrorResponse();
+    return internalServerErrorResponse('Error in revalidation API');
   }
 }
 
@@ -42,6 +43,6 @@ export async function GET() {
     return revalidateSuccessResponse('/blogs');
   } catch (error) {
     console.error('Error in revalidation GET-API: ', error);
-    return revalidateErrorResponse();
+    return internalServerErrorResponse('Error in revalidation API');
   }
 }

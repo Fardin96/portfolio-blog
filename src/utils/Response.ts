@@ -12,13 +12,6 @@ export function revalidateSuccessResponse(
   );
 }
 
-export function revalidateErrorResponse(): NextResponse {
-  return NextResponse.json(
-    { success: false, message: 'Error in revalidation API' },
-    { status: 500 }
-  );
-}
-
 export function successResponse() {
   return NextResponse.json({
     success: true,

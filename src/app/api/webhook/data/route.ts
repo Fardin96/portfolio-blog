@@ -21,6 +21,6 @@ export async function GET(): Promise<NextResponse> {
     } as WebhookDataResponse);
   } catch (error) {
     console.log('Error @ webhook-GET: ', error);
-    return errorResponse();
+    return errorResponse('Webhook GET error!');
   }
 }

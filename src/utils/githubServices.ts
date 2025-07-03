@@ -3,7 +3,7 @@ import { unstable_cache } from 'next/cache';
 import { query } from './graphql/queries/githubPostsList';
 import {
   formatGitGraphQlResponse,
-  sortedBlogPosts,
+  sortBlogPosts,
 } from './githubServicesHelpers';
 import { BlogPost, GithubGraphQLRes, Post } from './types/types';
 
@@ -112,7 +112,7 @@ export async function getGithubPostsListUsingGraphQL(
 
     const blogPosts: BlogPost[] = formatGitGraphQlResponse(path, result);
 
-    return sortedBlogPosts(blogPosts);
+    return sortBlogPosts(blogPosts);
   } catch (error) {
     console.error('Error @ getRepositoryData: ', error);
     throw error;

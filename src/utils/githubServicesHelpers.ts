@@ -40,7 +40,7 @@ export function formatGitGraphQlResponse(
  * @param blogPosts - The list of blog posts
  * @returns A sorted list of blog posts
  */
-export function sortedBlogPosts(blogPosts: BlogPost[]): BlogPost[] {
+export function sortBlogPosts(blogPosts: BlogPost[]): BlogPost[] {
   return blogPosts.sort((a, b) => {
     if (a.date && b.date) {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -58,11 +58,11 @@ export function sortedBlogPosts(blogPosts: BlogPost[]): BlogPost[] {
 }
 
 /**
- ** EXTRACT BLOG METADATA
- * @param dirName
- * @param content
- * @param path
- * @returns BlogPost
+ ** EXTRACT BLOG METADATA FROM MARKDOWN CONTENT
+ * @param dirName - Directory name (used as fallback title)
+ * @param content - Markdown content to parse
+ * @param path - File path
+ * @returns BlogPost object with extracted metadata
  */
 function extractBlogMetaData(
   dirName: string,
@@ -70,69 +70,136 @@ function extractBlogMetaData(
   path: string
 ): BlogPost {
   const lines = content.split('\n');
+
   let title = dirName;
   let description = '';
   let date: string | undefined = undefined;
 
-  // Check if content starts with frontmatter
-  if (lines[0]?.trim() === '---') {
-    const frontmatterEnd = lines.findIndex(
-      (line, index) => index > 0 && line.trim() === '---'
-    );
+  const hasFrontmatter = lines[0]?.trim() === '---';
 
-    if (frontmatterEnd > 0) {
-      // Parse frontmatter
-      const frontmatter = lines.slice(1, frontmatterEnd);
-      for (const line of frontmatter) {
-        const [key, ...valueParts] = line.split(':');
-        const value = valueParts.join(':').trim().replace(/['"]/g, '');
+  if (hasFrontmatter) {
+    const metadata = parseFrontmatter(lines);
+    title = metadata.title || title;
+    description = metadata.description || '';
+    date = metadata.date;
 
-        switch (key.trim().toLowerCase()) {
-          case 'title':
-            title = value;
-            break;
-          case 'description':
-            description = value;
-            break;
-          case 'date':
-            date = value;
-            break;
-        }
-      }
-
-      // If no description in frontmatter, get first paragraph after frontmatter
-      if (!description) {
-        const contentAfterFrontmatter = lines.slice(frontmatterEnd + 1);
-        const firstParagraph = contentAfterFrontmatter.find(
-          (line) => line.trim() && !line.startsWith('#')
-        );
-        description = firstParagraph?.trim() || '';
-      }
+    // Extract description from content if not in frontmatter
+    if (!description) {
+      description = extractDescriptionFromContent(
+        lines,
+        metadata.frontmatterEnd
+      );
     }
   } else {
-    // No frontmatter, extract from content
-    const firstHeading = lines.find((line) => line.startsWith('#'));
-    if (firstHeading) {
-      title = firstHeading.replace(/^#+\s*/, '');
-    }
-
-    // Get first non-heading line as description
-    const firstParagraph = lines.find(
-      (line) => line.trim() && !line.startsWith('#')
-    );
-    description = firstParagraph?.trim() || '';
-  }
-
-  // Truncate description if too long
-  if (description.length > 150) {
-    description = description.substring(0, 150) + '...';
+    // Extract from content without frontmatter
+    const contentMetadata = extractFromContent(lines);
+    title = contentMetadata.title || title;
+    description = contentMetadata.description || '';
   }
 
   return {
     id: dirName,
     title,
-    description,
+    description: truncateDescription(description),
     date,
     path,
   };
+}
+
+/**
+ ** PARSE FRONTMATTER SECTION OF MARKDOWN CONTENT
+ * @param lines - The lines of the markdown content
+ * @returns An object with the parsed frontmatter data
+ */
+function parseFrontmatter(lines: string[]): {
+  title: string;
+  description: string;
+  date: string | undefined;
+  frontmatterEnd: number;
+} {
+  const frontmatterEnd = lines.findIndex(
+    (line, index) => index > 0 && line.trim() === '---'
+  );
+
+  const result = {
+    title: '',
+    description: '',
+    date: undefined as string | undefined,
+    frontmatterEnd,
+  };
+
+  if (frontmatterEnd > 0) {
+    const frontmatter = lines.slice(1, frontmatterEnd);
+
+    for (const line of frontmatter) {
+      const [key, ...valueParts] = line.split(':');
+      const value = valueParts.join(':').trim().replace(/['"]/g, '');
+
+      switch (key.trim().toLowerCase()) {
+        case 'title':
+          result.title = value;
+          break;
+        case 'description':
+          result.description = value;
+          break;
+        case 'date':
+          result.date = value;
+          break;
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
+ ** EXTRACT METADATA FROM CONTENT WITHOUT FRONTMATTER
+ * @param lines - The lines of the markdown content
+ * @returns An object with the extracted metadata
+ */
+function extractFromContent(lines: string[]): {
+  title: string;
+  description: string;
+} {
+  const firstHeading = lines.find((line) => line.startsWith('#'));
+  const firstParagraph = lines.find(
+    (line) => line.trim() && !line.startsWith('#')
+  );
+
+  return {
+    title: firstHeading ? firstHeading.replace(/^#+\s*/, '') : '',
+    description: firstParagraph?.trim() || '',
+  };
+}
+
+/**
+ ** EXTRACT DESCRIPTION FROM CONTENT AFTER FRONTMATTER
+ * @param lines - The lines of the markdown content
+ * @param frontmatterEnd - The index of the frontmatter end
+ * @returns The extracted description
+ */
+function extractDescriptionFromContent(
+  lines: string[],
+  frontmatterEnd: number
+): string {
+  const contentAfterFrontmatter = lines.slice(frontmatterEnd + 1);
+
+  const firstParagraph = contentAfterFrontmatter.find(
+    (line) => line.trim() && !line.startsWith('#')
+  );
+
+  return firstParagraph?.trim() || '';
+}
+
+/**
+ ** TRUNCATE DESCRIPTION IF IT EXCEEDS MAXIMUM LENGTH
+ * @param description - The description to truncate
+ * @returns The truncated description
+ */
+function truncateDescription(description: string): string {
+  const maxLength = 150;
+
+  return description.length > maxLength
+    ? description.substring(0, maxLength) + '...'
+    : description;
 }

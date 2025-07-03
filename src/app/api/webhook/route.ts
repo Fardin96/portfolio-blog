@@ -8,10 +8,10 @@ import {
   getRequestBody,
   parseRequestBody,
 } from '../../../utils/requestValidation';
-import { successResponse } from '../../../utils/Response';
+import { errorResponse, successResponse } from '../../../utils/Response';
 import { unauthorizedResponse } from '../../../utils/Response';
 import { setRedisData } from '../../../utils/redisServices';
-import { revalidateTag } from 'next/cache';
+import { handleCacheRevalidation } from '../../../utils/hookHandlerServices';
 
 /**
  ** GITHUB WEBHOOK HANDLER ENDPOINT
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const signature = request.headers.get('X-Hub-Signature-256');
     const bodyTxt = await getRequestBody(request);
 
-    // auth
+    // auth & validation
     if (!bodyTxt) {
       return unauthorizedResponse();
     }
@@ -48,29 +48,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const webhookData = createWebhookData(body, eventType);
     await setRedisData('webhookData', JSON.stringify(webhookData)); // todo: modify this to store the least amount of data
 
-    // get modified file paths
-    const modifiedFiles: string[] = [
-      ...body?.head_commit?.removed,
-      ...body?.head_commit?.modified,
-    ];
-
-    // remove cache for specific posts only
-    modifiedFiles.forEach((file) => {
-      revalidateTag(`github-blog-post-${file}`);
-    });
-
-    // Only invalidate blog list if new posts are added/removed
-    if (
-      body?.head_commit?.added?.length > 0 ||
-      body?.head_commit?.removed?.length > 0 ||
-      body?.head_commit?.modified?.length > 0
-    ) {
-      revalidateTag('github-blogs');
-    }
+    // handle cache revalidation
+    handleCacheRevalidation(body);
 
     return successResponse();
   } catch (error) {
     console.error('Error @ webhook-POST: ', error);
-    return NextResponse.json({ error: 'Webhook POST error!' }, { status: 400 });
+    return errorResponse('Webhook POST error!');
   }
 }

@@ -1,9 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import {
-  GitHookPayload,
-  WebhookData,
-  WebhookDataResponse,
-} from './types/webhookTypes';
+import { NextRequest } from 'next/server';
+import { GitHookPayload, WebhookData } from './types/webhookTypes';
 import { validateGithubSignature } from './authServices';
 
 export async function getRequestBody(

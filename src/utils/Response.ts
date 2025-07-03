@@ -19,11 +19,8 @@ export function successResponse() {
   });
 }
 
-export function errorResponse() {
-  return NextResponse.json(
-    { error: 'Webhook GET error!', webhookData: null },
-    { status: 400 }
-  );
+export function errorResponse(msg: string = 'Webhook POST error!') {
+  return NextResponse.json({ error: msg, webhookData: null }, { status: 400 });
 }
 
 export function unauthorizedResponse() {

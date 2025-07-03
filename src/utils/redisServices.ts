@@ -34,6 +34,7 @@ export async function getRedisClient(): Promise<RedisClientType | null> {
  ** SET REDIS DATA
  * @param key - string
  * @param value - string
+ * @returns void
  */
 export async function setRedisData(key: string, value: string): Promise<void> {
   try {
@@ -58,7 +59,7 @@ export async function setRedisData(key: string, value: string): Promise<void> {
 /**
  ** GET REDIS DATA
  * @param key - string
- * @returns string | null
+ * @returns string | null | {}
  */
 export async function getRedisData(key: string): Promise<string | null | {}> {
   try {
@@ -76,6 +77,7 @@ export async function getRedisData(key: string): Promise<string | null | {}> {
 /**
  ** CLEAR ALL REDIS DATA
  * @param key - string
+ * @returns void
  */
 export async function clearRedis(key: string = 'webhookData'): Promise<void> {
   try {

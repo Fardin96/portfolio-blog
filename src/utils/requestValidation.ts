@@ -37,17 +37,24 @@ export function isBodyPopulated(body: GitHookPayload): boolean {
 }
 
 export function createWebhookData(
-  body: GitHookPayload,
-  eventType: string
+  body: GitHookPayload
+  // eventType: string
 ): WebhookData {
-  const timestamp = new Date().toISOString();
+  // const timestamp = new Date().toISOString();
 
   return {
-    timestamp,
-    eventType,
-    payload: {
-      commits: body.commits,
-      head_commit: body.head_commit,
+    id: body.id || '',
+    timestamp: body.timestamp || '',
+    tree_id: body.tree_id || '',
+    message: body.message || '',
+    url: body.url || '',
+    author: body.author || {
+      name: '',
+      email: '',
+      username: '',
     },
+    added: body.added,
+    removed: body.removed,
+    modified: body.modified,
   };
 }

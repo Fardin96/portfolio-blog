@@ -52,9 +52,19 @@ export interface GitHookPayload {
 }
 
 export interface WebhookData {
+  id: string;
   timestamp: string;
-  eventType: string;
-  payload: GitHookPayload;
+  tree_id: string;
+  message: string;
+  url: string;
+  author: {
+    name: string;
+    email: string;
+    username: string;
+  };
+  added: string[];
+  removed: string[];
+  modified: string[];
 }
 
 // For API responses

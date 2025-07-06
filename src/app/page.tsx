@@ -17,8 +17,6 @@ export default function Home(): React.ReactElement {
         <SocialIcons />
       </div>
 
-      {/* <p>repository data: {JSON.stringify(webhookData, null, 2)}</p> */}
-
       {/* 
       <button
         onClick={() => setVisible(!visible)}
@@ -29,9 +27,8 @@ export default function Home(): React.ReactElement {
 
       <div>
         <p>{data}</p>
-      </div> */}
+      </div> 
 
-      {/* 
       <div className='flex flex-col items-center justify-center'>
         {visible && (
           <Image
@@ -42,7 +39,7 @@ export default function Home(): React.ReactElement {
             className='rounded-lg shadow-lg'
           />
         )}
-      </div> */}
+      </div>  */}
     </div>
   );
 }

@@ -45,7 +45,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // format & set data to redis
-    const webhookData = createWebhookData(body, eventType);
+    const webhookData = createWebhookData(body.commits);
     await setRedisData('webhookData', JSON.stringify(webhookData)); // todo: modify this to store the least amount of data
 
     // handle cache revalidation

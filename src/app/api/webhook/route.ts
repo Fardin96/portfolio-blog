@@ -50,10 +50,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // format & set data to redis
     const webhookData = createWebhookData(body.head_commit);
-    const existing = (await getRedisData('webhookData')) as string;
-    const existingData: WebhookData[] = existing ? JSON.parse(existing) : [];
-    const newData = existingData.unshift(webhookData);
-    await setRedisData('webhookData', JSON.stringify(newData)); // todo: modify this to store the least amount of data
+    // const existing = (await getRedisData('webhookData')) as string;
+    // const existingData: WebhookData[] = existing ? JSON.parse(existing) : [];
+    // const newData = existingData.unshift(webhookData);
+    await setRedisData('webhookData', JSON.stringify(webhookData)); // todo: modify this to store the least amount of data
 
     // handle cache revalidation
     handleCacheRevalidation(body);

@@ -36,6 +36,10 @@ export function isBodyPopulated(body: GitHookPayload): boolean {
 }
 
 export function createWebhookData(body: GitHookPayload): WebhookData {
+  console.log('+-----------------CREATE-HOOKDATA-FUNCTION----------------+');
+  console.log('body', body);
+  console.log('+-----------------CREATE-HOOKDATA-FUNCTION----------------+');
+
   const webhookData: WebhookData = {
     id: body.id || '',
     timestamp: body.timestamp || '',

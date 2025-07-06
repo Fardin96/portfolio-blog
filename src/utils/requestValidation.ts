@@ -9,7 +9,6 @@ export async function getRequestBody(
   const bodyTxt = await reqClone.text();
   return bodyTxt.length > 0 ? bodyTxt : null;
 }
-
 export async function parseRequestBody(
   request: NextRequest
 ): Promise<GitHookPayload | undefined> {
@@ -36,13 +35,8 @@ export function isBodyPopulated(body: GitHookPayload): boolean {
   return Object.keys(body).length > 0;
 }
 
-export function createWebhookData(
-  body: GitHookPayload
-  // eventType: string
-): WebhookData {
-  // const timestamp = new Date().toISOString();
-
-  return {
+export function createWebhookData(body: GitHookPayload): WebhookData {
+  const webhookData: WebhookData = {
     id: body.id || '',
     timestamp: body.timestamp || '',
     tree_id: body.tree_id || '',
@@ -57,4 +51,6 @@ export function createWebhookData(
     removed: body.removed,
     modified: body.modified,
   };
+
+  return webhookData;
 }

@@ -3,16 +3,16 @@ import {
   isSignatureValid,
   isBodyPopulated,
 } from '../../../utils/requestValidation';
-import { createWebhookData } from '../../../utils/requestValidation';
 import {
   getRequestBody,
   parseRequestBody,
 } from '../../../utils/requestValidation';
 import { errorResponse, successResponse } from '../../../utils/Response';
 import { unauthorizedResponse } from '../../../utils/Response';
-import { getRedisData, setRedisData } from '../../../utils/redisServices';
-import { handleCacheRevalidation } from '../../../utils/hookHandlerServices';
-import { WebhookData } from '../../../utils/types/webhookTypes';
+import {
+  handleCacheRevalidation,
+  storeWebhookData,
+} from '../../../utils/hookHandlerServices';
 
 /**
  ** GITHUB WEBHOOK HANDLER ENDPOINT
@@ -45,16 +45,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return unauthorizedResponse();
     }
 
-    // format & set data to redis
-    const webhookData = createWebhookData(body.head_commit);
-    const existing = (await getRedisData('webhookData')) as string;
-    const existingData: WebhookData[] = existing ? JSON.parse(existing) : [];
-    existingData.unshift(webhookData);
-    const arraySize = 10;
-    await setRedisData(
-      'webhookData',
-      JSON.stringify(existingData.slice(0, arraySize))
-    );
+    // store webhook data in redis
+    await storeWebhookData(body);
 
     // handle cache revalidation
     handleCacheRevalidation(body);

@@ -1,4 +1,9 @@
 import { revalidateTag } from 'next/cache';
+import { createWebhookData } from '../utils/requestValidation';
+import { getRedisData, setRedisData } from '../utils/redisServices';
+import { WebhookData } from '../utils/types/webhookTypes';
+import { NextResponse } from 'next/server';
+import { unauthorizedResponse } from './Response';
 
 /**
  ** HANDLE CACHE REVALIDATION FOR WEBHOOK COMMITS
@@ -25,4 +30,26 @@ export function handleCacheRevalidation(body: any): void {
   ) {
     revalidateTag('github-blogs');
   }
+}
+
+/**
+ ** STORE WEBHOOK DATA IN REDIS
+ * @param body - The webhook request body containing commit data
+ * @returns void
+ */
+export async function storeWebhookData(body: any) {
+  // format
+  const webhookData = createWebhookData(body.head_commit);
+
+  // group with existing data
+  const existing = (await getRedisData('webhookData')) as string;
+  const existingData: WebhookData[] = existing ? JSON.parse(existing) : [];
+  existingData.unshift(webhookData);
+
+  // limit to 10 commits & store
+  const noOfCommits = 10;
+  await setRedisData(
+    'webhookData',
+    JSON.stringify(existingData.slice(0, noOfCommits))
+  );
 }

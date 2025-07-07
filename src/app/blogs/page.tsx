@@ -53,15 +53,7 @@ export default async function Blogs(): Promise<React.ReactElement> {
             >
               <h2 className='text-2xl font-semibold mb-2'>{blog.title}</h2>
               <p className='text-gray-500 text-sm mb-2'>
-                {formatDate(blog.date)}
-                {commit && (
-                  <>
-                    <span className='mx-2'>•</span>
-                    <span className='text-gray-400'>
-                      Updated {formatDate(commit.commit.author.date)}
-                    </span>
-                  </>
-                )}
+                {formatDate(commit.commit.author.date)}
               </p>
               <p className='text-gray-600 mb-4'>{blog.description}</p>
 

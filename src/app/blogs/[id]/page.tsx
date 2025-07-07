@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { formatDate } from '../../../utils/utils';
+import { formatDate, getAuthorName } from '../../../utils/utils';
 import {
   getGithubPostUsingFetch,
   getGithubPostsListUsingGraphQL,
@@ -35,6 +35,8 @@ export default async function BlogDetail({
   // Get latest commit info for this blog post
   const commitInfo = await getLatestCommitCached(`${blogId}/index.md`);
 
+  console.log('commitInfo: ', commitInfo.commit.author);
+
   return (
     <div className='min-h-full flex flex-col px-4 sm:px-8 lg:px-35'>
       <div>
@@ -45,26 +47,11 @@ export default async function BlogDetail({
           ← Back to blogs
         </Link>
 
-        <div className='flex items-center text-gray-500 mb-6'>
-          <span>By {data?.author?.name}</span>
+        <div className='flex items-center text-gray-500 italic mb-6'>
+          <span>By {getAuthorName(commitInfo?.commit?.author?.name)}</span>
           <span className='mx-2'>•</span>
-          <span>{formatDate(data?.date)}</span>
+          <span>{formatDate(commitInfo?.commit?.author?.date)}</span>
         </div>
-
-        {/* Display commit information if available */}
-        {commitInfo && (
-          <div className='text-sm text-gray-400 mb-4 space-y-1'>
-            <p>
-              Last updated on {formatDate(commitInfo.commit.author.date)} by{' '}
-              {commitInfo.commit.author.name}
-            </p>
-            {commitInfo.commit.message && (
-              <p className='text-xs italic'>
-                "{commitInfo.commit.message.split('\n')[0]}"
-              </p>
-            )}
-          </div>
-        )}
       </div>
 
       <div

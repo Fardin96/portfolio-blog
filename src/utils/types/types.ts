@@ -42,8 +42,8 @@ export type Post = {
   };
   mainImage: string;
   body: string;
-  gitHubUrl: string;
-  demoUrl: string;
+  githubLink: string;
+  demoLink: string;
 };
 
 export type GithubGraphQLRes = {

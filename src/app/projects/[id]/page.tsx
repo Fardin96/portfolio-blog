@@ -47,14 +47,14 @@ export default function ProjectDetail(): React.ReactElement {
 
       <div className='flex gap-4'>
         <a
-          href={data?.gitHubUrl}
+          href={data?.githubLink}
           className='bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700'
         >
           GitHub Repository
         </a>
 
         <a
-          href={data?.demoUrl}
+          href={data?.demoLink}
           className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'
         >
           Live Demo

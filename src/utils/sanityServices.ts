@@ -61,7 +61,9 @@ export async function getSinglePost(
       "date": publishedAt,
       author->{name, "image": image.asset->url},
       "mainImage": mainImage.asset->url,
-      body
+      body,
+      githubLink,
+      demoLink
     }`;
 
     const post = await client.fetch<Post>(query, {

@@ -8,7 +8,7 @@ import {
 
 /**
  ** GET GITHUB REPOSITORY DATA
- * @deprecated - uses directly
+ * @deprecated - currently integrated directly
  * @param request - NextRequest
  * @returns NextResponse
  */

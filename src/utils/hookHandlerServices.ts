@@ -29,6 +29,8 @@ export function handleCacheRevalidation(body: any): void {
     body?.head_commit?.modified?.length > 0
   ) {
     revalidateTag('github-blogs');
+    // Also invalidate commit cache
+    revalidateTag('github-commit');
   }
 }
 

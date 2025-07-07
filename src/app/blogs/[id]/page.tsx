@@ -3,6 +3,7 @@ import { formatDate } from '../../../utils/utils';
 import {
   getGithubPostUsingFetch,
   getGithubPostsListUsingGraphQL,
+  getLatestCommitCached,
 } from '../../../utils/githubServices';
 import '../../github-markdown.css';
 import { mdToHtml } from '../../../utils/mdToHtml';
@@ -31,6 +32,9 @@ export default async function BlogDetail({
   const data: any = await getGithubPostUsingFetch(`${blogId}/index.md`);
   const htmlContent = mdToHtml(data);
 
+  // Get latest commit info for this blog post
+  const commitInfo = await getLatestCommitCached(`${blogId}/index.md`);
+
   return (
     <div className='min-h-full flex flex-col px-4 sm:px-8 lg:px-35'>
       <div>
@@ -46,11 +50,22 @@ export default async function BlogDetail({
           <span className='mx-2'>•</span>
           <span>{formatDate(data?.date)}</span>
         </div>
-      </div>
 
-      <p className='text-sm text-gray-400 mb-4'>
-        last updated: {new Date().toLocaleString()}
-      </p>
+        {/* Display commit information if available */}
+        {commitInfo && (
+          <div className='text-sm text-gray-400 mb-4 space-y-1'>
+            <p>
+              Last updated on {formatDate(commitInfo.commit.author.date)} by{' '}
+              {commitInfo.commit.author.name}
+            </p>
+            {commitInfo.commit.message && (
+              <p className='text-xs italic'>
+                "{commitInfo.commit.message.split('\n')[0]}"
+              </p>
+            )}
+          </div>
+        )}
+      </div>
 
       <div
         className='markdown-body'

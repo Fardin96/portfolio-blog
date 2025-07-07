@@ -1,10 +1,26 @@
 import Link from 'next/link';
 import { BlogPost } from '../../utils/types/types';
 import { formatDate } from '../../utils/utils';
-import { getGithubPosts } from '../../utils/githubServices';
+import {
+  getGithubPosts,
+  getLatestCommitCached,
+} from '../../utils/githubServices';
 
 export default async function Blogs(): Promise<React.ReactElement> {
   const data: BlogPost[] = await getGithubPosts('');
+
+  // Fetch commit info for each blog in parallel
+  const blogCommits = await Promise.all(
+    data.map(async (blog) => {
+      const commit = await getLatestCommitCached(`${blog.id}/index.md`);
+      return { blogId: blog.id, commit };
+    })
+  );
+
+  // Create a map for easy lookup
+  const commitMap = new Map(
+    blogCommits.map((item) => [item.blogId, item.commit])
+  );
 
   // empty view
   if (data.length === 0) {
@@ -27,25 +43,37 @@ export default async function Blogs(): Promise<React.ReactElement> {
       </p>
 
       <div className='space-y-6'>
-        {data.map((blog) => (
-          <div
-            key={blog.id}
-            className='border rounded-lg p-4 shadow transition-all duration-200 custom-dark-shadow'
-          >
-            <h2 className='text-2xl font-semibold mb-2'>{blog.title}</h2>
-            <p className='text-gray-500 text-sm mb-2'>
-              {formatDate(blog.date)}
-            </p>
-            <p className='text-gray-600 mb-4'>{blog.description}</p>
+        {data.map((blog) => {
+          const commit = commitMap.get(blog.id);
 
-            <Link
-              href={`/blogs/${blog.id}`}
-              className='text-blue-500 hover:text-blue-700'
+          return (
+            <div
+              key={blog.id}
+              className='border rounded-lg p-4 shadow transition-all duration-200 custom-dark-shadow'
             >
-              Read more →
-            </Link>
-          </div>
-        ))}
+              <h2 className='text-2xl font-semibold mb-2'>{blog.title}</h2>
+              <p className='text-gray-500 text-sm mb-2'>
+                {formatDate(blog.date)}
+                {commit && (
+                  <>
+                    <span className='mx-2'>•</span>
+                    <span className='text-gray-400'>
+                      Updated {formatDate(commit.commit.author.date)}
+                    </span>
+                  </>
+                )}
+              </p>
+              <p className='text-gray-600 mb-4'>{blog.description}</p>
+
+              <Link
+                href={`/blogs/${blog.id}`}
+                className='text-blue-500 hover:text-blue-700'
+              >
+                Read more →
+              </Link>
+            </div>
+          );
+        })}
       </div>
 
       {/* spacing */}

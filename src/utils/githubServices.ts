@@ -148,3 +148,56 @@ export async function getGithubPosts(path: string = ''): Promise<BlogPost[]> {
     return [];
   }
 }
+
+/**
+ ** GET LATEST COMMIT FOR SPECIFIC FILE
+ * @param filePath - The file path (e.g., "blog-post-id/index.md")
+ * @returns Promise<any>
+ */
+export async function getLatestCommitForFile(filePath: string): Promise<any> {
+  try {
+    const octokit = await initOctokit();
+
+    const { data } = await octokit.repos.listCommits({
+      owner: OWNER,
+      repo: REPO,
+      path: filePath,
+      per_page: 1, // Only get the latest commit
+    });
+
+    return data[0] || null;
+  } catch (error) {
+    console.error('Error @ getLatestCommitForFile: ', error);
+    return null;
+  }
+}
+
+/**
+ ** GET CACHED LATEST COMMIT FOR FILE
+ * @param filePath - The file path
+ * @returns Promise<any>
+ */
+const getCachedLatestCommit = unstable_cache(
+  async (filePath: string) => {
+    return await getLatestCommitForFile(filePath);
+  },
+  ['github-commit'],
+  {
+    revalidate: 60 * 60 * 24, // 24 hours
+    tags: ['github-commit'],
+  }
+);
+
+/**
+ ** GET LATEST COMMIT WITH CACHE
+ * @param filePath - The file path
+ * @returns Promise<any>
+ */
+export async function getLatestCommitCached(filePath: string): Promise<any> {
+  try {
+    return await getCachedLatestCommit(filePath);
+  } catch (error) {
+    console.error('Error @ getLatestCommitCached: ', error);
+    return null;
+  }
+}

@@ -7,6 +7,7 @@ import {
 } from '../../../utils/githubServices';
 import '../../github-markdown.css';
 import { mdToHtml } from '../../../utils/mdToHtml';
+import { techstack } from '../../../../public/static';
 
 /**
  ** GENERATE STATIC PARAMS
@@ -30,12 +31,11 @@ export default async function BlogDetail({
 }): Promise<React.ReactElement> {
   const { id: blogId } = await params;
   const data: any = await getGithubPostUsingFetch(`${blogId}/index.md`);
+
   const htmlContent = mdToHtml(data);
 
   // Get latest commit info for this blog post
   const commitInfo = await getLatestCommitCached(`${blogId}/index.md`);
-
-  console.log('commitInfo: ', commitInfo.commit.author);
 
   return (
     <div className='min-h-full flex flex-col px-4 sm:px-8 lg:px-35'>
@@ -51,6 +51,23 @@ export default async function BlogDetail({
           <span>By {getAuthorName(commitInfo?.commit?.author?.name)}</span>
           <span className='mx-2'>•</span>
           <span>{formatDate(commitInfo?.commit?.author?.date)}</span>
+        </div>
+      </div>
+
+      <div className='mb-6'>
+        <h2 className='text-xl font-semibold mb-2'>Technologies Used</h2>
+
+        <div className='flex flex-wrap gap-2'>
+          {techstack?.tags?.map((tech, index) => {
+            return (
+              <span
+                key={index}
+                className='bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm'
+              >
+                {tech.title}
+              </span>
+            );
+          })}
         </div>
       </div>
 

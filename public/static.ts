@@ -86,3 +86,14 @@ export const blogPost: BlogPost = {
       You can expand this with more content as needed.
     `,
 };
+
+// Dummy data for tags
+export const techstack = {
+  tags: [
+    { title: 'Next.js' },
+    { title: 'React' },
+    { title: 'TypeScript' },
+    { title: 'Tailwind CSS' },
+    { title: 'Node.js' },
+  ],
+};

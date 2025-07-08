@@ -76,23 +76,7 @@ export type BlogPost = {
   content?: string;
   description?: string;
   path?: string;
-  // repository: {
-  //   object: {
-  //     entries: {
-  //       name: string;
-  //       type: string;
-  //       object: {
-  //         entries: {
-  //           name: string;
-  //           type: string;
-  //           object: {
-  //             text: string;
-  //           };
-  //         };
-  //       }[];
-  //     };
-  //   };
-  // };
+  tags?: string[];
 };
 
 // export interface BlogPost {

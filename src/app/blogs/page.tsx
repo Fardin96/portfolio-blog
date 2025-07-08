@@ -65,6 +65,21 @@ export default async function Blogs(): Promise<React.ReactElement> {
               <p className='text-gray-500 text-sm mb-2'>
                 {formatDate(commit.commit.author.date)}
               </p>
+
+              {/* Tags display */}
+              {blog.tags && blog.tags.length > 0 && (
+                <div className='flex flex-wrap gap-2 mb-3'>
+                  {blog.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className='px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full'
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
               <p className='text-gray-600 mb-4'>{blog.description}</p>
 
               <Link

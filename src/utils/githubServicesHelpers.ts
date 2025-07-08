@@ -74,6 +74,7 @@ function extractBlogMetaData(
   let title = dirName;
   let description = '';
   let date: string | undefined = undefined;
+  let tags: string[] = [];
 
   const hasFrontmatter = lines[0]?.trim() === '---';
 
@@ -82,6 +83,7 @@ function extractBlogMetaData(
     title = metadata.title || title;
     description = metadata.description || '';
     date = metadata.date;
+    tags = metadata.tags || [];
 
     // Extract description from content if not in frontmatter
     if (!description) {
@@ -102,6 +104,7 @@ function extractBlogMetaData(
     title,
     description: truncateDescription(description),
     date,
+    tags,
     path,
   };
 }
@@ -116,6 +119,7 @@ function parseFrontmatter(lines: string[]): {
   description: string;
   date: string | undefined;
   frontmatterEnd: number;
+  tags?: string[];
 } {
   const frontmatterEnd = lines.findIndex(
     (line, index) => index > 0 && line.trim() === '---'
@@ -126,6 +130,7 @@ function parseFrontmatter(lines: string[]): {
     description: '',
     date: undefined as string | undefined,
     frontmatterEnd,
+    tags: [] as string[],
   };
 
   if (frontmatterEnd > 0) {
@@ -144,6 +149,9 @@ function parseFrontmatter(lines: string[]): {
           break;
         case 'date':
           result.date = value;
+          break;
+        case 'tags':
+          result.tags = value.split(',').map((tag: string) => tag.trim());
           break;
       }
     }

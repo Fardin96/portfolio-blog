@@ -53,7 +53,10 @@ export function DropDown({ categories }: { categories: string[] }) {
       </DropdownMenuTrigger>
 
       {categories.length > 0 && (
-        <DropdownMenuContent className='w-56' align={alignment}>
+        <DropdownMenuContent
+          className='w-56 max-h-60 overflow-y-auto'
+          align={alignment}
+        >
           {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel> */}
           {/* <DropdownMenuSeparator /> */}
 

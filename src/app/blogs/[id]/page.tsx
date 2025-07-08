@@ -62,7 +62,7 @@ export default async function BlogDetail({
             return (
               <span
                 key={index}
-                className='bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm'
+                className='bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm'
               >
                 {tech.title}
               </span>

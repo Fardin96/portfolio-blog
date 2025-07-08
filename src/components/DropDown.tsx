@@ -8,8 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
@@ -57,9 +55,6 @@ export function DropDown({ categories }: { categories: string[] }) {
           className='w-56 max-h-60 overflow-y-auto'
           align={alignment}
         >
-          {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel> */}
-          {/* <DropdownMenuSeparator /> */}
-
           {categories.map((category) => (
             <DropdownMenuCheckboxItem
               key={category}
@@ -69,25 +64,6 @@ export function DropDown({ categories }: { categories: string[] }) {
               {category}
             </DropdownMenuCheckboxItem>
           ))}
-
-          {/* <DropdownMenuCheckboxItem
-          checked={showStatusBar}
-          onCheckedChange={setShowStatusBar}
-        >
-          Status Bar
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showActivityBar}
-          onCheckedChange={setShowActivityBar}
-        >
-          Activity Bar
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showPanel}
-          onCheckedChange={setShowPanel}
-        >
-          Panel
-        </DropdownMenuCheckboxItem> */}
         </DropdownMenuContent>
       )}
     </DropdownMenu>

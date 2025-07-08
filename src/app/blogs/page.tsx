@@ -43,32 +43,10 @@ export default async function Blogs(): Promise<React.ReactElement> {
 
         <div className='flex items-center gap-2 flex-wrap'>
           <DropDown
-            // categories={data
-            //   .map((blog) => blog.tags || [])
-            //   .flat()
-            //   .filter(Boolean)}
-            categories={[
-              'react',
-              'nextjs',
-              'typescript',
-              'tailwindcss',
-              'javascript',
-              'nodejs',
-              'express',
-              'mongodb',
-              'postgresql',
-              'docker',
-              'aws',
-              'vercel',
-              'netlify',
-              'git',
-              'github',
-              'html',
-              'css',
-              'sass',
-              'webpack',
-              'vite',
-            ]}
+            categories={data
+              .map((blog) => blog.tags || [])
+              .flat()
+              .filter(Boolean)}
           />
           <CalendarTrigger />
         </div>

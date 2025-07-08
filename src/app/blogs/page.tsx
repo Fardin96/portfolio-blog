@@ -35,6 +35,8 @@ export default async function Blogs(): Promise<React.ReactElement> {
     );
   }
 
+  data.map((blog) => console.log('tags: ', blog.tags));
+
   // main view
   return (
     <div>
@@ -42,7 +44,12 @@ export default async function Blogs(): Promise<React.ReactElement> {
         <h1 className='text-2xl sm:text-3xl font-bold'>My Blogs</h1>
 
         <div className='flex items-center gap-2 flex-wrap'>
-          <DropDown />
+          <DropDown
+            tags={data
+              .map((blog) => blog.tags || [])
+              .flat()
+              .filter(Boolean)}
+          />
           <CalendarTrigger />
         </div>
       </div>

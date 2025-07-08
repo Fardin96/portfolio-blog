@@ -15,7 +15,7 @@ import {
 
 type Checked = DropdownMenuCheckboxItemProps['checked'];
 
-export function DropDown() {
+export function DropDown({ tags }: { tags: string[] }) {
   const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
   const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
   const [showPanel, setShowPanel] = React.useState<Checked>(false);
@@ -23,6 +23,7 @@ export function DropDown() {
   // Responsive alignment based on screen size
   const [alignment, setAlignment] = React.useState<'start' | 'end'>('start');
 
+  // handle window resize
   React.useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -46,13 +47,27 @@ export function DropDown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline'>Categories</Button>
+        <Button variant='outline' disabled={tags.length === 0}>
+          Categories
+        </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className='w-56' align={alignment}>
-        <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuCheckboxItem
+      {tags.length > 0 && (
+        <DropdownMenuContent className='w-56' align={alignment}>
+          {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel> */}
+          {/* <DropdownMenuSeparator /> */}
+
+          {tags.map((tag) => (
+            <DropdownMenuCheckboxItem
+              key={tag}
+              checked={showStatusBar}
+              onCheckedChange={setShowStatusBar}
+            >
+              {tag}
+            </DropdownMenuCheckboxItem>
+          ))}
+
+          {/* <DropdownMenuCheckboxItem
           checked={showStatusBar}
           onCheckedChange={setShowStatusBar}
         >
@@ -61,7 +76,6 @@ export function DropDown() {
         <DropdownMenuCheckboxItem
           checked={showActivityBar}
           onCheckedChange={setShowActivityBar}
-          disabled
         >
           Activity Bar
         </DropdownMenuCheckboxItem>
@@ -70,8 +84,9 @@ export function DropDown() {
           onCheckedChange={setShowPanel}
         >
           Panel
-        </DropdownMenuCheckboxItem>
-      </DropdownMenuContent>
+        </DropdownMenuCheckboxItem> */}
+        </DropdownMenuContent>
+      )}
     </DropdownMenu>
   );
 }

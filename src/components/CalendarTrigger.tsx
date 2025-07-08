@@ -24,10 +24,12 @@ export function CalendarTrigger() {
           <Button
             variant='outline'
             id='date'
-            className='w-48 justify-between font-normal'
+            className='w-full sm:w-48 justify-between font-normal min-w-0'
           >
-            {date ? date.toLocaleDateString() : 'Select Date Range'}
-            <ChevronDownIcon />
+            <span className='truncate'>
+              {date ? date.toLocaleDateString() : 'Select Date Range'}
+            </span>
+            <ChevronDownIcon className='ml-2 flex-shrink-0' />
           </Button>
         </PopoverTrigger>
         <PopoverContent className='w-auto overflow-hidden p-0' align='start'>

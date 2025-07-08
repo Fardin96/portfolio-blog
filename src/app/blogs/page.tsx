@@ -5,14 +5,6 @@ import {
   getGithubPosts,
   getLatestCommitCached,
 } from '../../utils/githubServices';
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuLabel,
-//   DropdownMenuSeparator,
-//   DropdownMenuTrigger,
-// } from '@/components/ui/dropdown-menu';
 import { DropDown } from '../../components/DropDown';
 import { CalendarTrigger } from '@/components/CalendarTrigger';
 
@@ -46,10 +38,10 @@ export default async function Blogs(): Promise<React.ReactElement> {
   // main view
   return (
     <div>
-      <div className='flex items-center justify-between'>
-        <h1 className='text-3xl font-bold mb-6'>My Blogs</h1>
+      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-2 mb-6'>
+        <h1 className='text-2xl sm:text-3xl font-bold'>My Blogs</h1>
 
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center gap-2 flex-wrap'>
           {/* <span className='text-sm text-gray-400'>filters :</span> */}
 
           <DropDown />

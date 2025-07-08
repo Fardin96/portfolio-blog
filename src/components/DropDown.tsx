@@ -15,7 +15,7 @@ import {
 
 type Checked = DropdownMenuCheckboxItemProps['checked'];
 
-export function DropDown({ tags }: { tags: string[] }) {
+export function DropDown({ categories }: { categories: string[] }) {
   const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
   const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
   const [showPanel, setShowPanel] = React.useState<Checked>(false);
@@ -47,23 +47,23 @@ export function DropDown({ tags }: { tags: string[] }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' disabled={tags.length === 0}>
+        <Button variant='outline' disabled={categories.length === 0}>
           Categories
         </Button>
       </DropdownMenuTrigger>
 
-      {tags.length > 0 && (
+      {categories.length > 0 && (
         <DropdownMenuContent className='w-56' align={alignment}>
           {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel> */}
           {/* <DropdownMenuSeparator /> */}
 
-          {tags.map((tag) => (
+          {categories.map((category) => (
             <DropdownMenuCheckboxItem
-              key={tag}
+              key={category}
               checked={showStatusBar}
               onCheckedChange={setShowStatusBar}
             >
-              {tag}
+              {category}
             </DropdownMenuCheckboxItem>
           ))}
 

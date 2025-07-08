@@ -35,8 +35,6 @@ export default async function Blogs(): Promise<React.ReactElement> {
     );
   }
 
-  data.map((blog) => console.log('tags: ', blog.tags));
-
   // main view
   return (
     <div>
@@ -45,7 +43,7 @@ export default async function Blogs(): Promise<React.ReactElement> {
 
         <div className='flex items-center gap-2 flex-wrap'>
           <DropDown
-            tags={data
+            categories={data
               .map((blog) => blog.tags || [])
               .flat()
               .filter(Boolean)}

@@ -151,7 +151,22 @@ function parseFrontmatter(lines: string[]): {
           result.date = value;
           break;
         case 'tags':
-          result.tags = value.split(',').map((tag: string) => tag.trim());
+          // Handle different tag formats:
+          // 1. "tag1, tag2, tag3" (comma-separated string)
+          // 2. "[tag1, tag2, tag3]" (array-like string)
+          // 3. "tag1,tag2,tag3" (no spaces)
+          let cleanValue = value.trim();
+
+          // Remove surrounding brackets if present
+          if (cleanValue.startsWith('[') && cleanValue.endsWith(']')) {
+            cleanValue = cleanValue.slice(1, -1);
+          }
+
+          // Split by comma and clean up each tag
+          result.tags = cleanValue
+            .split(',')
+            .map((tag: string) => tag.trim().replace(/['"]/g, ''))
+            .filter((tag: string) => tag.length > 0);
           break;
       }
     }

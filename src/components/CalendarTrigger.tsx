@@ -17,6 +17,29 @@ export function CalendarTrigger() {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(undefined);
 
+  // Responsive alignment based on screen size
+  const [alignment, setAlignment] = React.useState<'start' | 'end'>('end');
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        // lg breakpoint
+        setAlignment('end');
+      } else {
+        setAlignment('start');
+      }
+    };
+
+    // Set initial alignment
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className='flex flex-col gap-3'>
       <Popover open={open} onOpenChange={setOpen}>
@@ -32,7 +55,10 @@ export function CalendarTrigger() {
             <ChevronDownIcon className='ml-2 flex-shrink-0' />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
+        <PopoverContent
+          className='w-auto overflow-hidden p-0'
+          align={alignment}
+        >
           <RangeCalendar />
         </PopoverContent>
       </Popover>

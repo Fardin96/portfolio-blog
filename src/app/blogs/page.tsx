@@ -42,10 +42,7 @@ export default async function Blogs(): Promise<React.ReactElement> {
         <h1 className='text-2xl sm:text-3xl font-bold'>My Blogs</h1>
 
         <div className='flex items-center gap-2 flex-wrap'>
-          {/* <span className='text-sm text-gray-400'>filters :</span> */}
-
           <DropDown />
-
           <CalendarTrigger />
         </div>
       </div>

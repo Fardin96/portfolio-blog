@@ -20,12 +20,36 @@ export function DropDown() {
   const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
   const [showPanel, setShowPanel] = React.useState<Checked>(false);
 
+  // Responsive alignment based on screen size
+  const [alignment, setAlignment] = React.useState<'start' | 'end'>('start');
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        // lg breakpoint
+        setAlignment('end');
+      } else {
+        setAlignment('start');
+      }
+    };
+
+    // Set initial alignment
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='outline'>Categories</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-56'>
+
+      <DropdownMenuContent className='w-56' align={alignment}>
         <DropdownMenuLabel>Appearance</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem

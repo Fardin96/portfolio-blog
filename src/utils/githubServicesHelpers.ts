@@ -161,6 +161,21 @@ function parseFrontmatter(lines: string[]): {
 }
 
 /**
+ ** SANITIZE FRONTMATTER FROM MARKDOWN CONTENT
+ * @param lines: string[] - The lines of the markdown content
+ * @returns: string[] - The lines of the markdown content without frontmatter
+ */
+export function removeFrontmatter(lines: string): string {
+  const linesArray = lines.split('\n');
+
+  const frontmatterEnd = linesArray.findIndex(
+    (line, index) => index > 0 && line.trim() === '---'
+  );
+
+  return linesArray.slice(frontmatterEnd + 1).join('\n');
+}
+
+/**
  ** CLEAN TAGS FROM FRONTMATTER
  * @param value: string - The tags to clean
  * @returns: string[] - The cleaned tags

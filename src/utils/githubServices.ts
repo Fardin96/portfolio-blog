@@ -3,6 +3,7 @@ import { unstable_cache } from 'next/cache';
 import { query } from './graphql/queries/githubPostsList';
 import {
   formatGitGraphQlResponse,
+  removeFrontmatter,
   sortBlogPosts,
 } from './githubServicesHelpers';
 import { BlogPost, GithubGraphQLRes, Post } from './types/types';
@@ -86,7 +87,9 @@ export async function getGithubPostUsingFetch(
       throw new Error(`GitHub API error: ${response.status}`);
     }
 
-    return await response.text();
+    const content = await response.text();
+
+    return removeFrontmatter(content);
   } catch (error) {
     console.error('Error @ getGithubPostWithFetch: ', error);
     throw error;

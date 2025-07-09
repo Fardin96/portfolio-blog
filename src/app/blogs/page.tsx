@@ -7,6 +7,7 @@ import {
 } from '../../utils/githubServices';
 import { DropDown } from '../../components/DropDown';
 import { CalendarTrigger } from '@/components/CalendarTrigger';
+import { dummyTags } from '../../../public/static';
 
 export default async function Blogs(): Promise<React.ReactElement> {
   const data: BlogPost[] = await getGithubPosts('');
@@ -43,10 +44,11 @@ export default async function Blogs(): Promise<React.ReactElement> {
 
         <div className='flex items-center gap-2 flex-wrap'>
           <DropDown
-            categories={data
-              .map((blog) => blog.tags || [])
-              .flat()
-              .filter(Boolean)}
+            // categories={data
+            //   .map((blog) => blog.tags || [])
+            //   .flat()
+            //   .filter(Boolean)}
+            categories={dummyTags}
           />
           <CalendarTrigger />
         </div>

@@ -87,6 +87,29 @@ export const blogPost: BlogPost = {
     `,
 };
 
+export const dummyTags = [
+  'React',
+  'Next.js',
+  'TypeScript',
+  'JavaScript',
+  'Node.js',
+  'CSS',
+  'HTML',
+  'GraphQL',
+  'MongoDB',
+  'Express',
+  'Redux',
+  'Tailwind',
+  'Jest',
+  'Cypress',
+  'Docker',
+  'Kubernetes',
+  'AWS',
+  'Firebase',
+  'Sass',
+  'Webpack',
+];
+
 // Dummy data for tags
 export const techstack = {
   tags: [

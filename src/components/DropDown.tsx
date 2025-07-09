@@ -13,11 +13,17 @@ import {
 
 type Checked = DropdownMenuCheckboxItemProps['checked'];
 
-export function DropDown({ categories }: { categories: string[] }) {
-  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
-  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
-  const [showPanel, setShowPanel] = React.useState<Checked>(false);
+interface DropDownProps {
+  categories: string[];
+  selectedCategory?: string;
+  onCategoryChange?: (category: string) => void;
+}
 
+export function DropDown({
+  categories,
+  selectedCategory,
+  onCategoryChange,
+}: DropDownProps) {
   // Responsive alignment based on screen size
   const [alignment, setAlignment] = React.useState<'start' | 'end'>('start');
 
@@ -42,11 +48,19 @@ export function DropDown({ categories }: { categories: string[] }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const handleCategoryToggle = (category: string) => {
+    if (onCategoryChange) {
+      // If category is already selected, deselect it, otherwise select it
+      const newCategory = selectedCategory === category ? '' : category;
+      onCategoryChange(newCategory);
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='outline' disabled={categories.length === 0}>
-          Categories
+          {selectedCategory ? selectedCategory : 'Categories'}
         </Button>
       </DropdownMenuTrigger>
 
@@ -58,8 +72,8 @@ export function DropDown({ categories }: { categories: string[] }) {
           {categories.map((category) => (
             <DropdownMenuCheckboxItem
               key={category}
-              checked={showStatusBar}
-              onCheckedChange={setShowStatusBar}
+              checked={selectedCategory === category}
+              onCheckedChange={() => handleCategoryToggle(category)}
             >
               {category}
             </DropdownMenuCheckboxItem>

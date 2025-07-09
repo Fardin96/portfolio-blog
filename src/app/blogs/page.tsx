@@ -1,13 +1,9 @@
-import Link from 'next/link';
 import { BlogPost } from '../../utils/types/types';
-import { formatDate } from '../../utils/utils';
 import {
   getGithubPosts,
   getLatestCommitCached,
 } from '../../utils/githubServices';
-import { DropDown } from '../../components/DropDown';
-import { CalendarTrigger } from '@/components/CalendarTrigger';
-import { dummyTags } from '../../../public/static';
+import { BlogsWithFilters } from '../../components/BlogsWithFilters';
 
 export default async function Blogs(): Promise<React.ReactElement> {
   const data: BlogPost[] = await getGithubPosts('');
@@ -25,83 +21,16 @@ export default async function Blogs(): Promise<React.ReactElement> {
     blogCommits.map((item) => [item.blogId, item.commit])
   );
 
-  // empty view
-  if (data.length === 0) {
-    return (
-      <div>
-        <h1 className='text-3xl font-bold mb-6'>My Blog</h1>
+  // Extract unique tags from all blog posts
+  const allTags = data
+    .map((blog) => blog.tags || [])
+    .flat()
+    .filter(Boolean);
 
-        <h3>no blogs yet :(</h3>
-      </div>
-    );
-  }
+  // Get unique tags and sort them alphabetically
+  const uniqueTags = Array.from(new Set(allTags)).sort();
 
-  // main view
   return (
-    <div>
-      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-2 mb-6'>
-        <h1 className='text-2xl sm:text-3xl font-bold'>My Blogs</h1>
-
-        <div className='flex items-center gap-2 flex-wrap'>
-          <DropDown
-            // categories={data
-            //   .map((blog) => blog.tags || [])
-            //   .flat()
-            //   .filter(Boolean)}
-            categories={dummyTags}
-          />
-          <CalendarTrigger />
-        </div>
-      </div>
-
-      {/* 
-      <p className='text-sm text-gray-400 mb-4'>
-        last updated: {new Date().toLocaleString()}
-      </p> */}
-
-      <div className='space-y-6'>
-        {data.map((blog) => {
-          const commit = commitMap.get(blog.id);
-
-          return (
-            <div
-              key={blog.id}
-              className='border rounded-lg p-4 shadow transition-all duration-200 custom-dark-shadow'
-            >
-              <h2 className='text-2xl font-semibold mb-2'>{blog.title}</h2>
-              <p className='text-gray-500 text-sm mb-2'>
-                {formatDate(commit.commit.author.date)}
-              </p>
-
-              {/* Tags display */}
-              {blog.tags && blog.tags.length > 0 && (
-                <div className='flex flex-wrap gap-2 mb-3'>
-                  {blog.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className='px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full'
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              <p className='text-gray-600 mb-4'>{blog.description}</p>
-
-              <Link
-                href={`/blogs/${blog.id}`}
-                className='text-blue-500 hover:text-blue-700'
-              >
-                Read more →
-              </Link>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* spacing */}
-      <div className='py-4 sm:py-4 lg:py-10' />
-    </div>
+    <BlogsWithFilters allBlogs={data} commitMap={commitMap} tags={uniqueTags} />
   );
 }

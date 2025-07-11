@@ -89,7 +89,8 @@ export function CalendarTrigger({
     } else if (dateRange?.from) {
       return `${dateRange.from.toLocaleDateString()} - ...`;
     }
-    return 'Select Date Range';
+
+    return 'Date Range';
   };
 
   return (
@@ -99,12 +100,13 @@ export function CalendarTrigger({
           <Button
             variant='outline'
             id='date'
-            className='w-full sm:w-64 justify-between font-normal min-w-0'
+            className='w-full sm:w-34 justify-between font-normal min-w-0'
           >
             <span className='truncate'>{formatDateRange()}</span>
             <ChevronDownIcon className='ml-2 flex-shrink-0' />
           </Button>
         </PopoverTrigger>
+
         <PopoverContent
           className='w-auto overflow-hidden p-0'
           align={alignment}

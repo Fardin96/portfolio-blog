@@ -104,6 +104,7 @@ export function BlogsWithFilters({
             selectedCategory={currentFilters.category}
             onCategoryChange={(category) => updateFilter('category', category)}
           />
+
           <CalendarTrigger
             startDate={currentFilters.startDate}
             endDate={currentFilters.endDate}
@@ -112,6 +113,7 @@ export function BlogsWithFilters({
               updateFilter('endDate', endDate);
             }}
           />
+
           <Button
             variant='outline'
             onClick={clearFilters}

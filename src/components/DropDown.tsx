@@ -27,7 +27,7 @@ export function DropDown({
   // Responsive alignment based on screen size
   const [alignment, setAlignment] = React.useState<'start' | 'end'>('start');
 
-  // handle window resize
+  // handle responsive alignment via window resize
   React.useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {

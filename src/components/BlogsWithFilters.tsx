@@ -38,7 +38,7 @@ export function BlogsWithFilters({
     );
   }
 
-  // No results after filtering
+  // No matches results
   if (
     filteredBlogs.length === 0 &&
     (currentFilters.category ||
@@ -95,6 +95,7 @@ export function BlogsWithFilters({
 
   return (
     <div className={isTransitioning ? 'opacity-70 pointer-events-none' : ''}>
+      {/* Title and filters */}
       <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-2 mb-6'>
         <h1 className='text-2xl sm:text-3xl font-bold'>My Blogs</h1>
 
@@ -150,6 +151,7 @@ export function BlogsWithFilters({
         </div>
       )}
 
+      {/* Blogs */}
       <div className='space-y-6'>
         {filteredBlogs.map((blog) => {
           const commit = commitMap.get(blog.id);

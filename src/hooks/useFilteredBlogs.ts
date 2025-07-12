@@ -37,7 +37,10 @@ export function useFilteredBlogs(
     [searchParams]
   );
 
-  // Compute filtered results
+  /*
+   ** CATEGORY & DATE RANGE FILTERING
+   ** return filteredBlogs
+   */
   const filteredBlogs = useMemo(() => {
     return allBlogs.filter((blog) => {
       // Category filtering
@@ -49,13 +52,16 @@ export function useFilteredBlogs(
       }
 
       // Date range filtering
+      // todo: fix date range filtering?
       if (currentFilters.startDate || currentFilters.endDate) {
         const commit = commitMap.get(blog.id);
+
         if (commit) {
           const blogDate = new Date(commit.commit.author.date);
 
           if (currentFilters.startDate) {
             const startDate = new Date(currentFilters.startDate);
+
             if (blogDate < startDate) {
               return false;
             }
@@ -63,14 +69,15 @@ export function useFilteredBlogs(
 
           if (currentFilters.endDate) {
             const endDate = new Date(currentFilters.endDate);
-            // Set end date to end of day for inclusive range
-            endDate.setHours(23, 59, 59, 999);
+
+            endDate.setHours(23, 59, 59, 999); // end date is inclusive
+
             if (blogDate > endDate) {
               return false;
             }
           }
         } else {
-          return false; // If no commit data, exclude from date filtering
+          return false; // no data, exclude from date filtering
         }
       }
 

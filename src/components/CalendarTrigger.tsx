@@ -34,12 +34,14 @@ export function CalendarTrigger({
         to: endDate ? new Date(endDate) : undefined,
       };
     }
+
     return undefined;
   }, [startDate, endDate]);
 
   // Responsive alignment based on screen size
   const [alignment, setAlignment] = React.useState<'start' | 'end'>('end');
 
+  // handle responsive alignment via window resize
   React.useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -61,6 +63,12 @@ export function CalendarTrigger({
   }, []);
 
   const handleDateRangeSelect = (range: DateRange | undefined) => {
+    console.log('--------------------------------');
+    console.log('startDate', startDate);
+    console.log('endDate', endDate);
+    console.log('range', range);
+    console.log('--------------------------------');
+
     if (onDateRangeChange) {
       if (range?.from && range?.to) {
         // Convert to ISO string for consistent formatting
@@ -80,6 +88,7 @@ export function CalendarTrigger({
     if (onDateRangeChange) {
       onDateRangeChange('', '');
     }
+
     setOpen(false);
   };
 
@@ -115,8 +124,9 @@ export function CalendarTrigger({
             mode='range'
             selected={dateRange}
             onSelect={handleDateRangeSelect}
-            numberOfMonths={2}
-            initialFocus
+            numberOfMonths={1}
+            captionLayout='dropdown'
+            autoFocus={false}
           />
           {(startDate || endDate) && (
             <div className='p-3 border-t'>

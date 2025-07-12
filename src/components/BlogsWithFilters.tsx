@@ -7,6 +7,9 @@ import { DropDown } from './DropDown';
 import { CalendarTrigger } from './CalendarTrigger';
 import { useFilteredBlogs } from '../hooks/useFilteredBlogs';
 import { Button } from './ui/button';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { startTransition } from 'react';
 
 interface BlogsWithFiltersProps {
   allBlogs: BlogPost[];
@@ -27,6 +30,9 @@ export function BlogsWithFilters({
     clearFilters,
     isTransitioning,
   } = useFilteredBlogs(allBlogs, commitMap);
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   // Empty view
   if (allBlogs.length === 0) {
@@ -62,8 +68,14 @@ export function BlogsWithFilters({
               startDate={currentFilters.startDate}
               endDate={currentFilters.endDate}
               onDateRangeChange={(startDate, endDate) => {
-                updateFilter('startDate', startDate);
-                updateFilter('endDate', endDate);
+                startTransition(() => {
+                  const params = new URLSearchParams(searchParams);
+                  if (startDate) params.set('startDate', startDate);
+                  else params.delete('startDate');
+                  if (endDate) params.set('endDate', endDate);
+                  else params.delete('endDate');
+                  router.push(`/blogs?${params.toString()}`);
+                });
               }}
             />
             <Button
@@ -110,8 +122,14 @@ export function BlogsWithFilters({
             startDate={currentFilters.startDate}
             endDate={currentFilters.endDate}
             onDateRangeChange={(startDate, endDate) => {
-              updateFilter('startDate', startDate);
-              updateFilter('endDate', endDate);
+              startTransition(() => {
+                const params = new URLSearchParams(searchParams);
+                if (startDate) params.set('startDate', startDate);
+                else params.delete('startDate');
+                if (endDate) params.set('endDate', endDate);
+                else params.delete('endDate');
+                router.push(`/blogs?${params.toString()}`);
+              });
             }}
           />
 

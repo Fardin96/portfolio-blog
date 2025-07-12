@@ -114,3 +114,9 @@ export type UseThemeReturnType = {
 };
 
 export type SetWebhookDataType = (data: WebhookData | null) => void;
+
+export interface CalendarTriggerProps {
+  startDate?: string;
+  endDate?: string;
+  onDateRangeChange?: (startDate: string, endDate: string) => void;
+}

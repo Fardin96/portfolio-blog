@@ -12,12 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-
-interface CalendarTriggerProps {
-  startDate?: string;
-  endDate?: string;
-  onDateRangeChange?: (startDate: string, endDate: string) => void;
-}
+import { CalendarTriggerProps } from '@/utils/types/types';
 
 export function CalendarTrigger({
   startDate,
@@ -25,18 +20,24 @@ export function CalendarTrigger({
   onDateRangeChange,
 }: CalendarTriggerProps) {
   const [open, setOpen] = React.useState(false);
+  const [selectedRange, setSelectedRange] = React.useState<
+    DateRange | undefined
+  >();
 
   // Convert string dates to DateRange object for the calendar
   const dateRange: DateRange | undefined = React.useMemo(() => {
     if (startDate || endDate) {
       return {
-        from: startDate ? new Date(startDate) : undefined,
-        to: endDate ? new Date(endDate) : undefined,
+        from: startDate ? new Date(`${startDate}T00:00:00Z`) : undefined,
+        to: endDate ? new Date(`${endDate}T00:00:00Z`) : undefined,
       };
     }
 
     return undefined;
   }, [startDate, endDate]);
+
+  // Use selectedRange if actively selecting, otherwise use dateRange from props
+  const calendarSelection = selectedRange || dateRange;
 
   // Responsive alignment based on screen size
   const [alignment, setAlignment] = React.useState<'start' | 'end'>('end');
@@ -63,25 +64,34 @@ export function CalendarTrigger({
   }, []);
 
   const handleDateRangeSelect = (range: DateRange | undefined) => {
-    console.log('--------------------------------');
-    console.log('startDate', startDate);
-    console.log('endDate', endDate);
-    console.log('range', range);
-    console.log('--------------------------------');
+    setSelectedRange(range);
 
     if (onDateRangeChange) {
-      if (range?.from && range?.to) {
-        // Convert to ISO string for consistent formatting
+      if (
+        range?.from &&
+        range?.to &&
+        range.from.getTime() !== range.to.getTime()
+      ) {
+        // Complete range selected
         onDateRangeChange(
-          range.from.toISOString().split('T')[0],
-          range.to.toISOString().split('T')[0]
+          getLocalDateString(range.from),
+          getLocalDateString(range.to)
         );
         setOpen(false);
-      } else if (range?.from && !range?.to) {
-        // If only start date is selected, don't close the popover yet
-        onDateRangeChange(range.from.toISOString().split('T')[0], '');
+        setSelectedRange(undefined); // Clear local state
+      } else if (range?.from) {
+        // Single date selected
+        onDateRangeChange(getLocalDateString(range.from), '');
       }
     }
+  };
+
+  // Helper to get YYYY-MM-DD in local timezone
+  const getLocalDateString = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const handleClearDates = () => {
@@ -93,12 +103,6 @@ export function CalendarTrigger({
   };
 
   const formatDateRange = () => {
-    if (dateRange?.from && dateRange?.to) {
-      return `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`;
-    } else if (dateRange?.from) {
-      return `${dateRange.from.toLocaleDateString()} - ...`;
-    }
-
     return 'Date Range';
   };
 
@@ -122,11 +126,11 @@ export function CalendarTrigger({
         >
           <Calendar
             mode='range'
-            selected={dateRange}
+            selected={calendarSelection}
             onSelect={handleDateRangeSelect}
             numberOfMonths={1}
             captionLayout='dropdown'
-            autoFocus={false}
+            // autoFocus={false}
           />
           {(startDate || endDate) && (
             <div className='p-3 border-t'>

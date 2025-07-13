@@ -202,12 +202,15 @@ export function BlogsWithFilters({
                           ? 'bg-blue-500 text-white'
                           : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800'
                       }`}
-                      onClick={() =>
-                        updateFilter(
-                          'category',
-                          currentFilters.category === tag ? '' : tag
-                        )
-                      }
+                      onClick={() => {
+                        const selected = currentFilters.category
+                          .split(',')
+                          .filter(Boolean);
+                        const newCategory = selected.includes(tag)
+                          ? selected.filter((c) => c !== tag)
+                          : [...selected, tag];
+                        updateFilter('category', newCategory.join(','));
+                      }}
                     >
                       {tag}
                     </span>

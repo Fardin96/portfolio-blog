@@ -15,7 +15,7 @@ type Checked = DropdownMenuCheckboxItemProps['checked'];
 
 interface DropDownProps {
   categories: string[];
-  selectedCategory?: string;
+  selectedCategory?: string[];
   onCategoryChange?: (category: string) => void;
 }
 
@@ -51,8 +51,11 @@ export function DropDown({
   const handleCategoryToggle = (category: string) => {
     if (onCategoryChange) {
       // If category is already selected, deselect it, otherwise select it
-      const newCategory = selectedCategory === category ? '' : category;
-      onCategoryChange(newCategory);
+      const newCategory = selectedCategory.includes(category)
+        ? selectedCategory.filter((c) => c != category)
+        : [...selectedCategory, category];
+
+      onCategoryChange(newCategory.join(','));
     }
   };
 
@@ -60,7 +63,7 @@ export function DropDown({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='outline' disabled={categories.length === 0}>
-          {selectedCategory ? selectedCategory : 'Categories'}
+          {'Categories'}
         </Button>
       </DropdownMenuTrigger>
 
@@ -72,7 +75,7 @@ export function DropDown({
           {categories.map((category) => (
             <DropdownMenuCheckboxItem
               key={category}
-              checked={selectedCategory === category}
+              checked={selectedCategory.includes(category)}
               onCheckedChange={() => handleCategoryToggle(category)}
             >
               {category}

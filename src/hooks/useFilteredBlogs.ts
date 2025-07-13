@@ -46,13 +46,15 @@ export function useFilteredBlogs(
       // Category filtering
       if (
         currentFilters.category &&
-        (!blog.tags || !blog.tags.includes(currentFilters.category))
+        (!blog.tags ||
+          !currentFilters.category
+            .split(',')
+            .some((category) => blog.tags.includes(category)))
       ) {
         return false;
       }
 
       // Date range filtering
-      // todo: fix date range filtering?
       if (currentFilters.startDate || currentFilters.endDate) {
         const commit = commitMap.get(blog.id);
 

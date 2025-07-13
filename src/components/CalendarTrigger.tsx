@@ -91,6 +91,7 @@ export function CalendarTrigger({
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
+
     return `${year}-${month}-${day}`;
   };
 
@@ -130,7 +131,6 @@ export function CalendarTrigger({
             onSelect={handleDateRangeSelect}
             numberOfMonths={1}
             captionLayout='dropdown'
-            // autoFocus={false}
           />
           {(startDate || endDate) && (
             <div className='p-3 border-t'>

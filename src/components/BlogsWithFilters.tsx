@@ -59,7 +59,7 @@ export function BlogsWithFilters({
           <div className='flex items-center gap-2 flex-wrap'>
             <DropDown
               categories={tags}
-              selectedCategory={currentFilters.category}
+              selectedCategory={currentFilters.category.split(',')}
               onCategoryChange={(category) =>
                 updateFilter('category', category)
               }
@@ -114,7 +114,7 @@ export function BlogsWithFilters({
         <div className='flex items-center gap-2 flex-wrap'>
           <DropDown
             categories={tags}
-            selectedCategory={currentFilters.category}
+            selectedCategory={currentFilters.category.split(',')}
             onCategoryChange={(category) => updateFilter('category', category)}
           />
 
@@ -157,7 +157,12 @@ export function BlogsWithFilters({
           </span>
           {currentFilters.category && (
             <span className='px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded'>
-              Category: {currentFilters.category}
+              Category:{' '}
+              {currentFilters.category
+                .split(',')
+                .filter(Boolean)
+                .map((category) => `#${category.trim()}`)
+                .join(', ')}
             </span>
           )}
           {(currentFilters.startDate || currentFilters.endDate) && (
@@ -193,7 +198,7 @@ export function BlogsWithFilters({
                     <span
                       key={index}
                       className={`px-2 py-1 text-xs rounded-full cursor-pointer transition-colors ${
-                        currentFilters.category === tag
+                        currentFilters.category.split(',').includes(tag)
                           ? 'bg-blue-500 text-white'
                           : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800'
                       }`}

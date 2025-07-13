@@ -46,6 +46,7 @@ export function useFilteredProjects(
         const selectedCategories = currentFilters.category
           .split(',')
           .filter(Boolean);
+
         if (
           selectedCategories.length > 0 &&
           (!project.tags ||

@@ -11,6 +11,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { startTransition } from 'react';
 import { truncateDescription } from '../utils/githubServicesHelpers';
+import { BsUnion, BsIntersect } from 'react-icons/bs';
 
 interface ProjectsWithFiltersProps {
   allProjects: AllPosts[];
@@ -74,8 +75,17 @@ export function ProjectsWithFilters({
                   )
                 }
                 disabled={false}
+                title={
+                  currentFilters.filterMode === 'exclusive'
+                    ? 'Exclusive (AND)'
+                    : 'Inclusive (OR)'
+                }
               >
-                {currentFilters.filterMode === 'exclusive' ? '&&' : '||'}
+                {currentFilters.filterMode === 'exclusive' ? (
+                  <BsIntersect />
+                ) : (
+                  <BsUnion />
+                )}
               </Button>
             )}
 
@@ -145,8 +155,17 @@ export function ProjectsWithFilters({
                 )
               }
               disabled={false}
+              title={
+                currentFilters.filterMode === 'exclusive'
+                  ? 'Exclusive (AND)'
+                  : 'Inclusive (OR)'
+              }
             >
-              {currentFilters.filterMode === 'exclusive' ? '&&' : '||'}
+              {currentFilters.filterMode === 'exclusive' ? (
+                <BsIntersect />
+              ) : (
+                <BsUnion />
+              )}
             </Button>
           )}
 

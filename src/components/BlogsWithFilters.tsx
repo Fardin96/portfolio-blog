@@ -10,6 +10,7 @@ import { Button } from './ui/button';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { startTransition, useState } from 'react';
+import { BsUnion, BsIntersect } from 'react-icons/bs';
 
 interface BlogsWithFiltersProps {
   allBlogs: BlogPost[];
@@ -77,8 +78,17 @@ export function BlogsWithFilters({
                   )
                 }
                 disabled={false}
+                title={
+                  currentFilters.filterMode === 'exclusive'
+                    ? 'Exclusive (AND)'
+                    : 'Inclusive (OR)'
+                }
               >
-                {currentFilters.filterMode === 'exclusive' ? '&&' : '||'}
+                {currentFilters.filterMode === 'exclusive' ? (
+                  <BsIntersect />
+                ) : (
+                  <BsUnion />
+                )}
               </Button>
             )}
 
@@ -148,8 +158,17 @@ export function BlogsWithFilters({
                 )
               }
               disabled={false}
+              title={
+                currentFilters.filterMode === 'exclusive'
+                  ? 'Exclusive (AND)'
+                  : 'Inclusive (OR)'
+              }
             >
-              {currentFilters.filterMode === 'exclusive' ? '&&' : '||'}
+              {currentFilters.filterMode === 'exclusive' ? (
+                <BsIntersect />
+              ) : (
+                <BsUnion />
+              )}
             </Button>
           )}
 

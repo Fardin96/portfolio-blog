@@ -10,6 +10,7 @@ import { Button } from './ui/button';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { startTransition } from 'react';
+import { truncateDescription } from '../utils/githubServicesHelpers';
 
 interface ProjectsWithFiltersProps {
   allProjects: AllPosts[];
@@ -205,7 +206,9 @@ export function ProjectsWithFilters({
                 ))}
               </div>
             )}
-            <p className='text-gray-600 mb-4'>{project.description}</p>
+            <p className='text-gray-600 mb-4'>
+              {truncateDescription(project.description)}
+            </p>
             <Link
               href={`/projects/${project.id}`}
               className='text-blue-500 hover:text-blue-700'

@@ -238,7 +238,7 @@ function extractDescriptionFromContent(
  * @param description - The description to truncate
  * @returns The truncated description
  */
-function truncateDescription(description: string): string {
+export function truncateDescription(description: string): string {
   const maxLength = 150;
 
   return description.length > maxLength

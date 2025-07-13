@@ -87,7 +87,7 @@ export function BlogsWithFilters({
                 !currentFilters.endDate
               }
             >
-              Reset Filters
+              Reset
             </Button>
           </div>
         </div>
@@ -142,7 +142,7 @@ export function BlogsWithFilters({
               !currentFilters.endDate
             }
           >
-            Reset Filters
+            Reset
           </Button>
         </div>
       </div>

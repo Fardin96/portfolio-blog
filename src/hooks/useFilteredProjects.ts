@@ -8,6 +8,7 @@ interface FilterState {
   category: string;
   startDate: string;
   endDate: string;
+  filterMode: 'inclusive' | 'exclusive';
 }
 
 interface UseFilteredProjectsReturn {
@@ -31,6 +32,9 @@ export function useFilteredProjects(
       category: searchParams.get('category') || '',
       startDate: searchParams.get('startDate') || '',
       endDate: searchParams.get('endDate') || '',
+      filterMode:
+        (searchParams.get('filterMode') as 'inclusive' | 'exclusive') ||
+        'inclusive',
     }),
     [searchParams]
   );
@@ -43,10 +47,15 @@ export function useFilteredProjects(
           .split(',')
           .filter(Boolean);
         if (
-          !project.tags ||
-          !selectedCategories.some((cat) =>
-            project.tags?.some((tag) => tag.title === cat)
-          )
+          selectedCategories.length > 0 &&
+          (!project.tags ||
+            (currentFilters.filterMode === 'exclusive'
+              ? !selectedCategories.every((cat) =>
+                  project.tags.some((tag) => tag.title === cat)
+                )
+              : !selectedCategories.some((cat) =>
+                  project.tags.some((tag) => tag.title === cat)
+                )))
         ) {
           return false;
         }

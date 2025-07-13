@@ -61,6 +61,24 @@ export function ProjectsWithFilters({
                 updateFilter('category', category)
               }
             />
+
+            {currentFilters.category.split(',').filter(Boolean).length > 1 && (
+              <Button
+                variant='outline'
+                onClick={() =>
+                  updateFilter(
+                    'filterMode',
+                    currentFilters.filterMode === 'inclusive'
+                      ? 'exclusive'
+                      : 'inclusive'
+                  )
+                }
+                disabled={false}
+              >
+                {currentFilters.filterMode === 'exclusive' ? '&&' : '||'}
+              </Button>
+            )}
+
             <CalendarTrigger
               startDate={currentFilters.startDate}
               endDate={currentFilters.endDate}
@@ -114,6 +132,24 @@ export function ProjectsWithFilters({
             selectedCategory={currentFilters.category.split(',')}
             onCategoryChange={(category) => updateFilter('category', category)}
           />
+
+          {currentFilters.category.split(',').filter(Boolean).length > 1 && (
+            <Button
+              variant='outline'
+              onClick={() =>
+                updateFilter(
+                  'filterMode',
+                  currentFilters.filterMode === 'inclusive'
+                    ? 'exclusive'
+                    : 'inclusive'
+                )
+              }
+              disabled={false}
+            >
+              {currentFilters.filterMode === 'exclusive' ? '&&' : '||'}
+            </Button>
+          )}
+
           <CalendarTrigger
             startDate={currentFilters.startDate}
             endDate={currentFilters.endDate}

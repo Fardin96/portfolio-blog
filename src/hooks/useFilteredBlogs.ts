@@ -8,6 +8,7 @@ interface FilterState {
   category: string;
   startDate: string;
   endDate: string;
+  filterMode: 'inclusive' | 'exclusive';
 }
 
 interface UseFilteredBlogsReturn {
@@ -33,6 +34,9 @@ export function useFilteredBlogs(
       category: searchParams.get('category') || '',
       startDate: searchParams.get('startDate') || '',
       endDate: searchParams.get('endDate') || '',
+      filterMode:
+        (searchParams.get('filterMode') as 'inclusive' | 'exclusive') ||
+        'inclusive',
     }),
     [searchParams]
   );
@@ -44,14 +48,19 @@ export function useFilteredBlogs(
   const filteredBlogs = useMemo(() => {
     return allBlogs.filter((blog) => {
       // Category filtering
-      if (
-        currentFilters.category &&
-        (!blog.tags ||
-          !currentFilters.category
-            .split(',')
-            .some((category) => blog.tags.includes(category)))
-      ) {
-        return false;
+      if (currentFilters.category) {
+        const selectedCategories = currentFilters.category
+          .split(',')
+          .filter(Boolean);
+        if (
+          selectedCategories.length > 0 &&
+          (!blog.tags ||
+            (currentFilters.filterMode === 'exclusive'
+              ? !selectedCategories.every((cat) => blog.tags.includes(cat))
+              : !selectedCategories.some((cat) => blog.tags.includes(cat))))
+        ) {
+          return false;
+        }
       }
 
       // Date range filtering

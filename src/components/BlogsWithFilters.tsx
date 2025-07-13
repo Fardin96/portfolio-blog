@@ -9,7 +9,7 @@ import { useFilteredBlogs } from '../hooks/useFilteredBlogs';
 import { Button } from './ui/button';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { startTransition } from 'react';
+import { startTransition, useState } from 'react';
 
 interface BlogsWithFiltersProps {
   allBlogs: BlogPost[];
@@ -64,6 +64,24 @@ export function BlogsWithFilters({
                 updateFilter('category', category)
               }
             />
+
+            {currentFilters.category.split(',').filter(Boolean).length > 1 && (
+              <Button
+                variant='outline'
+                onClick={() =>
+                  updateFilter(
+                    'filterMode',
+                    currentFilters.filterMode === 'inclusive'
+                      ? 'exclusive'
+                      : 'inclusive'
+                  )
+                }
+                disabled={false}
+              >
+                {currentFilters.filterMode === 'exclusive' ? '&&' : '||'}
+              </Button>
+            )}
+
             <CalendarTrigger
               startDate={currentFilters.startDate}
               endDate={currentFilters.endDate}
@@ -117,6 +135,23 @@ export function BlogsWithFilters({
             selectedCategory={currentFilters.category.split(',')}
             onCategoryChange={(category) => updateFilter('category', category)}
           />
+
+          {currentFilters.category.split(',').filter(Boolean).length > 1 && (
+            <Button
+              variant='outline'
+              onClick={() =>
+                updateFilter(
+                  'filterMode',
+                  currentFilters.filterMode === 'inclusive'
+                    ? 'exclusive'
+                    : 'inclusive'
+                )
+              }
+              disabled={false}
+            >
+              {currentFilters.filterMode === 'exclusive' ? '&&' : '||'}
+            </Button>
+          )}
 
           <CalendarTrigger
             startDate={currentFilters.startDate}

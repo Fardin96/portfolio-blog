@@ -95,6 +95,7 @@ export type AllPosts = {
   content?: string;
   description?: string;
   path?: string;
+  tags?: Tag[];
 };
 
 // export interface AllPosts {

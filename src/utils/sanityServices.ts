@@ -23,7 +23,8 @@ export async function getAllPosts(docName: AllPostsType): Promise<AllPosts[]> {
       "id": _id,
       title,
       "description": description[0].children[0].text,
-      "date": publishedAt
+      "date": publishedAt,
+      "tags": tags[]->{ title, value }
     }`;
 
     const posts = await client.fetch<AllPosts[]>(query, {

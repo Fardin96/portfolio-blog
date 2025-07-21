@@ -7,7 +7,7 @@ export default function Home(): React.ReactElement {
     <div className='flex flex-col items-center justify-center py-8'>
       <h1 className='text-4xl font-bold mb-2'>👋🏼 This is Farabi</h1>
 
-      <h2 className='text-2xl mb-6'>Muslim & Dreamer 😴💭</h2>
+      <h2 className='text-2xl mb-6'>Dreamer 😴💭</h2>
 
       <h3 className='text-2xl mb-6'>
         Writes code & loves everything about Linux and automation.

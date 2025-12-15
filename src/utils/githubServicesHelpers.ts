@@ -241,7 +241,7 @@ function extractDescriptionFromContent(
 export function truncateDescription(description: string): string {
   const maxLength = 150;
 
-  return description.length > maxLength
+  return description?.length > maxLength
     ? description.substring(0, maxLength) + '...'
     : description;
 }

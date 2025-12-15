@@ -8,7 +8,7 @@ import { AllPosts, AllPostsType, Post } from './types/types';
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: 'production',
-  useCdn: true, // set to `false` to bypass the edge cache
+  useCdn: false, // set to `false` to bypass the edge cache
   apiVersion: '2025-04-26', // use current date (YYYY-MM-DD) to target the latest API version. Note: this should always be hard coded. Setting API version based on a dynamic value (e.g. new Date()) may break your application at a random point in the future.
 });
 

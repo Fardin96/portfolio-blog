@@ -3,8 +3,6 @@ import Navigation from '../components/Navigation';
 import { ThemeProvider } from '../components/theme-provider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
-import 'tw-animate-css';
-// small change
 
 export const metadata: Metadata = {
   title: "😴💭 Farabi's Portfolio-Blog",
@@ -13,12 +11,12 @@ export const metadata: Metadata = {
 };
 
 type RootLayoutProps = {
-  children: React.ReactElement;
+  children: React.ReactNode;
 };
 
 export default function RootLayout({
   children,
-}: RootLayoutProps): React.ReactElement {
+}: RootLayoutProps): React.ReactNode {
   return (
     <html lang='en' className='h-full' suppressHydrationWarning>
       <body className='h-full'>

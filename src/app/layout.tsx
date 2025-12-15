@@ -4,6 +4,7 @@ import { ThemeProvider } from '../components/theme-provider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import 'tw-animate-css';
+// small change
 
 export const metadata: Metadata = {
   title: "😴💭 Farabi's Portfolio-Blog",
